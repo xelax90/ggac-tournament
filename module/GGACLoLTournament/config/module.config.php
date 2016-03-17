@@ -22,6 +22,8 @@ return array(
 		),
 	),
 	
+	'xelax' => array('list_controller' => array('user' => array('page_length' => 0))),
+
 	'router' => array(
 		'routes' => array(
 			'home' => array(
