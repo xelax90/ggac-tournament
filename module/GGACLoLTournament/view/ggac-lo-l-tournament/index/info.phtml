@@ -1,0 +1,5 @@
+<?php
+$position = $this->position;
+$tournament = $this->tournament;
+
+echo $this->contentBlock()->renderPosition($position, 'ggac-lo-l-tournament/index/partial/info_blocks', array('tournament' => $tournament));

@@ -13,11 +13,13 @@ return array(
             'web' => '/js/dev',
         ),
         'debug_mode' => true,
+		'use_package_json' => true,
 		'packs' => array(
 			'backend' => array(
 				'token' => 'admin',
 				'modules' => array(
 					'jquery',
+					'datatables',
 					'bootstrap',
 					'bootstrap-switch',
 					'select2',
@@ -28,6 +30,15 @@ return array(
 				'token' => 'main',
 				'modules' => array(
 					'jquery',
+					'bootstrap',
+					'select2',
+				)
+			),
+			'ggac' => array(
+				'token' => 'ggac',
+				'modules' => array(
+					'jquery',
+					'iscroll',
 					'bootstrap',
 					'select2',
 				)

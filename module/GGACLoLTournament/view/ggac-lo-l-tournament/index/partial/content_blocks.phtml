@@ -1,0 +1,12 @@
+<?php 
+$blocks = $this->blocks;
+$params = $this->params;
+?>
+<div class="section">
+	<?php
+	foreach($blocks as $block){
+		echo $this->partial('ggac-lo-l-tournament/index/partial/content_block', array('block' => $block, 'params' => $params));
+	}
+	?>
+</div>
+

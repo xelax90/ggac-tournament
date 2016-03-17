@@ -1,0 +1,48 @@
+<?php
+
+/* 
+ * Copyright (C) 2016 schurix
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+use SimpleCmsModule\Entity\ContentBlock;
+
+$blocks = $this->blocks;
+$params = $this->params;
+
+if(!empty($params['tournament'])):
+	/* @var $tournament GGACTournament\Entity\Tournament */
+	$tournament = $params['tournament'];
+	$block = new ContentBlock();
+	$block->setTitle('Turnierregeln und Ausschreibung');
+
+	ob_start();
+?>
+<p>Alle Turnierregeln sowie nähere Details zum Turnier stehen in der <b><a href="<?php echo $this->basePath($tournament->getAnnouncementFile()); ?>">Ausschreibung</a></b> und in unserem <b><a href="<?php echo $this->basePath($tournament->getRulesFile()); ?>">Turnierregelwerk</a></b>.</p>
+<p>Die folgenden Stichpunkte fassen die wesentlichen Information als Hilfe kurz zusammen. Für den Turnierverlauf gilt aber, was in den o.g. Dokumenten steht, die solltet also alle Teilnehmer lesen.</p>
+<?php
+	$content = ob_get_clean();
+	$block->setContent($content);
+	array_unshift($blocks, $block);
+endif;
+?>
+<div class="section">
+	<?php
+	foreach($blocks as $block){
+		echo $this->partial('ggac-lo-l-tournament/index/partial/content_block', array('block' => $block));
+	}
+	?>
+</div>

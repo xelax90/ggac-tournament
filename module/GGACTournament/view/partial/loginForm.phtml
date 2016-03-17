@@ -1,0 +1,65 @@
+<li class="login">
+	<?php  $identity = $this->zfcUserIdentity(); ?>
+	<?php if(!$identity): ?>
+		<div class="header">
+			<b>Login</b>
+		</div>
+		<div class="article">
+			<?php
+			$form = $this->loginForm;
+			$form->prepare();
+			$form->setAttribute('action', $this->formAction);
+			$form->setAttribute('method', 'post');
+
+			$submitLabel = $form->get('submit')->getLabel();
+			$form->remove('submit');
+			$form->get('identity')
+					->setOption('column-size', 'sm-5')
+					->setAttribute('placeholder', 'Email');
+			$form->get('credential')
+					->setOption('column-size', 'sm-5')
+					->setAttribute('placeholder', 'Code');
+
+			$form->add(array(
+				'name' => 'submit',
+				'type' => 'Submit',
+				'options' => array(
+					'as-group' => true,
+					'col-left-width' => 'placeholder',
+					'col-right-width' => 'sm-2',
+					'button-column' => 'right',
+				),
+				'attributes' => array(
+					'value' => 'Login',
+				)
+			));
+
+			echo $this->flashMessenger()->render(Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS);
+
+			echo $this->formElementErrors($form->get('identity'));
+
+			echo $this->twbForm($form, \XelaxTwbUnmask\Form\View\Helper\Form::LAYOUT_INLINE);
+			
+			
+			?>
+		</div>
+	<?php else: ?>
+		<div class="header">
+			<b>Hallo <?= $identity->getDisplayName() ?>, was möchtest du tun?</b>
+		</div>
+		<div class="article">
+			<?php
+				$links = array();
+				if($this->isAllowed('tournament', 'navigation/meldung')){
+					$links[] = array( 'url' => 'meldung', 'text' =>  'Ergebnis/Spieltermin melden');
+				}
+				if($this->isAllowed('tournament', 'navigation/myteam')){
+					$links[] = array( 'url' => 'myteam', 'text' =>  'Dein Team/Ersatzspieler ansehen');
+				}
+			?>
+			<?php foreach($links as $i => $link): ?>
+			<?= $i > 0 ? ' | ' : ''  ?><a href="<?= $this->url($link['url']) ?>"><?= $link['text']; ?></a>
+			<?php endforeach; ?>
+		</div>
+	<?php endif; ?>
+</li>

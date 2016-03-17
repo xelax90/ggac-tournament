@@ -16,3 +16,4 @@ vendor/
 bower_components/
 data/DoctrineORMModule/
 data/formgen/
+data/cache/

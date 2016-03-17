@@ -1,0 +1,101 @@
+<?php
+// Standard display for player and registration
+use GGACTournament\Entity\Player;
+use GGACTournament\Entity\Registration;
+
+$showControls = false;
+$controls = array();
+$addStyles = '';
+$showCaptainContact = false;
+$showAllContacts = false;
+$showCaptain = true;
+$showEmailRight = false;
+$emailWithLink = true;
+$showWins = true;
+
+if(isset($this->showControls       )){ $showControls       = $this->showControls; }
+if(isset($this->controls           )){ $controls           = $this->controls; }
+if(isset($this->addStyles          )){ $addStyles          = $this->addStyles; }
+if(isset($this->showCaptainContact )){ $showCaptainContact = $this->showCaptainContact; }
+if(isset($this->showAllContacts    )){ $showAllContacts    = $this->showAllContacts; }
+if(isset($this->showCaptain        )){ $showCaptain        = $this->showCaptain; }
+if(isset($this->showEmailRight     )){ $showEmailRight     = $this->showEmailRight; }
+if(isset($this->emailWithLink      )){ $emailWithLink      = $this->emailWithLink; }
+if(isset($this->showWins           )){ $showWins           = $this->showWins; }
+
+if(!empty($this->player) && $this->player instanceof Player){
+	/* @var $player \GGACTournament\Entity\Player */
+	$player = $this->player;
+	$registration = $player->getRegistration();
+	$itemId = $player->getId();
+} elseif(!empty($this->registration) || $this->player instanceof Registration){
+	/* @var $registration Registration */
+	$player = $this->player;
+	if($player instanceof Registration){
+		$registration = $this->player;
+	} else {
+		$registration = $this->registration;
+	}
+	$itemId = $registration->getId();
+	$showCaptain = false;
+} else {
+	throw new \Exception('No Registration provided');
+}
+
+$dataKnown = false;
+$iconId = 0;
+$rankedWins = 0;
+$level = 0;
+$tier = 'Unranked';
+$normalWins = 0;
+if(!empty($registration->getData())){
+	$dataKnown = true;
+	$iconId = $registration->getData()->getProfileIconId();
+	$rankedWins = $registration->getData()->getRankedWins();
+	$level = $registration->getData()->getLevel();
+	$normalWins = $registration->getData()->getNormalWins();
+	$tier = $registration->getData()->getTier();
+}
+?>
+
+<div class="player <?php echo $showControls ? 'with-controls' : ''; ?>" style="background-image: url('<?php echo $this->ggacLoLDDragon()->profileIcon($iconId) ?>'); <?php echo $addStyles ?>">
+	<?php if($showControls) : ?>
+		<div class="player-controls">
+			<?php foreach($controls as $control): ?>
+				<?php $js = empty($control['warning']) ? '' : "return confirm('".sprintf($control['warning'], $registration->getSummonerName())."');" ?>
+				<a class="btn btn-xs" <?= empty($js) ? '' : 'onclick="'.$js.'"'; ?> href="<?= $this->url($control['route'], array($control['routeParamName'] => $itemId) + $control['routeParams']) ?>" title="<?= $control['title'] ?>"><i class="fa <?= $control['icon'] ?>"></i></a>
+			<?php endforeach; ?>
+		</div>
+	<?php endif; ?>
+	<div class="player-data">
+		<?php if($showAllContacts || ($showCaptainContact && $player->getIsCaptain())) : ?>
+			<div class="player_summonername <?= $showCaptain && $player->getIsCaptain() ? 'captain' : '' ?>"><?= $registration->getName() ?></div>
+			<div class="<?= $showEmailRight ? 'player_rankedWins' : 'player_level' ?>">
+				<?php if($emailWithLink): ?>
+				<a href="mailto:<?= rawurlencode($registration->getName() . " <".$registration->getEmail().">") ?>">
+				<?php endif;?>
+					<?= $registration->getEmail() ?>
+				<?php if($emailWithLink): ?>
+				</a>
+				<?php endif;?>
+			</div>
+		<?php endif; ?>
+			
+		<div class="player_summonername <?= $showCaptain && $player->getIsCaptain() ? 'captain' : '' ?>"><?= $registration->getSummonerName() ?></div>
+		<?php if($dataKnown && $level > 0) : ?>
+			<?php if($showWins) : ?>
+				<div class="player_rankedWins">Ranked: <?= $rankedWins ?> Siege</div>
+			<?php endif; ?>
+
+			<div class="player_level">Level <?= $level ?>, <?= $tier ?></div>
+
+			<?php if($showWins) : ?>
+				<div class="player_normalWins">Normal: <?= $normalWins ?> Siege</div>
+			<?php endif; ?>
+
+		<?php endif; ?>
+		<?php if($showCaptain && $player->getIsCaptain()) : ?>
+			<div class="player_subborder"></div>
+		<?php endif; ?>
+	</div>
+</div>

@@ -27,6 +27,10 @@ $config = array(
 		'XelaxPasswordGeneratorModule',
 		'XelaxTreeEditor',
 		'SkelletonApplication',
+		'SimpleCmsModule',
+		'GGACTournament',
+		'GGACLoLTournament',
+		'GGACRiotApi',
     ),
 	
     // These are various options for the listeners attached to the ModuleManager

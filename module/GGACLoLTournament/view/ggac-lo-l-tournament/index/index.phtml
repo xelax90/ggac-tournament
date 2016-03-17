@@ -1,0 +1,37 @@
+<?php
+$position = $this->position;
+$tournament = $this->tournament;
+
+	$files = scandir('./public/img/featured');
+	$featured = array();
+	foreach($files as $file){
+		if(pathinfo($file, PATHINFO_EXTENSION) == 'png'){
+			$featured[] = $this->basePath().'/img/featured/'.$file;
+		}
+	}
+	shuffle($featured);
+?>
+<script type="text/javascript">
+	// Image Swap //
+	var img1_is_visible = false;
+	var featuredImgs = ["<?= implode('", "', $featured) ?>"];
+	function swap(i) {
+		var img1 = document.getElementById("img1");
+		var img2 = document.getElementById("img2");
+		var imgold= img1_is_visible ? img1 : img2;
+		var imgnew= img1_is_visible ? img2 : img1;
+
+		imgnew.style.opacity = 1.0;
+		imgnew.src = featuredImgs[i];
+		imgold.style.opacity = 0.0;
+		img1_is_visible = !img1_is_visible;
+		setTimeout(function(){swap((i+1) % featuredImgs.length)},5000);
+	}
+	setTimeout(function(){swap(1)},5000);
+</script>
+<div class="featured">
+	<img id="img1" src="<?= $featured[0] ?>" alt="">
+	<img id="img2" src="<?= $featured[0] ?>" alt="">
+</div>
+<?php
+echo $this->contentBlock()->renderPosition($position, 'ggac-lo-l-tournament/index/partial/index_blocks', array('tournament' => $tournament));

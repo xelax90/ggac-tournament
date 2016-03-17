@@ -1,0 +1,43 @@
+<?php
+use XelaxTwbUnmask\Form\View\Helper\Form as FormHelper;
+use GGACTournament\Form\RegistrationTeamForm;
+
+$form = $this->form;
+?>
+
+<div class="anmeldung">
+	<div class="content">
+		<ul>
+			<?php echo $this->partial('partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url())) ?>
+			<li>
+				<div class="header">
+					<?php if($form instanceof RegistrationTeamForm) : ?>
+					<b>Teamanmeldung zur RWTH Liga</b>
+					<?php else : ?>
+					<b>Einzelanmeldung zur RWTH Liga</b>
+					<?php endif; ?>
+				</div>
+				<div class="article">
+					<?php if($form instanceof RegistrationTeamForm) : ?>
+					<div class="form-horizontal">
+						<div class="form-group ">
+							<label class="col-sm-2 control-label">Team Icon<sup>*</sup></label>
+							<div class="col-sm-10" id="team-icon-select" style="height: auto"><img src="<?php echo $this->basePath("/img/teamIcons/".$form->get("team_icon_text")->getValue()) ?>"></div>
+						</div>
+					</div>
+					<?php endif; ?>
+					<?php 
+						$form->setAttribute('action', $this->url('registration/ready'))
+							 ->prepare();
+						$form->get('submit')->setValue($this->translate('Anmelden'))->setLabel($this->translate('Anmelden'));
+						$ausschreibung = $form->get('ausschreibung_gelesen');
+						$ausschreibung->setOption('column-size', 'sm-10');
+						$ausschreibung->setOption('label_attributes', array('class' => 'col-sm-2'));
+						
+						echo $this->twbForm($form, FormHelper::LAYOUT_VALUES_HIDDEN);
+					?>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

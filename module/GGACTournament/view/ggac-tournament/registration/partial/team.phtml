@@ -1,0 +1,16 @@
+<?php 
+	$players = $this->players;
+	$teamName = $this->teamName;
+	$playerParams = $this->playerParams;
+	$icon = $this->teamIcon;
+?>
+<div class="team" style="background-image: url('<?= $this->basePath('img/teamIcons/'.$icon) ?>')">
+	<div class="teamname"><?= $teamName ?></div>
+	<div class="players">
+<?php
+	foreach($players as $player){
+		echo $this->partial('ggac-tournament/partial/player.phtml', array('player' => $player) + $playerParams);
+	}
+?>
+	</div>
+</div>

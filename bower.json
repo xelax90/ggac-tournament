@@ -33,6 +33,8 @@
 		"bootstrap-switch": "*",
 		"html5shiv": "*",
 		"respond": "*",
+		"iscroll": "4.2.5",
+		"datatables": "*",
 		"fontawesome": "*",
 		"select2": "4.*",
 		"bootstrap-languages": "https://github.com/xelax90/bootstrap-languages.git",

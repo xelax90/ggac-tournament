@@ -1,0 +1,143 @@
+<div class="anmeldung">
+	<div class="content">
+		<ul>
+			<?php echo $this->partial('partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url())) ?>
+			<?php if($this->singleForm) : ?>
+			<li id="einzelanmeldung">
+				<div class="header">
+					<b>Einzelanmeldung zum <?php echo $this->tournament->getName(); ?></b><?php if($this->teamForm) : ?> <span><a href="#teamanmeldung">Zur Teamanmeldung</a></span> <?php endif; ?>
+				</div>
+				<div class="article">
+					<?php 
+						$form = $this->singleForm;
+						$form->setAttribute('action', $this->url('registration/form'))
+							 ->prepare();
+						echo $this->twbForm($form);
+					?>
+				</div>
+			</li>
+			<?php endif; ?>
+			<?php if($this->teamForm) : ?>
+			<li id="teamanmeldung">
+				<div class="header">
+					<b>Teamanmeldung zum <?php echo $this->tournament->getName(); ?></b><?php if($this->singleForm) : ?> <span><a href="#einzelanmeldung">Zur Einzelanmeldung</a></span> <?php endif; ?>
+				</div>
+				<div class="article">
+					<p>
+						Ihr könnt euch mit bis zu fünf Spielern (mind. zwei) als Team anmelden. <br> 
+						Wenn ihr weniger als fünf Spieler seid, lasst die restlichen Felder frei und euch werden andere Spieler zugelost<br>
+					</p>
+					<?php
+						/* @var $teamForm \GGACTournament\Form\RegistrationTeamForm */
+						$teamForm = $this->teamForm;
+						$teamForm->setAttribute('action', $this->url('registration/form'))
+								 ->prepare();
+						$registrations = $teamForm->get('registrations');
+						/* @var $registrations Zend\Form\Element\Collection */
+						$i = 1;
+						foreach($registrations->getFieldsets() as $elm){
+							$elm->setLabel('Spieler '.$i);
+							$i++;
+						}
+					?>
+					<script type="text/javascript">
+						<?php
+							$icons = $this->icons;
+							$ics = array();
+							$cnt = 0;
+							foreach($icons as $icon){
+								if($icon != "ProfileIcon_Poro.png"){
+									$ics[] = "{'iconFilePath':'".$this->basePath()."/img/teamIcons/".$icon."', 'iconValue':'".$icon."'}";
+								}
+								$cnt++;
+							}
+						?>
+						IconSelect.COMPONENT_ICON_FILE_PATH = '<?= $this->basePath() ?>/img/control/icon-select/arrow.png';
+						var iconSelect;
+						var selectedText;
+
+						window.onload = function(){
+							selectedText = document.getElementById('team_icon_text');
+
+							document.getElementById('team-icon-select').addEventListener('changed', function(e){
+							   selectedText.value = iconSelect.getSelectedValue();
+							});
+
+							iconSelect = new IconSelect("team-icon-select",                 
+								{
+									'selectedIconWidth':48,
+									'selectedIconHeight':48,
+									'selectedBoxPadding':1,
+									'iconsWidth':48,
+									'iconsHeight':48,
+									'boxIconSpace':1,
+									'vectoralIconNumber':4,
+									'horizontalIconNumber':4
+								}
+							);
+
+							var icons = [<?php echo implode(",", $ics) ?>];
+
+							iconSelect.refresh(icons);
+							<?php
+								if(!empty($teamForm->get('team_icon_text')->getValue())){
+									foreach($icons as $i => $icon){
+										if($icon == $teamForm->get('team_icon_text')->getValue()){
+											echo 'iconSelect.setSelectedIndex('.$i.');';
+											break;
+										}
+									}
+								}
+							?>
+						};
+					</script>
+					<div class="form-horizontal">
+						<div class="form-group ">
+							<label class="col-sm-2 control-label">Team Icon<sup>*</sup></label>
+							<div class="col-sm-10" id="team-icon-select" style="height: auto"></div>
+						</div>
+					</div>
+					<?php echo $this->twbForm($teamForm); ?>
+					<script type="text/javascript">
+						jQuery(function($){
+							$(function(){
+								$("span[data-template]").each(function(){
+									var addElement = function(){
+										var that = this;
+										var $fieldset = $(that).closest('fieldset');
+										var currentCount = $fieldset.find('fieldset').length;
+										console.log(currentCount);
+										if(currentCount >= 8)
+											return false;
+										var template = $fieldset.find("span[data-template]").data('template');
+										template = template.replace(/__placeholder__/g, currentCount);
+										//var fieldsetLabel = $(that).parent().find('legend').text().replace(/s$/,'');
+										var temp = $(template).prepend('<legend>Spieler '+(currentCount + 1)+'</legend>');
+										$fieldset.find('fieldset:last').after(temp);
+										return false;
+									};
+
+									var btn = $('<button>').addClass("btn");
+									btn.append('<i class="glyphicon glyphicon-plus"></i> <?= $this->translate('Add Player'); ?>');
+									btn.click(addElement);
+									var cont = $('<div>').addClass('btn-group btn-group-justified').attr('role', 'group').attr('aria-label', 'Element hinzufügen').append($('<div>').addClass('btn-group').attr('role', 'group').append(btn));
+									$(this).closest('fieldset').append(
+											$('<div>').addClass('form-group').append($('<div>').addClass('col-sm-4 col-sm-offset-8').append(cont))
+									);
+								});
+
+								$('input[type=checkbox],input[type=radio]').each(function(){
+									if($(this).data('switch')){
+										$(this).bootstrapSwitch();
+									}
+								});
+
+							});
+						}(jQuery));
+					</script>
+				</div>
+			</li>
+			<?php endif; ?>
+		</ul>
+	</div>
+</div>

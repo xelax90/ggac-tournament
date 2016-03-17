@@ -1,0 +1,55 @@
+<?php
+
+/* 
+ * Copyright (C) 2016 schurix
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+use SimpleCmsModule\Entity\ContentBlock;
+
+$blocks = $this->blocks;
+$params = $this->params;
+
+if(!empty($params['tournament'])):
+	/* @var $tournament GGACTournament\Entity\Tournament */
+	$tournament = $params['tournament'];
+	if(empty($blocks)){
+		$blocks = array();
+		$block = new ContentBlock();
+		$block->setContent('')
+				->setTitle('');
+		$blocks[] = $block;
+	}
+
+	ob_start();
+?>
+<div style="float: right; border: none; padding: 0px 0 10px 10px;">
+	<span style="border-top: 1px solid #22272a;"><a href="<?= $this->url('registration'); ?>">Zur Anmeldung</a></span>
+	<span><a href="<?= $this->basePath($tournament->getAnnouncementFile()); ?>" target="_blank">Ausschreibung</a></span>
+	<span><a href="<?= $this->basePath($tournament->getRulesFile()); ?>" target="_blank">Turnierregeln</a></span>
+</div>
+<?php
+	$content = ob_get_clean();
+	$blocks[0]->setContent($content . $blocks[0]->getContent());
+endif;
+?>
+<div class="section">
+	<?php
+	foreach($blocks as $block){
+		echo $this->partial('ggac-lo-l-tournament/index/partial/content_block', array('block' => $block));
+	}
+	?>
+</div>

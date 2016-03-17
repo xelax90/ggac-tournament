@@ -28,6 +28,15 @@ jQuery(function(){
 			dropdownAutoWidth : true,
 			width: "element"
 		};
+        if($this.attr('data-reorder')){
+            $this.on('select2:select', function(e){
+                var elm = e.params.data.element;
+                $elm = jQuery(elm);
+                $t = jQuery(this);
+                $t.append($elm);
+                $t.trigger('change.select2');
+            });
+        }
 		if($this.attr('data-placeholder')){
 			defaults.placeholder = $this.attr('data-placeholder');
 		}
@@ -39,4 +48,17 @@ jQuery(function(){
 		}
 		$this.select2(defaults);
 	});
+    
+    jQuery.getScript('/js/dataTables.bootstrap.min.js', function(){
+        jQuery("table.table.admin_list_table").each(function(){
+            $this = jQuery(this);
+            if($this.find('> tfoot').length === 0){
+                $this.DataTable({
+                    language: {
+                        url: "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+                    }
+                });
+            }
+        });
+    });
 });
