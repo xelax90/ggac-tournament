@@ -47,12 +47,12 @@ class Tournament implements JsonSerializable, AlreadyPlayedInterface
 	protected $teams;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
 	protected $rulesFile;
 	
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
 	protected $announcementFile;
 	
