@@ -20,9 +20,6 @@
 
 namespace GGACTournament\Validator;
 
-echo 'AA';
-@debug_print_backtrace();
-
 /**
  * Description of MinMaxEmailsRWTH
  *
