@@ -73,6 +73,13 @@ return array(
 		)
 	),
 	
+	// Site navigation
+	'navigation' => array(
+		// admin navigation
+		'admin' => array(
+			'contentblock'      => array('label' => gettext_noop('Contents'),      'route' => 'zfcadmin/contentblock',             'resource' => 'contentblock', 'privilege' => 'contentblock/list' ),
+		),
+	),
 	
 	// language options
 	'translator' => array(
