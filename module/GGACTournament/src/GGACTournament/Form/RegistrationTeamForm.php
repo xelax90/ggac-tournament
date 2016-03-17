@@ -10,7 +10,7 @@ use Zend\Form\Element\Collection;
 use GGACTournament\Validator\NoObjectExistsInTournament;
 use GGACTournament\Entity\Registration;
 use GGACTournament\Validator\MinMaxEmailsRwth;
-use GGACTournament\Validator\MinMaxEmailsNotRWTH;
+use GGACTournament\Validator\MinMaxEmailsNotRwth;
 
 /**
  * Registration Form
@@ -235,12 +235,12 @@ class RegistrationTeamForm extends Form implements InputFilterProviderInterface{
 						)
 					),
 					array(
-						'name' => MinMaxEmailsNotRWTH::class,
+						'name' => MinMaxEmailsNotRwth::class,
 						'options' => array(
 							'min' => $this->getMinNotRwth(),
 							'max' => $this->getMaxNotRwth(),
 							'messages'=> array(
-								MinMaxEmailsNotRWTH::MESSAGE_TOO_MANY => 'Es dürfen nicht mehr, als '.$this->getMaxNotRwth().' externe Mailadresse(n) angegeben sein',
+								MinMaxEmailsNotRwth::MESSAGE_TOO_MANY => 'Es dürfen nicht mehr, als '.$this->getMaxNotRwth().' externe Mailadresse(n) angegeben sein',
 							)
 						)
 					),

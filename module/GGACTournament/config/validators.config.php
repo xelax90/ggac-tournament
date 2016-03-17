@@ -17,7 +17,7 @@ return array(
 		Validator\UniqueObjectInTournament::class => Validator\Factory\UniqueObjectInTournamentFactory::class,
 		Validator\EmailIsRwth::class => InvokableFactory::class,
 		Validator\MinMaxEmailsRwth::class => Validator\Factory\MinMaxEmailsRwthFactory::class,
-		Validator\MinMaxEmailsNotRWTH::class => Validator\Factory\MinMaxEmailsRwthFactory::class,
+		Validator\MinMaxEmailsNotRwth::class => Validator\Factory\MinMaxEmailsRwthFactory::class,
 	),
 	'aliases' => array(
 	)

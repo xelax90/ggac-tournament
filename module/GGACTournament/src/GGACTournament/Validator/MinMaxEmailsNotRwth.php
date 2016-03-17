@@ -20,12 +20,15 @@
 
 namespace GGACTournament\Validator;
 
+echo 'AA';
+@debug_print_backtrace();
+
 /**
  * Description of MinMaxEmailsRWTH
  *
  * @author schurix
  */
-class MinMaxEmailsNotRWTH extends MinMaxEmailsRWTH{
+class MinMaxEmailsNotRwth extends MinMaxEmailsRWTH{
 	public function checkEmail($value) {
 		return !parent::checkEmail($value);
 	}
