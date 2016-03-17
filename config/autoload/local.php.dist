@@ -25,6 +25,16 @@ return array(
 			)
 		)
 	),
+	'ggac_riotapi' => array(
+		'key' => '', 
+		'region' => 'euw',
+		'max_requests' => 20,
+	),
+	
+	'ggac_tournament' => array(
+		'default_tournament_id' => 0,
+	),
+	
 	'session_config' => array(
 		// Adjust this parameter if you have multiple applications on the same 
 		// VirtualHost to avoid conflicting sessions
