@@ -60,8 +60,8 @@ class Manager extends AbstractManager{
 		return $this->initPhase($phase, $currentPhase, $ignoreBlocked);
 	}
 	
-	public function initPhase(TournamentPhase $phase, TournamentPhase $currentPhase, $ignoreBlocked = true){
-		if($phase->getKeepGroups()){
+	public function initPhase(TournamentPhase $phase, TournamentPhase $currentPhase = null, $ignoreBlocked = true){
+		if($phase->getKeepGroups() && $currentPhase){
 			$groups = $currentPhase->getGroups();
 			$newGroups = array();
 			// copy all groups

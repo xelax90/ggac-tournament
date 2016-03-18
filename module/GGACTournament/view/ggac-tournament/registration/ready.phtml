@@ -12,18 +12,22 @@ use GGACTournament\Entity\Registration;
 			<li>
 				<div class="header">
 					<?php if($this->team && is_array($this->team)) : ?>
-					<b>Teamanmeldung zur RWTH Liga</b>
+					<b>Teamanmeldung zum <?php echo $this->tournament->getName(); ?></b>
 					<?php elseif($this->registration && $this->registration instanceof Registration) : ?>
-					<b>Einzelanmeldung zur RWTH Liga</b>
+					<b>Einzelanmeldung zum <?php echo $this->tournament->getName(); ?></b>
 					<?php else: ?>
 					<b>Fehler</b>
 					<?php endif; ?>
 				</div>
 				<div class="article">
 					<?php if($this->team && is_array($this->team)) : ?>
-					<b>Das Team <?php echo $this->team[0]->getTeamName() ?> wurde erfolgreich angemeldet</b>
+					Vielen Dank, das Team <?php echo $this->team[0]->getTeamName() ?> wurde erfolgreich angemeldet.<br><br>
+					Bevor das Turnier los geht, müssen alle Mitglieder noch ihre E-Mail Adresse bestätigen und ein Passwort für ihren Benutzer setzen. Jeder sollte dafür jeweils eine E-Mail von uns bekommen haben.<br>
+					Hinweis: Die Benutzer werden sich erst einloggen können, wenn ihre E-Mail Adresse bestätigt ist. Auch, wenn das Passwort bereits gesetzt ist.
 					<?php elseif($this->registration && $this->registration instanceof Registration) : ?>
-					<b>Hallo <?php echo $this->registration->getName() ?> "<?php echo $this->registration->getSummonerName() ?>", du hast dich erfolgreich zum Turnier angemeldet </b>
+					Vielen Dank <?php echo $this->registration->getName() ?> "<?php echo $this->registration->getSummonerName() ?>", du hast dich erfolgreich zum Turnier angemeldet. <br><br>
+					Bevor das Turnier los geht, musst Du noch deine E-Mail Adresse bestätigen und ein Passwort für deinen Benutzer setzen. Du solltest dafür jeweils eine E-Mail von uns bekommen haben. <br>
+					Hinweis: Du wirst dich erst einloggen können, wenn Du deine E-Mail Adresse bestätigt hast. Auch, wenn dein Passwort bereits gesetzt ist.
 					<?php else: ?>
 					<b>Bei der Anmeldung ist ein Fehler aufgetreten. Bitte versuche es erneut, oder kontaktiere die Turnierleitung.</b>
 					<?php endif; ?>

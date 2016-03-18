@@ -23,6 +23,7 @@ namespace GGACTournament\Service;
 use Interop\Container\ContainerInterface;
 
 use GGACTournament\Tournament\Registration\Manager;
+use Zend\ServiceManager\AbstractPluginManager;
 
 /**
  * Description of TeamdataManagerFactory
@@ -35,8 +36,21 @@ class RegistrationManagerFactory extends TournamentServiceFactory {
 		/* @var $manager Manager */
 		$manager = parent::__invoke($container, $requestedName, $options);
 		
-		$formManager = $container->get('FormElementManager');
+		$services = $container;
+		if($services instanceof AbstractPluginManager){
+			$services = $services->getServiceLocator();
+		}
+		
+		$formManager = $services->get('FormElementManager');
+		$userMapper = $services->get('zfcuser_user_mapper');
+		$userService = $services->get('zfcuser_user_service');
+		$passwordService = $services->get('goalioforgotpassword_password_service');
+		$generator = $services->get('XelaxPasswordGenerator\Default');
 		$manager->setFormManager($formManager);
+		$manager->setUserMapper($userMapper);
+		$manager->setUserService($userService);
+		$manager->setPasswordService($passwordService);
+		$manager->setPasswordGenerator($generator);
 		
 		return $manager;
 	}

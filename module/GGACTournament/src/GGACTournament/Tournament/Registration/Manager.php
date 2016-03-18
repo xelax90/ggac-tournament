@@ -28,6 +28,11 @@ use GGACTournament\Entity\Player;
 use GGACTournament\Entity\Registration;
 use Zend\Form\FormElementManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
+use ZfcUser\Mapper\UserInterface;
+use ZfcUser\Service\User as UserService;
+use Zend\EventManager\EventManager;
+use GoalioForgotPassword\Service\Password as PasswordService;
+use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 
 /**
  * Description of Manager
@@ -39,12 +44,75 @@ class Manager extends AbstractManager{
 	/** @var FormElementManager */
 	protected $formManager;
 	
-	public function getFormManager() {
+	/** @var UserInterface */
+	protected $userMapper;
+	
+	/** @var UserService*/
+	protected $userService;
+	
+	/** @var EventManager */
+	protected $eventManager;
+	
+	/** @var PasswordService */
+	protected $passwordService;
+	
+	/** @var PasswordGeneratorInterface */
+	protected $passwordGenerator;
+	
+	protected function getFormManager() {
 		return $this->formManager;
+	}
+	
+	protected function getUserMapper() {
+		return $this->userMapper;
+	}
+
+	protected function getUserService() {
+		return $this->userService;
+	}
+	
+	protected function getEventManager() {
+		if(null === $this->eventManager){
+			$this->eventManager = new EventManager(array(UserService::class));
+		}
+		return $this->eventManager;
+	}
+	
+	protected function getPasswordService() {
+		return $this->passwordService;
+	}
+
+	protected function getPasswordGenerator() {
+		return $this->passwordGenerator;
 	}
 
 	public function setFormManager(FormElementManager $formManager) {
 		$this->formManager = $formManager;
+		return $this;
+	}
+	
+	public function setUserMapper(UserInterface $userMapper) {
+		$this->userMapper = $userMapper;
+		return $this;
+	}
+	
+	public function setUserService(UserService $userService) {
+		$this->userService = $userService;
+		return $this;
+	}
+	
+	public function setEventManager(EventManager $eventManager) {
+		$this->eventManager = $eventManager;
+		return $this;
+	}
+	
+	public function setPasswordService(PasswordService $passwordService) {
+		$this->passwordService = $passwordService;
+		return $this;
+	}
+	
+	public function setPasswordGenerator(PasswordGeneratorInterface $passwordGenerator) {
+		$this->passwordGenerator = $passwordGenerator;
 		return $this;
 	}
 	
@@ -236,6 +304,7 @@ class Manager extends AbstractManager{
 					->setTeamName($teamName)
 					->setIcon($teamIcon);
 			$em->persist($newRegistration);
+			$this->createUser($registration);
 			$team[] = $newRegistration;
 		}
 		$em->flush();
@@ -251,6 +320,36 @@ class Manager extends AbstractManager{
 		$em = $this->getObjectManager();
 		$em->persist($registration);
 		$em->flush();
+		$this->createUser($registration);
 		return $registration;
+	}
+	
+	protected function createUser(Registration $registration){
+		$mapper = $this->getUserMapper();
+		$email = $registration->getEmail();
+		$found = $mapper->findByEmail($email);
+		if($found){
+			$this->resetUser($found);
+			return;
+		}
+		$pw = $this->getPasswordGenerator()->generatePassword();
+		$data = array(
+			'username' => $registration->getEmail(),
+			'display_name' => $registration->getName(),
+			'email' => $registration->getEmail(),
+			'password' => $pw,
+			'passwordVerify' => $pw
+		);
+		$user = $this->getUserService()->register($data);
+		$this->getPasswordService()->sendProcessForgotRequest($user->getId(), $user->getEmail());
+	}
+	
+	/**
+	 * @param User $user
+	 */
+	protected function resetUser($user){
+		$user->setState(0);
+        $this->getEventManager()->trigger('register.post', $this->getUserService(), array('user' => $user, 'form' => null));
+		$this->getPasswordService()->sendProcessForgotRequest($user->getId(), $user->getEmail());
 	}
 }

@@ -25,6 +25,7 @@ use GGACTournament\Form\RegistrationSingleForm;
 use Zend\View\Model\ViewModel;
 use Zend\Stdlib\ResponseInterface as Response;
 use GGACTournament\Tournament\ApiData\Manager as ApiDataManager;
+use Zend\Form\Form;
 
 /**
  * Description of RegistrationController
@@ -169,7 +170,7 @@ class RegistrationController extends AbstractTournamentController{
 	public function confirmAction(){
 		$formOrRedirect = $this->getFormOrRedirect();
 		$this->getResponse();
-		if($formOrRedirect instanceof Response){
+		if(! ($formOrRedirect instanceof Form)){
 			return $formOrRedirect;
 		}
 		$form = $formOrRedirect;
@@ -190,11 +191,14 @@ class RegistrationController extends AbstractTournamentController{
 	public function readyAction(){
 		$loginForm = $this->getLoginForm();
 		
-		$params = array('loginForm' => $loginForm);
+		$params = array(
+			'loginForm' => $loginForm,
+			'tournament' => $this->getTournamentProvider()->getTournament(),
+		);
 		
 		// Run validation and get the used form
 		$formOrRedirect = $this->getFormOrRedirect();
-		if($formOrRedirect instanceof Response){
+		if(! ($formOrRedirect instanceof Form)){
 			return $formOrRedirect;
 		}
 		$saveResult = $this->getRegistrationManager()->saveForm($formOrRedirect);
