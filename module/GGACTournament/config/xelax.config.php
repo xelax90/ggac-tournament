@@ -89,5 +89,14 @@ return array(
 				),
 			),
 		),
+		'registration' => array(
+			'name' => 'Registration',
+			'controller_class' => Controller\AdminRegistrationController::class, 
+			'base_namespace' => __NAMESPACE__,
+			'list_columns' => array(gettext_noop('Id') => 'id', gettext_noop('Team Name') => 'teamName', gettext_noop('Name') => 'name', gettext_noop('Summoner Name') => 'summonerName', gettext_noop('EMail') => 'email'),
+			'route_base' => 'zfcadmin/registration', 
+			'page_length' => 0,
+			'rest_enabled' => false,
+		),
 	),
 );

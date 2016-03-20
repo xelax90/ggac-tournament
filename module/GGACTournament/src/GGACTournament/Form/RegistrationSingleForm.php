@@ -46,6 +46,7 @@ class RegistrationSingleForm extends Form implements InputFilterProviderInterfac
 			'options' => array(
 				'use_as_base_fieldset' => true,
 				'require_rwth' => $this->getRequireRwth(),
+				'show_teamName' => false,
 			),
 		));
 		

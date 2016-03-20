@@ -27,6 +27,9 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 	/** @var boolean */
 	protected $showAnmerkung = true;
 	
+	/** @var boolean */
+	protected $showTeamName = true;
+	
 	public function __construct($name = "", $options = array()){
 		if($name == ""){
 			$name = 'RegistrationFieldset';
@@ -50,6 +53,10 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 		
         if (isset($options['show_anmerkung'])) {
             $this->setShowAnmerkung($options['show_anmerkung']);
+        }
+		
+        if (isset($options['show_teamName'])) {
+            $this->setShowTeamName($options['show_teamName']);
         }
 	}
 	
@@ -79,6 +86,13 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 	 */
 	public function getShowAnmerkung() {
 		return $this->showAnmerkung;
+	}
+	
+	/**
+	 * @return boolean
+	 */
+	public function getShowTeamName() {
+		return $this->showTeamName;
 	}
 
 	/**
@@ -122,11 +136,27 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 		}
 		return $this;
 	}
+	
+	/**
+	 * @param boolean $showTeamName
+	 * @return RegistrationFieldset
+	 */
+	public function setShowTeamName($showTeamName) {
+		$this->showTeamName = $showTeamName;
+		if(!$showTeamName && $this->has('teamName')){
+			$this->remove('teamName');
+		}
+		return $this;
+	}
 
 	public function init(){
 		parent::init();
 		$this->setObject(new Registration());
-		$options = $this->getOptions();
+		
+		$this->add(array(
+			'name' => 'id',
+			'type' => 'Hidden',
+		));
 		
 		$this->add(array(
 			'name' => 'name',
@@ -145,6 +175,23 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 				'id' => "",
 			)
 		));
+		
+		if($this->getShowTeamName()){
+			$this->add(array(
+				'name' => 'teamName',
+				'type' => 'Text',
+				'options' => array(
+					'label' => gettext_noop('Team Name'),
+					'column-size' => 'sm-10',
+					'label_attributes' => array(
+						'class' => 'col-sm-2',
+					),
+				),
+				'attributes' => array(
+					'id' => "",
+				)
+			));
+		}
 
 
 		$this->add(array(
@@ -325,6 +372,17 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 			);
 		}
 		
+		if($this->getShowTeamName()){
+			$filters['teamName'] = array(
+				'required' => false,
+				'filters' => array(
+					array('name' => 'StringTrim'),
+					array('name' => 'StripTags'),
+					array('name' => HTMLPurifier::class),
+				),
+			);
+		}
+		
 		$filters['isSub'] = array(
 			'required' => false,
 			'filters' => array(
@@ -333,6 +391,13 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 			'validators' => array(
 				array('name' => 'Between', 'options' => array('min' => 0, 'max' => 2))
 			)
+		);
+		
+		$filters['id'] = array(
+			'required' => false,
+			'filters' => array(
+				array('name' => 'Int'),
+			),
 		);
 		return $filters;
 	}

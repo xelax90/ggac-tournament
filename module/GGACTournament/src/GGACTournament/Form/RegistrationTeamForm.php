@@ -132,6 +132,7 @@ class RegistrationTeamForm extends Form implements InputFilterProviderInterface{
 						'show_isSub' => false,
 						'show_anmerkung' => false,
 						'data_required' => false,
+						'show_teamName' => false,
 					),
 				),
 			),

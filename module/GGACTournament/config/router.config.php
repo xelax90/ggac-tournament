@@ -56,6 +56,7 @@ return array(
 	'zfcadmin' => array(
 		'child_routes' => array(
 			'tournament'        => array( 'type' => ListRoute::class, 'options' => array( 'controller_options_name' => 'tournament'        ) ),
+			'registration'      => array( 'type' => ListRoute::class, 'options' => array( 'controller_options_name' => 'registration'      ) ),
 			'matches' => array(
 				'type' => 'Segment',
 				'options' => array(

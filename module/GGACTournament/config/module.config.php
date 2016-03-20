@@ -14,6 +14,7 @@ $guardConfig = array(
 	
 	// backend
 	['route' => 'zfcadmin/tournament',         'roles' => ['administrator'] ],
+	['route' => 'zfcadmin/registration',       'roles' => ['moderator'] ],
 	['route' => 'zfcadmin/matches',            'roles' => ['moderator'] ],
 	['route' => 'zfcadmin/matches/block',      'roles' => ['moderator'] ],
 	['route' => 'zfcadmin/matches/unblock',    'roles' => ['moderator'] ],
@@ -28,6 +29,7 @@ $ressources = array(
 $ressourceAllowRules = array(
 	[['administrator'], 'tournament', 'tournament/list'],
 	[['moderator'], 'tournament', 'matches/list'],
+	[['moderator'], 'tournament', 'registrations/list'],
 	
 );
 
@@ -40,6 +42,7 @@ return array(
 			Controller\AdminTournamentPhaseController::class => Controller\Factory\AdminTournamentPhaseControllerFactory::class,
 			Controller\AdminMatchController::class => Controller\Factory\AdminMatchControllerFactory::class,
 			Controller\AdminRoundController::class => Controller\Factory\AdminRoundControllerFactory::class,
+			Controller\AdminRegistrationController::class => Controller\Factory\AdminRegistrationControllerFactory::class,
 		),
 	),
 	
@@ -113,8 +116,17 @@ return array(
 		),
 		// admin navigation
 		'admin' => array(
-			'tournament'         => array('label' => gettext_noop('Tournaments'),           'route' => 'zfcadmin/tournament',             'resource' => 'tournament', 'privilege' => 'tournament/list' ),
-			'matches'            => array('label' => gettext_noop('Matches'),               'route' => 'zfcadmin/matches',                'resource' => 'tournament', 'privilege' => 'matches/list' ),
+			'users' => null,
+			'user-profiles' => null,
+			'user-dropdown' => array( 'label' => gettext_noop('Users'),          'route' => 'zfcadmin/user',             'resource' => 'administration', 'privilege' => 'user/list', 'pages' => array( 
+				'users'         => array('label' => gettext_noop('Users'),           'route' => 'zfcadmin/user',             'resource' => 'administration', 'privilege' => 'user/list' ),
+				'user-profiles' => array('label' => gettext_noop('User Profiles'),   'route' => 'zfcadmin/userprofile',      'resource' => 'administration', 'privilege' => 'userprofile'),
+			)),
+			'tournament'    => array('label' => gettext_noop('Tournament'),      'route' => 'zfcadmin/matches',          'resource' => 'tournament',     'privilege' => 'matches/list', 'pages' => array(
+				'registration'       => array('label' => gettext_noop('Registrations'),         'route' => 'zfcadmin/registration',           'resource' => 'tournament', 'privilege' => 'registrations/list' ),
+				'tournament'         => array('label' => gettext_noop('Tournaments'),           'route' => 'zfcadmin/tournament',             'resource' => 'tournament', 'privilege' => 'tournament/list' ),
+				'matches'            => array('label' => gettext_noop('Matches'),               'route' => 'zfcadmin/matches',                'resource' => 'tournament', 'privilege' => 'matches/list' ),
+			)),
 		),
 	),
 

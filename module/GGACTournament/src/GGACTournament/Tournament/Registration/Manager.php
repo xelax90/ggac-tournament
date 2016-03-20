@@ -302,7 +302,8 @@ class Manager extends AbstractManager{
 			$hydrator->hydrate($registration, $newRegistration);
 			$newRegistration->setTournament($this->getTournamentProvider()->getTournament())
 					->setTeamName($teamName)
-					->setIcon($teamIcon);
+					->setIcon($teamIcon)
+					->setId(0);
 			$em->persist($newRegistration);
 			$this->createUser($registration);
 			$team[] = $newRegistration;
@@ -316,7 +317,8 @@ class Manager extends AbstractManager{
 		if(!$registration instanceof Registration){
 			return false;
 		}
-		$registration->setTournament($this->getTournamentProvider()->getTournament());
+		$registration->setTournament($this->getTournamentProvider()->getTournament())
+				->setId(0);
 		$em = $this->getObjectManager();
 		$em->persist($registration);
 		$em->flush();
