@@ -33,6 +33,8 @@ use ZfcUser\Service\User as UserService;
 use Zend\EventManager\EventManager;
 use GoalioForgotPassword\Service\Password as PasswordService;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
+use GGACTournament\Entity\TournamentPhase;
+use GGACTournament\Entity\Team;
 
 /**
  * Description of Manager
@@ -203,6 +205,17 @@ class Manager extends AbstractManager{
 	 */
 	public function getTeamForm(){
 		$tournament = $this->getTournamentProvider()->getTournament();
+		
+		$currentPhase = $tournament->getCurrentPhase();
+		if(in_array($currentPhase->getRegistrationState(), array(
+			TournamentPhase::REGISTRATION_STATUS_CLOSED,
+			TournamentPhase::REGISTRATION_STATUS_NO_TEAMS,
+			TournamentPhase::REGISTRATION_STATUS_SUB_ONLY,
+		))){
+			// return null if team registration is disabled
+			return null;
+		}
+		
 		$form = $this->getFormManager()->get(RegistrationTeamForm::class, array(
 			'min_rwth' => $tournament->getRegistrationTeamMinRWTH(),
 			'max_not_rwth' => $tournament->getRegistrationTeamMaxNotRWTH(),
@@ -215,6 +228,15 @@ class Manager extends AbstractManager{
 	 */
 	public function getSingleForm(){
 		$tournament = $this->getTournamentProvider()->getTournament();
+		
+		$currentPhase = $tournament->getCurrentPhase();
+		if(in_array($currentPhase->getRegistrationState(), array(
+			TournamentPhase::REGISTRATION_STATUS_CLOSED,
+		))){
+			// return null if single registration is disabled
+			return null;
+		}
+		
 		$form = $this->getFormManager()->get(RegistrationSingleForm::class, array(
 			'require_rwth' => $tournament->getRegistrationSingleRequireRWTH(),
 		));
@@ -222,6 +244,9 @@ class Manager extends AbstractManager{
 	}
 	
 	public function prefillForm(User $user, $form){
+		if(!$form){
+			return true;
+		}
 		/* @var $playerRepo \GGACTournament\Model\PlayerRepository */
 		$playerRepo = $this->getObjectManager()->getRepository(Player::class);
 		$players = $playerRepo->getPlayersForUser($user);
@@ -296,6 +321,15 @@ class Manager extends AbstractManager{
 		$teamIcon = $data['team_icon_text'];
 		$registrations = $data['registrations'];
 		$team = array();
+		$players = array();
+		
+		// if tournament is runing, create team and players automatically
+		$currentPhase = $this->getTournamentProvider()->getTournament()->getCurrentPhase();
+		$tournamentRunning = false;
+		if($currentPhase->getTournamentState() == TournamentPhase::TOURNAMENT_STATUS_STARTED){
+			$tournamentRunning = true;
+		}
+		
 		foreach ($registrations as $registration) {
 			/* @var $registration Registration */
 			$newRegistration = new Registration();
@@ -305,10 +339,22 @@ class Manager extends AbstractManager{
 					->setIcon($teamIcon)
 					->setId(0);
 			$em->persist($newRegistration);
-			$this->createUser($registration);
+			$user = $this->createUser($registration);
+			
+			if($tournamentRunning){
+				$player = $this->createPlayer($registration);
+				$player->setUser($user);
+				$players[] = $player;
+			}
+			
 			$team[] = $newRegistration;
 		}
 		$em->flush();
+		
+		if(!empty($players)){
+			$this->createTeam($players);
+		}
+		
 		return $team;
 	}
 	
@@ -322,8 +368,58 @@ class Manager extends AbstractManager{
 		$em = $this->getObjectManager();
 		$em->persist($registration);
 		$em->flush();
-		$this->createUser($registration);
+		$user = $this->createUser($registration);
+		
+		// if tournament is runing, create player as substitute automatically
+		$currentPhase = $this->getTournamentProvider()->getTournament()->getCurrentPhase();
+		if($currentPhase->getTournamentState() == TournamentPhase::TOURNAMENT_STATUS_STARTED){
+			$player = $this->createPlayer($registration);
+			$player->setUser($user);
+			$em->flush();
+		}
+		
 		return $registration;
+	}
+	
+	protected function createTeam($players){
+		$teamName = '';
+		$teamIcon = '';
+		foreach($players as $player){
+			/* @var $player Player */
+			if($player->getTeam()){
+				return false;
+			}
+			if(!$player->getRegistration()){
+				return false;
+			}
+			$teamName = $player->getRegistration()->getTeamName();
+			$teamIcon = $player->getRegistration()->getIcon();
+		}
+		$teamNumber = $this->getTournamentProvider()->getTournament()->getMaxTeamNumber() + 1;
+		$team = new Team();
+		$team->setName($teamName)
+				->setIcon($teamIcon)
+				->setNumber($teamNumber)
+				->setPlayers($players);
+		foreach($players as $player){
+			$player->setTeam($team);
+		}
+		$em = $this->getObjectManager();
+		$em->persist($team);
+		$em->flush();
+		return $team;
+	}
+	
+	protected function createPlayer(Registration $registration){
+		if($registration->getPlayer()){
+			return $registration->getPlayer();
+		}
+		
+		$player = new Player();
+		$player->setRegistration($registration);
+		$registration->setPlayer($player);
+		$this->getObjectManager()->flush();
+		return $player;
 	}
 	
 	protected function createUser(Registration $registration){
@@ -332,7 +428,7 @@ class Manager extends AbstractManager{
 		$found = $mapper->findByEmail($email);
 		if($found){
 			$this->resetUser($found);
-			return;
+			return $found;
 		}
 		$pw = $this->getPasswordGenerator()->generatePassword();
 		$data = array(
@@ -344,6 +440,7 @@ class Manager extends AbstractManager{
 		);
 		$user = $this->getUserService()->register($data);
 		$this->getPasswordService()->sendProcessForgotRequest($user->getId(), $user->getEmail());
+		return $user;
 	}
 	
 	/**

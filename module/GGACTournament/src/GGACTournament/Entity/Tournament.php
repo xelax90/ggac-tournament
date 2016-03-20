@@ -391,6 +391,17 @@ class Tournament implements JsonSerializable, AlreadyPlayedInterface
 		return $maxPhase;
 	}
 	
+	public function getMaxTeamNumber(){
+		$maxNumber = 0;
+		foreach($this->getTeams() as $team){
+			/* @var $team Team */
+			if(!$maxNumber || $maxNumber < $team->getNumber()){
+				$maxNumber = $team->getNumber();
+			}
+		}
+		return $maxNumber;
+	}
+	
 	/**
 	 * Returns json String
 	 * @return string

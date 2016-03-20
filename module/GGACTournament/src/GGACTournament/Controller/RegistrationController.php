@@ -149,9 +149,11 @@ class RegistrationController extends AbstractTournamentController{
 			} else {
 				$currentForm = $singleForm;
 			}
-			$currentForm->setData($data);
-			if($currentForm->isValid()){
-				return $this->_forwardToConfirm();
+			if($currentForm){
+				$currentForm->setData($data);
+				if($currentForm->isValid()){
+					return $this->_forwardToConfirm();
+				}
 			}
 		}
 		$icons = $this->getRegistrationManager()->getAvailableIcons();
