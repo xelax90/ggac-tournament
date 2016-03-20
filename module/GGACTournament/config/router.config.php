@@ -63,6 +63,16 @@ return array(
 			),
 		),
 	),
+	'teams' => array(
+		'type' => 'literal',
+		'options' => array(
+			'route'    => '/teams',
+			'defaults' => array(
+				'controller' => Controller\TeamController::class,
+				'action'     => 'teams',
+			),
+		),
+	),
 	'zfcadmin' => array(
 		'child_routes' => array(
 			'tournament'        => array( 'type' => ListRoute::class, 'options' => array( 'controller_options_name' => 'tournament'        ) ),
