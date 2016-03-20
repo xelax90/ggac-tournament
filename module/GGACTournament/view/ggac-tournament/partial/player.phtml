@@ -4,6 +4,9 @@ use GGACTournament\Entity\Player;
 use GGACTournament\Entity\Registration;
 
 $showControls = false;
+$showWarnings = false;
+$deleteWarningRoute = '';
+$deleteWarningParams = array();
 $controls = array();
 $addStyles = '';
 $showCaptainContact = false;
@@ -14,6 +17,9 @@ $emailWithLink = true;
 $showWins = true;
 
 if(isset($this->showControls       )){ $showControls       = $this->showControls; }
+if(isset($this->showWarnings       )){ $showWarnings       = $this->showWarnings; }
+if(isset($this->deleteWarningRoute )){ $deleteWarningRoute = $this->deleteWarningRoute; }
+if(isset($this->deleteWarningParams)){ $deleteWarningParams= $this->deleteWarningParams; }
 if(isset($this->controls           )){ $controls           = $this->controls; }
 if(isset($this->addStyles          )){ $addStyles          = $this->addStyles; }
 if(isset($this->showCaptainContact )){ $showCaptainContact = $this->showCaptainContact; }
@@ -56,7 +62,25 @@ if(!empty($registration->getData())){
 	$normalWins = $registration->getData()->getNormalWins();
 	$tier = $registration->getData()->getTier();
 }
+
+$warningHTML = '';
+$warningHtmlPut = false;
+if($showWarnings){
+	$warnings = $player->getWarnings();
+	ob_start();
+	foreach($warnings as $warning): 
+		$routeParams = array();
+		$warnJs = "if(confirm('Verwarnung löschen?')){ window.location='".$this->url($deleteWarningRoute, array('warning_id' => $warning->getId()) + $deleteWarningParams )."'; }";
+	?>
+	<img onclick="<?= $warnJs ?>" src="<?= $this->basePath() ?>/img/control/yellowcard.png" alt="<?= $warning->getComment(); ?>" title="<?= $warning->getComment(); ?>" style="height: 20px; vertical-align: top;">
+	<?php 
+	endforeach; 
+	$warningHTML = ob_get_clean();
+}
+
+
 ?>
+
 
 <div class="player <?php echo $showControls ? 'with-controls' : ''; ?>" style="background-image: url('<?php echo $this->ggacLoLDDragon()->profileIcon($iconId) ?>'); <?php echo $addStyles ?>">
 	<?php if($showControls) : ?>
@@ -69,7 +93,7 @@ if(!empty($registration->getData())){
 	<?php endif; ?>
 	<div class="player-data">
 		<?php if($showAllContacts || ($showCaptainContact && $player->getIsCaptain())) : ?>
-			<div class="player_summonername <?= $showCaptain && $player->getIsCaptain() ? 'captain' : '' ?>"><?= $registration->getName() ?></div>
+			<div class="player_summonername <?= $showCaptain && $player->getIsCaptain() ? 'captain' : '' ?>"><?= $registration->getName() ?> <?php if(!$warningHtmlPut) { echo $warningHTML; $warningHtmlPut = true; } ?> </div>
 			<div class="<?= $showEmailRight ? 'player_rankedWins' : 'player_level' ?>">
 				<?php if($emailWithLink): ?>
 				<a href="mailto:<?= rawurlencode($registration->getName() . " <".$registration->getEmail().">") ?>">
@@ -81,7 +105,7 @@ if(!empty($registration->getData())){
 			</div>
 		<?php endif; ?>
 			
-		<div class="player_summonername <?= $showCaptain && $player->getIsCaptain() ? 'captain' : '' ?>"><?= $registration->getSummonerName() ?></div>
+		<div class="player_summonername <?= $showCaptain && $player->getIsCaptain() ? 'captain' : '' ?>"><?= $registration->getSummonerName() ?> <?php if(!$warningHtmlPut) { echo $warningHTML; $warningHtmlPut = true; } ?></div>
 		<?php if($dataKnown && $level > 0) : ?>
 			<?php if($showWins) : ?>
 				<div class="player_rankedWins">Ranked: <?= $rankedWins ?> Siege</div>

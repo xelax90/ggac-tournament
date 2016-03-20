@@ -18,34 +18,38 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace GGACTournament\Form\Element;
+namespace GGACTournament\View\Helper;
 
-use DoctrineModule\Form\Element\ObjectSelect;
-use GGACTournament\Tournament\ProviderAwareInterface;
-use GGACTournament\Tournament\ProviderAwareTrait;
-use GGACTournament\Entity\Team;
+use Zend\View\Helper\AbstractHelper;
+
+use GGACTournament\Tournament\Acl;
 
 /**
- * Description of TeamSelect
+ * Description of TournamentAcl
  *
  * @author schurix
  */
-class TeamSelect extends ObjectSelect implements ProviderAwareInterface{
-	use ProviderAwareTrait;
+class TournamentAcl extends AbstractHelper{
+	/** @var Acl */
+	protected $acl;
 	
-	public function setDefaultOptions(){
-		$this->setOptions(array(
-			'target_class'   => Team::class,
-			'label_generator' => function($team) {
-				return $team->getName();
-			},
-			'label' => gettext_noop('Team'),
-			'find_method' => array(
-				'name'   => 'getTeamsForTournament',
-				'params' => array(
-					'tournament' => $this->getTournamentProvider()->getTournament()
-				),
-			)
-		));
+	protected function getAcl() {
+		return $this->acl;
+	}
+
+	public function setAcl(Acl $acl) {
+		$this->acl = $acl;
+		return $this;
+	}
+
+	public function __invoke($ressource = null, $team = null) {
+		if($ressource === null){
+			return $this;
+		}
+		return $this->isAllowed($ressource, $team);
+	}
+	
+	public function isAllowed($ressource, $team = null){
+		return $this->getAcl()->isAllowed($ressource, $team);
 	}
 }

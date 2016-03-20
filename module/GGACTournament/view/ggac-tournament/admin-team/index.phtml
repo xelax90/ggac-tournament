@@ -1,0 +1,146 @@
+<?php
+
+/* 
+ * Copyright (C) 2016 schurix
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+echo $this->partial('partial/admin_flashmessenger.phtml');
+
+/* @var $tournament \GGACTournament\Entity\Tournament */
+$tournament = $this->tournament;
+$onlyMine = $this->onlyMine;
+
+$defaultRouteParams = array('routeStart' => $onlyMine ? 'my-teams' : 'teams');
+
+$teams = $tournament->getTeams();
+?>
+
+<h1><?= $tournament->getName() ?> - Teams</h1>
+
+<div class="navbar filter-bar">
+	<div class="navbar-inner">
+		<div class="pull-right">
+			<a href="<?php echo $this->url('zfcadmin/teams/create') ?>" class="btn btn-primary">
+				<?php echo $this->translate('New team') ?>
+			</a>
+		</div>
+	</div>
+</div>
+
+<?php foreach($teams as $team) : /* @var $team \GGACTournament\Entity\Team */  ?>
+	<?php 
+		if($onlyMine && $team->getAnsprechpartner() != $this->zfcUserIdentity()){
+			continue;
+		} 
+	?>
+	<?php 
+		$teamOptions = array(
+			'team' => $team,
+			'showFarberwartung' => true,
+			'useBootstrap' => true,
+			'showWarnings' => true,
+			'deleteWarningRoute' => 'zfcadmin/teams/deleteWarning',
+			'deleteWarningParams' => $defaultRouteParams,
+			'playerOptions' => array(
+				'addStyles' => '',
+				'showControls' => true,
+				'showCaptain' => true,
+				'showWarnings' => true,
+				'deleteWarningRoute' => 'zfcadmin/teams/deleteWarning',
+				'deleteWarningParams' => $defaultRouteParams,
+				'showCaptainContact' => true,
+				'showAllContacts' => $this->tournamentAcl('viewContacts', $team),
+				'emailWithLink' => true,
+				'showWins' => true,
+				'showEmailRight' => true,
+				'controls' => array(
+					'makeSub' => array(
+						'route' => 'zfcadmin/teams/player/makeSub',
+						'routeParams' => array('team_id' => $team->getId()) + $defaultRouteParams,
+						'routeParamName' => 'player_id',
+						'icon' => 'fa fa-user-times',
+						'title' => 'Aus Team entfernen',
+						'warning' => 'Spieler %s wirklich zum Ersatzspieler machen?'
+					),
+					'makeCaptain' => array(
+						'route' => 'zfcadmin/teams/player/makeCaptain',
+						'routeParams' => array('team_id' => $team->getId()) + $defaultRouteParams,
+						'routeParamName' => 'player_id',
+						'icon' => 'fa fa-black-tie',
+						'title' => 'Zum Captain machen',
+						'warning' => 'Spieler %s wirklich zum Captain machen? Dadurch werden seine Kontaktdaten für andere Spieler sichtbar!'
+					),
+					'warn' => array(
+						'route' => 'zfcadmin/teams/player/warn',
+						'routeParams' => array('team_id' => $team->getId()) + $defaultRouteParams,
+						'routeParamName' => 'player_id',
+						'icon' => 'fa fa-gavel',
+						'title' => 'Spieler verwarnen',
+					),
+				),
+			),
+		); 
+		
+		$cptMail = '';
+		$players = $team->getPlayers();
+		foreach($players as $player){
+			/* @var $player \GGACTournament\Entity\Player */
+			if ($player->getIsCaptain()) {
+				$cptMail = $player->getRegistration()->getName() . ' <'.$player->getRegistration()->getEmail().'>';
+			}
+		}
+	?>
+	
+	<div class="panel panel-default admin-team" style="position: relative">
+		<div class="panel-heading">
+			<div class="result">
+				<a class="btn btn-xs" title="Nachricht an den Captain" href="mailto:<?= rawurlencode($cptMail) ?>">
+					<i class="fa fa-envelope"></i>
+				</a>
+				<a class="btn btn-xs" title="Anmerkung hinzufügen" href="<?= $this->url('zfcadmin/teams/comment', array('team_id' => $team->getId()) + $defaultRouteParams) ?>">
+					<i class="fa fa-comments"></i>
+				</a>
+				<a class="btn btn-xs" title="Team verwarnen" href="<?= $this->url('zfcadmin/teams/warn', array('team_id' => $team->getId())  + $defaultRouteParams) ?>">
+					<i class="fa fa-gavel"></i>
+				</a>
+				<?php if($this->tournamentAcl('edit', $team)) : ?>
+				<a class="btn btn-xs" title="Team bearbeiten" href="<?= $this->url('zfcadmin/teams/edit', array('team_id' => $team->getId()) + $defaultRouteParams) ?>">
+					<i class="fa fa-pencil"></i>
+				</a>
+				<?php endif; ?>
+				<a class="btn btn-xs" title="Ersatzspieler permanent hinzuf&uuml;gen" href="<?= $this->url('zfcadmin/teams/addSub', array('team_id' => $team->getId()) + $defaultRouteParams) ?>">
+					<i class="fa fa-plus"></i>
+				</a>
+				<?php if($team->getIsBlocked() && $this->tournamentAcl('edit', $team)) : ?>
+				<a class="btn btn-xs" title="Aktivieren" href="<?= $this->url('zfcadmin/teams/unblock', array('team_id' => $team->getId()) + $defaultRouteParams) ?>">
+					<i class="fa fa-check"></i>
+				</a>
+				<?php elseif($this->tournamentAcl('edit', $team)): ?>
+				<a class="btn btn-xs" title="Blockieren" href="<?= $this->url('zfcadmin/teams/block', array('team_id' => $team->getId()) + $defaultRouteParams) ?>">
+					<i class="fa fa-ban"></i>
+				</a>
+				<?php endif; ?>
+			</div>
+			<div class="team-ansprechpartner"><?= $team->getAnsprechpartner()->getDisplayName() ?> <?= $team->getAnsprechpartner()->getEmail() ?></div>
+			<?php echo $this->partial('ggac-tournament/partial/team.phtml', $teamOptions); ?>
+			<?php if(!empty($team->getAnmerkung())) : ?>
+			<button class="btn btn-info btn-xs" style="position: absolute;top: -9px; right: -9px;" title="<?= $team->getAnmerkung() ?>"><i class="fa fa-comments"></i> </button>
+			<?php endif; ?>
+		</div>
+	</div>
+
+<?php  endforeach;

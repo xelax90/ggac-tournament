@@ -27,13 +27,14 @@ use GGACTournament\Tournament\Teamdata\Manager as TeamdataManager;
 use Zend\ServiceManager\AbstractPluginManager;
 
 /**
- * Description of AdminMatchControllerFactory
+ * Description of AdminTeamControllerFactory
  *
  * @author schurix
  */
-class AdminMatchControllerFactory extends AbstractTournamentControllerFactory{
+class AdminTeamControllerFactory extends AbstractTournamentControllerFactory{
+	
 	public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
-		/* @var $controller \GGACTournament\Controller\AdminMatchController */
+		/* @var $controller \GGACTournament\Controller\AdminTeamController */
 		$controller = parent::__invoke($container, $requestedName, $options);
 		
 		$services = $container;

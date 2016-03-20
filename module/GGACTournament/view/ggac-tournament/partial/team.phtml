@@ -7,6 +7,7 @@ $showWarnings = false;
 $showScore = false;
 $showFarberwartung = false;
 $deleteWarningRoute = '';
+$deleteWarningParams = array();
 $playerOptions = array();
 
 if(isset($this->team               )){ $team               = $this->team; }
@@ -15,6 +16,7 @@ if(isset($this->showWarnings       )){ $showWarnings       = $this->showWarnings
 if(isset($this->showScore          )){ $showScore          = $this->showScore; }
 if(isset($this->showFarberwartung  )){ $showFarberwartung  = $this->showFarberwartung; }
 if(isset($this->deleteWarningRoute )){ $deleteWarningRoute = $this->deleteWarningRoute; }
+if(isset($this->deleteWarningParams)){ $deleteWarningParams= $this->deleteWarningParams; }
 if(isset($this->playerOptions      )){ $playerOptions      = $this->playerOptions; }
 
 $teamSide = '';
@@ -65,7 +67,7 @@ if($team != null) :
 			<?= $showScore ? '('.$team->getScore().')' : '' ?> 
 			<?= $showFarberwartung ? $team->getData()->getFarberwartung() : '' ?>
 			<?php foreach($warnings as $warning): 
-				$warnJs = "if(confirm('Verwarnung löschen?')){ window.location='".$this->url($deleteWarningRoute, array('team_id' => $team->getId(), 'warning_id' => $warning->getId()))."'; }";
+				$warnJs = "if(confirm('Verwarnung löschen?')){ window.location='".$this->url($deleteWarningRoute, array('team_id' => $team->getId(), 'warning_id' => $warning->getId()) + $deleteWarningParams )."'; }";
 			?>
 			<img onclick="<?= $warnJs ?>" src="<?= $this->basePath() ?>/img/control/yellowcard.png" alt="<?= $warning->getComment(); ?>" title="<?= $warning->getComment(); ?>" style="height: 20px; vertical-align: top;">
 			<?php endforeach; ?>

@@ -15,6 +15,7 @@ return array(
 			return new Options\TournamentOptions(isset($config['ggac_tournament']) ? $config['ggac_tournament'] : array());
 		},
 		Tournament\Provider::class => Service\TournamentProviderFactory::class,
+		Tournament\Acl::class => Service\TournamentAclFactory::class,
 		
 		// managers
 		Tournament\Manager::class => Service\TournamentManagerFactory::class,

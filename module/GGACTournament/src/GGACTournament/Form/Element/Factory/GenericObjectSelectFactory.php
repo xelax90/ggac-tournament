@@ -18,34 +18,30 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace GGACTournament\Form\Element;
+namespace GGACTournament\Form\Element\Factory;
 
-use DoctrineModule\Form\Element\ObjectSelect;
-use GGACTournament\Tournament\ProviderAwareInterface;
-use GGACTournament\Tournament\ProviderAwareTrait;
-use GGACTournament\Entity\Team;
+use SkelletonApplication\Service\Factory\InvokableFactory;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\AbstractPluginManager;
+use Doctrine\ORM\EntityManager;
 
 /**
- * Description of TeamSelect
+ * Description of GenericObjectSelectFactory
  *
  * @author schurix
  */
-class TeamSelect extends ObjectSelect implements ProviderAwareInterface{
-	use ProviderAwareTrait;
-	
-	public function setDefaultOptions(){
-		$this->setOptions(array(
-			'target_class'   => Team::class,
-			'label_generator' => function($team) {
-				return $team->getName();
-			},
-			'label' => gettext_noop('Team'),
-			'find_method' => array(
-				'name'   => 'getTeamsForTournament',
-				'params' => array(
-					'tournament' => $this->getTournamentProvider()->getTournament()
-				),
-			)
-		));
+class GenericObjectSelectFactory extends InvokableFactory{
+	public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
+		$service = $container;
+		if($service instanceof AbstractPluginManager){
+			$service = $service->getServiceLocator();
+		}
+		
+		$element = parent::__invoke($container, $requestedName, $options);
+		
+        $entityManager = $service->get(EntityManager::class);
+        $element->getProxy()->setObjectManager($entityManager);
+		
+		return $element;
 	}
 }

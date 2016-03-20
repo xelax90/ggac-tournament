@@ -18,34 +18,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace GGACTournament\Form\Element;
+namespace GGACTournament\Form\Element\Factory;
 
-use DoctrineModule\Form\Element\ObjectSelect;
-use GGACTournament\Tournament\ProviderAwareInterface;
-use GGACTournament\Tournament\ProviderAwareTrait;
-use GGACTournament\Entity\Team;
+use Interop\Container\ContainerInterface;
 
 /**
- * Description of TeamSelect
+ * Description of AdminSelectFactory
  *
  * @author schurix
  */
-class TeamSelect extends ObjectSelect implements ProviderAwareInterface{
-	use ProviderAwareTrait;
-	
-	public function setDefaultOptions(){
-		$this->setOptions(array(
-			'target_class'   => Team::class,
-			'label_generator' => function($team) {
-				return $team->getName();
-			},
-			'label' => gettext_noop('Team'),
-			'find_method' => array(
-				'name'   => 'getTeamsForTournament',
-				'params' => array(
-					'tournament' => $this->getTournamentProvider()->getTournament()
-				),
-			)
-		));
+class AdminSelectFactory extends GenericObjectSelectFactory{
+	public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
+		$element = parent::__invoke($container, $requestedName, $options);
+		$element->setDefaultOptions();
+		return $element;
 	}
 }

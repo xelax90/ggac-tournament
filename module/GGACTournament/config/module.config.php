@@ -13,13 +13,26 @@ $guardConfig = array(
 	['route' => 'registration/display',        'roles' => ['guest', 'user'] ],
 	
 	// backend
-	['route' => 'zfcadmin/tournament',         'roles' => ['administrator'] ],
-	['route' => 'zfcadmin/registration',       'roles' => ['moderator'] ],
-	['route' => 'zfcadmin/matches',            'roles' => ['moderator'] ],
-	['route' => 'zfcadmin/matches/block',      'roles' => ['moderator'] ],
-	['route' => 'zfcadmin/matches/unblock',    'roles' => ['moderator'] ],
-	['route' => 'zfcadmin/matches/setResult',  'roles' => ['moderator'] ],
-	['route' => 'zfcadmin/matches/comment',    'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/tournament',               'roles' => ['administrator'] ],
+	['route' => 'zfcadmin/registration',             'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/matches',                  'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/matches/block',            'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/matches/unblock',          'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/matches/setResult',        'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/matches/comment',          'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams',                    'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/unblock',            'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/block',              'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/comment',            'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/edit',               'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/create',             'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/warn',               'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/addSub',             'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/deleteWarning',      'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/player',             'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/player/warn',        'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/player/makeSub',     'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/teams/player/makeCaptain', 'roles' => ['moderator'] ],
 );
 
 $ressources = array(
@@ -29,6 +42,7 @@ $ressources = array(
 $ressourceAllowRules = array(
 	[['administrator'], 'tournament', 'tournament/list'],
 	[['moderator'], 'tournament', 'matches/list'],
+	[['moderator'], 'tournament', 'teams/list'],
 	[['moderator'], 'tournament', 'registrations/list'],
 	
 );
@@ -43,6 +57,7 @@ return array(
 			Controller\AdminMatchController::class => Controller\Factory\AdminMatchControllerFactory::class,
 			Controller\AdminRoundController::class => Controller\Factory\AdminRoundControllerFactory::class,
 			Controller\AdminRegistrationController::class => Controller\Factory\AdminRegistrationControllerFactory::class,
+			Controller\AdminTeamController::class => Controller\Factory\AdminTeamControllerFactory::class,
 		),
 	),
 	
@@ -105,8 +120,12 @@ return array(
 	),
 
 	'view_helpers' => array(
-		'invokables' => array(
+		'aliases' => array(
+			'tournamentAcl' => View\Helper\TournamentAcl::class,
 		),
+		'factories' => array(
+			View\Helper\TournamentAcl::class => Service\TournamentAclHelperFactory::class,
+		)
 	),
 	
 	// Site navigation
@@ -126,6 +145,7 @@ return array(
 				'registration'       => array('label' => gettext_noop('Registrations'),         'route' => 'zfcadmin/registration',           'resource' => 'tournament', 'privilege' => 'registrations/list' ),
 				'tournament'         => array('label' => gettext_noop('Tournaments'),           'route' => 'zfcadmin/tournament',             'resource' => 'tournament', 'privilege' => 'tournament/list' ),
 				'matches'            => array('label' => gettext_noop('Matches'),               'route' => 'zfcadmin/matches',                'resource' => 'tournament', 'privilege' => 'matches/list' ),
+				'teams'              => array('label' => gettext_noop('Teams'),                 'route' => 'zfcadmin/teams',                  'resource' => 'tournament', 'privilege' => 'teams/list' ),
 			)),
 		),
 	),

@@ -23,29 +23,30 @@ namespace GGACTournament\Form\Element;
 use DoctrineModule\Form\Element\ObjectSelect;
 use GGACTournament\Tournament\ProviderAwareInterface;
 use GGACTournament\Tournament\ProviderAwareTrait;
-use GGACTournament\Entity\Team;
+use GGACTournament\Entity\Player;
 
 /**
- * Description of TeamSelect
+ * Description of SubstituteSelect
  *
  * @author schurix
  */
-class TeamSelect extends ObjectSelect implements ProviderAwareInterface{
+class SubstituteSelect extends ObjectSelect implements ProviderAwareInterface{
 	use ProviderAwareTrait;
 	
 	public function setDefaultOptions(){
 		$this->setOptions(array(
-			'target_class'   => Team::class,
-			'label_generator' => function($team) {
-				return $team->getName();
+			'target_class'   => Player::class,
+			'label_generator' => function($player) {
+				return $player->getRegistration()->getSummonerName();
 			},
-			'label' => gettext_noop('Team'),
+			'label' => gettext_noop('Substitute'),
 			'find_method' => array(
-				'name'   => 'getTeamsForTournament',
+				'name'   => 'getSubsForTournament',
 				'params' => array(
 					'tournament' => $this->getTournamentProvider()->getTournament()
 				),
 			)
 		));
+
 	}
 }

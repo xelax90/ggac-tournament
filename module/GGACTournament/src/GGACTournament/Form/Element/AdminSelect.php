@@ -22,7 +22,6 @@ namespace GGACTournament\Form\Element;
 
 use DoctrineModule\Form\Element\ObjectSelect;
 use SkelletonApplication\Entity\User;
-use SkelletonApplication\Entity\Role;
 
 /**
  * Description of TeamSelect
@@ -30,28 +29,34 @@ use SkelletonApplication\Entity\Role;
  * @author schurix
  */
 class AdminSelect extends ObjectSelect{
-	
-	public function getProxy() {
-        if (null === $this->proxy) {
-            $this->proxy = new Proxy();
-			// initialize with default properties
-			
-			$adminRoles = $this->proxy->getObjectManager()->getRepository(Role::class)->findBy(array('roleId' => array('moderator', 'administrator')));
-			$this->proxy->setOptions(array(
-				'target_class'   => User::class,
-				'label_generator' => function($user) {
-					return $user->getDisplayName();
-				},
-				'find_method' => array(
-					'name'   => 'findBy',
-					'params' => array(
-						'criteria' => array(
-							'roles' => $adminRoles
-						),
+	public function setDefaultOptions(){
+		/* @var $userRepo \Doctrine\ORM\EntityRepository */
+		$userRepo = $this->proxy->getObjectManager()->getRepository(User::class);
+		$users = $userRepo->createQueryBuilder('u')
+				->leftJoin('u.roles', 'r')
+				->andWhere('r.roleId IN (:adminRoles)')
+				->setParameter('adminRoles', array('moderator', 'administrator'))
+				->getQuery()
+				->getResult();
+		// executes query by hand to avoid creating a new repository
+		$ids = array();
+		foreach($users as $user){
+			$ids[] = $user->getId();
+		}
+		$defaultOptions = array(
+			'target_class'   => User::class,
+			'label_generator' => function($user) {
+				return $user->getDisplayName();
+			},
+			'find_method' => array(
+				'name'   => 'findBy',
+				'params' => array(
+					'criteria' => array(
+						'id' => $ids,
 					),
 				),
-			));
-        }
-        return $this->proxy;
+			),
+		);
+		return $this->setOptions($defaultOptions);
 	}
 }

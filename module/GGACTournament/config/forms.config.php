@@ -10,7 +10,8 @@ return array(
 	'factories' => array(
 		// elements
 		Form\Element\TeamSelect::class => Form\Element\Factory\TournamentObjectSelect::class,
-		Form\Element\AdminSelect::class => ObjectSelectFactory::class,
+		Form\Element\SubstituteSelect::class => Form\Element\Factory\TournamentObjectSelect::class,
+		Form\Element\AdminSelect::class => Form\Element\Factory\GenericObjectSelectFactory::class,
 		Form\Element\RegistrationStateSelect::class => ElementFactory::class,
 		Form\Element\TournamentStateSelect::class => ElementFactory::class,
 		Form\Element\RoundTypeSelect::class => Form\Element\Factory\RoundTypeSelectFactory::class,
@@ -31,6 +32,7 @@ return array(
 		Form\RegistrationSingleForm::class => DoctrineHydratedFieldsetFactory::class,
 		Form\MatchCommentForm::class => DoctrineHydratedFieldsetFactory::class,
 		Form\MatchResultForm::class => DoctrineHydratedFieldsetFactory::class,
+		Form\TeamCommentForm::class => DoctrineHydratedFieldsetFactory::class,
 	),
 	'aliases' => array(
 	)
