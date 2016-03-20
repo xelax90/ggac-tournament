@@ -18,34 +18,34 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace GGACTournament\Service;
-
-use SkelletonApplication\Service\Factory\InvokableFactory;
-
+namespace GGACTournament\Controller\Factory;
 use Zend\ServiceManager\AbstractPluginManager;
-use Interop\Container\ContainerInterface;
-use Doctrine\ORM\EntityManager;
+use GGACTournament\Tournament\ApiData\Manager as ApiDataManager;
+use GGACTournament\Tournament\Manager as TournamentManager;
+use GGACTournament\Tournament\Teamdata\Manager as TeamdataManager;
 
 /**
- * Description of TournamentAclFactory
+ * Description of StandingsControllerFactory
  *
  * @author schurix
  */
-class TournamentAclFactory extends InvokableFactory{
-	public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
-		/* @var $acl \GGACTournament\Tournament\Acl */
-		$acl = parent::__invoke($container, $requestedName, $options);
+class StandingsControllerFactory extends AbstractTournamentControllerFactory{
+	public function __invoke(\Interop\Container\ContainerInterface $container, $requestedName, array $options = null) {
+		/* @var $controller \GGACTournament\Controller\StandingsController */
+		$controller = parent::__invoke($container, $requestedName, $options);
 		
 		$services = $container;
 		if($services instanceof AbstractPluginManager){
 			$services = $services->getServiceLocator();
 		}
 		
-		$auth = $services->get('zfcuser_auth_service');
-		$em = $services->get(EntityManager::class);
-		$acl->setAuthenticationService($auth);
-		$acl->setObjectManager($em);
+		$apiManager = $services->get(ApiDataManager::class);
+		$teamdataManager = $services->get(TeamdataManager::class);
+		$tournamentManager = $services->get(TournamentManager::class);
+		$controller->setApiDataManager($apiManager);
+		$controller->setTeamdataManager($teamdataManager);
+		$controller->setTournamentManager($tournamentManager);
 		
-		return $acl;
+		return $controller;
 	}
 }

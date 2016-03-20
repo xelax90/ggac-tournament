@@ -23,7 +23,6 @@ use GGACTournament\Tournament\Registration\Manager as RegistrationManager;
 use GGACTournament\Form\RegistrationTeamForm;
 use GGACTournament\Form\RegistrationSingleForm;
 use Zend\View\Model\ViewModel;
-use Zend\Stdlib\ResponseInterface as Response;
 use GGACTournament\Tournament\ApiData\Manager as ApiDataManager;
 use Zend\Form\Form;
 

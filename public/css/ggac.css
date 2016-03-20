@@ -10780,45 +10780,8 @@ body {
 #header ul li.selected a {
   color: #fff;
 }
-.players .player {
-  margin: 0 0 10px 0;
-  background-repeat: no-repeat;
-  background-size: 52px;
-  background-position-x: left;
-  min-height: 44px;
-  padding: 6px 2px 2px 58px;
-  line-height: 20px;
-  position: relative;
-  overflow: auto;
-}
-.players .player .player_summonername,
-.players .player .player_level {
-  float: left;
-}
-.players .player .player_summonername,
-.players .player .player_level {
-  clear: left;
-}
-.players .player .player_summonername {
-  font-weight: bold;
-}
-.players .player .player_summonername.captain {
-  color: red;
-}
-.players .player .player_normalWins,
-.players .player .player_rankedWins {
-  float: right;
-}
-.players .player .player_rankedWins {
-  clear: right;
-}
-.players .player .player_subborder {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 48px;
-  height: 48px;
-  border: 2px solid #FF4400;
+.players {
+  display: block;
 }
 .report_team {
   overflow: auto;
@@ -11394,47 +11357,8 @@ body {
   margin: 0 0 10px 0;
   font-size: 17px;
 }
-#body .games .aside ul li .team .players {
-  display: block;
-}
-#body .games .aside ul li .team .players .player {
-  margin: 0 0 10px 0;
-  background-repeat: no-repeat;
-  background-size: 52px;
-  background-position-x: left;
-  min-height: 52px;
-  padding: 6px 2px 2px 58px;
-  line-height: 20px;
-  position: relative;
-  overflow: auto;
-}
-#body .games .aside ul li .team .players .player .player_summonername,
-#body .games .aside ul li .team .players .player .player_level {
-  float: left;
-}
-#body .games .aside ul li .team .players .player .player_level {
-  clear: left;
-}
-#body .games .aside ul li .team .players .player .player_summonername {
-  font-weight: bold;
-}
-#body .games .aside ul li .team .players .player .player_summonername.captain {
-  color: red;
-}
-#body .games .aside ul li .team .players .player .player_normalWins,
-#body .games .aside ul li .team .players .player .player_rankedWins {
-  float: right;
-}
-#body .games .aside ul li .team .players .player .player_rankedWins {
-  clear: right;
-}
 #body .games .aside ul li .team .players .player .player_subborder {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 48px;
-  height: 48px;
-  border: 2px solid #FFD700;
+  border-color: #FFD700;
 }
 #body .games .aside ul li span a {
   font-size: 14px;
@@ -11966,7 +11890,7 @@ body {
   background-repeat: no-repeat;
   background-size: 52px;
   background-position-x: left;
-  min-height: 48px;
+  min-height: 52px;
   padding: 2px 2px 2px 58px;
   margin-left: 80px;
 }
@@ -11981,44 +11905,8 @@ body {
 #body .ergebnisse ul li .article .standings .standing .team .players {
   display: none;
 }
-#body .ergebnisse ul li .article .standings .standing .team .players .player {
-  margin: 0 0 10px 0;
-  background-repeat: no-repeat;
-  background-size: 52px;
-  background-position-x: left;
-  min-height: 44px;
-  padding: 6px 2px 2px 58px;
-  line-height: 20px;
-  position: relative;
-  overflow: auto;
-}
-#body .ergebnisse ul li .article .standings .standing .team .players .player .player_summonername,
-#body .ergebnisse ul li .article .standings .standing .team .players .player .player_level {
-  float: left;
-}
-#body .ergebnisse ul li .article .standings .standing .team .players .player .player_level {
-  clear: left;
-}
-#body .ergebnisse ul li .article .standings .standing .team .players .player .player_summonername {
-  font-weight: bold;
-}
-#body .ergebnisse ul li .article .standings .standing .team .players .player .player_summonername.captain {
-  color: red;
-}
-#body .ergebnisse ul li .article .standings .standing .team .players .player .player_normalWins,
-#body .ergebnisse ul li .article .standings .standing .team .players .player .player_rankedWins {
-  float: right;
-}
-#body .ergebnisse ul li .article .standings .standing .team .players .player .player_rankedWins {
-  clear: right;
-}
 #body .ergebnisse ul li .article .standings .standing .team .players .player .player_subborder {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 48px;
-  height: 48px;
-  border: 2px solid #FFD700;
+  border-color: #FFD700;
 }
 #body .ergebnisse ul li .article .standings .standing .score {
   float: right;
@@ -12286,11 +12174,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   background-repeat: no-repeat;
   background-size: 52px;
   background-position-x: left;
-  min-height: 44px;
+  min-height: 52px;
   padding: 6px 2px 2px 58px;
   line-height: 20px;
   position: relative;
   overflow: auto;
+}
+.player.with-controls .player-data {
+  float: left;
+  width: 90%;
 }
 .player .player-controls {
   float: right;
@@ -12299,16 +12191,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   text-align: center;
   margin-top: 15px;
 }
-.player.with-controls .player-data {
-  float: left;
-  width: 90%;
-}
 .player .player_summonername,
 .player .player_level {
   float: left;
-  clear: left;
-}
-.player .player_level {
   clear: left;
 }
 .player .player_summonername {

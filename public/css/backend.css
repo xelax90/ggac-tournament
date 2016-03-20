@@ -11503,11 +11503,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   background-repeat: no-repeat;
   background-size: 52px;
   background-position-x: left;
-  min-height: 44px;
+  min-height: 52px;
   padding: 6px 2px 2px 58px;
   line-height: 20px;
   position: relative;
   overflow: auto;
+}
+.player.with-controls .player-data {
+  float: left;
+  width: 90%;
 }
 .player .player-controls {
   float: right;
@@ -11516,16 +11520,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   text-align: center;
   margin-top: 15px;
 }
-.player.with-controls .player-data {
-  float: left;
-  width: 90%;
-}
 .player .player_summonername,
 .player .player_level {
   float: left;
-  clear: left;
-}
-.player .player_level {
   clear: left;
 }
 .player .player_summonername {

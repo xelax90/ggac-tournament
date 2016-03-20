@@ -157,48 +157,7 @@ body {
 }
 
 .players{
-	.player{
-		margin: 0 0 10px 0;
-		background-repeat: no-repeat;
-		background-size: 52px;
-		background-position-x: left;
-		min-height: 44px;
-		padding: 6px 2px 2px 58px;	
-		line-height: 20px;
-		position: relative;
-		overflow: auto;
-		
-		.player_summonername,
-		.player_level{
-			float: left;
-		}
-		.player_summonername,
-		.player_level{
-			clear: left;
-		}
-		.player_summonername{
-			font-weight: bold;
-			&.captain{
-				color: red;
-			}
-		}
-		.player_normalWins,
-		.player_rankedWins{
-			float: right;
-		}
-
-		.player_rankedWins{
-			clear: right;
-		}
-		.player_subborder{
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			width: 48px;
-			height: 48px;
-			border: 2px solid #FF4400;
-		}
-	}
+	display: block;
 }
 
 .gamereport{
@@ -783,7 +742,7 @@ body {
 						background-repeat: no-repeat;
 						background-size: 52px;
 						background-position-x: left;
-						min-height: 48px + 2 + 2;
+						min-height: 52px;
 						padding: 2px 2px 2px 58px;	
 						
 						.team_name{
@@ -793,46 +752,9 @@ body {
 						}
 						
 						.players{
-							display: block;
 							.player {
-								margin: 0 0 10px 0;
-								background-repeat: no-repeat;
-								background-size: 52px;
-								background-position-x: left;
-								min-height: 44px + 6 + 2;
-								padding: 6px 2px 2px 58px;	
-								line-height: 20px;
-								position: relative;
-								overflow: auto;
-								
-								.player_summonername,
-								.player_level{
-									float: left;
-								}
-								.player_level{
-									clear: left;
-								}
-								.player_summonername{
-									font-weight: bold;
-									&.captain{
-										color: red;
-									}
-								}
-								.player_normalWins,
-								.player_rankedWins{
-									float: right;
-								}
-
-								.player_rankedWins{
-									clear: right;
-								}
 								.player_subborder{
-									position: absolute;
-									top: 0px;
-									left: 0px;
-									width: 48px;
-									height: 48px;
-									border: 2px solid #FFD700;
+									border-color: #FFD700;
 								}
 							}
 						}
@@ -1409,7 +1331,7 @@ body {
 							background-repeat: no-repeat;
 							background-size: 52px;
 							background-position-x: left;
-							min-height: 48px;
+							min-height: 52px;
 							padding: 2px 2px 2px 58px;
 							margin-left: 80px;
 							
@@ -1427,44 +1349,8 @@ body {
 								display: none;
 								
 								.player{
-									margin: 0 0 10px 0;
-									background-repeat: no-repeat;
-									background-size: 52px;
-									background-position-x: left;
-									min-height: 44px;
-									padding: 6px 2px 2px 58px;	
-									line-height: 20px;
-									position: relative;
-									overflow: auto;
-									
-									.player_summonername,
-									.player_level{
-										float: left;
-									}
-									.player_level{
-										clear: left;
-									}
-									.player_summonername{
-										font-weight: bold;
-									}
-									.player_summonername.captain{
-										color: red;
-									}
-									.player_normalWins,
-									.player_rankedWins{
-										float: right;
-									}
-
-									.player_rankedWins{
-										clear: right;
-									}
 									.player_subborder{
-										position: absolute;
-										top: 0px;
-										left: 0px;
-										width: 48px;
-										height: 48px;
-										border: 2px solid #FFD700;
+										border-color: #FFD700;
 									}
 									
 								}
@@ -1518,7 +1404,7 @@ body {
 									background-repeat: no-repeat;
 									background-size: 52px;
 									background-position-x: left;
-									min-height: 48px + 2 + 2;
+									min-height: 52px;
 									padding: 2px 2px 2px 58px;
 									margin-left: 0px;
 									width: 255px;

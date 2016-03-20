@@ -99,56 +99,57 @@ body {
     background-repeat: no-repeat;
     background-size: 52px;
     background-position-x: left;
-    min-height: 44px;
+	min-height: 44px + 6 + 2;
     padding: 6px 2px 2px 58px;	
     line-height: 20px;
     position: relative;
     overflow: auto;
-}
+	
+	&.with-controls{
+		.player-data{
+			float: left; 
+			width: 90%;
+		}
+	}
+	
+	.player-controls{
+		float: right;
+		width: 8%;
+		line-height: 24px;
+		text-align: center;
+		margin-top: 15px;
+	}
+	
+	.player_summonername,
+	.player_level{
+		float: left;
+		clear: left;
+	}
+	
+	.player_summonername{
+		font-weight: bold;
+		&.captain{
+			color: red;
+		}
+	}
+	
+	.player_normalWins,
+	.player_rankedWins{
+		float: right;
+	}
 
-.player .player-controls{
-	float: right;
-	width: 8%;
-	line-height: 24px;
-	text-align: center;
-	margin-top: 15px;
-}
-
-.player.with-controls .player-data{
-	float: left; 
-	width: 90%;
-}
-
-.player .player_summonername,
-.player .player_level{
-    float: left;
-    clear: left;
-}
-
-.player .player_level{
-    clear: left;
-}
-.player .player_summonername{
-    font-weight: bold;
-}
-.player .player_summonername.captain{
-    color: red;
-}
-.player .player_normalWins,
-.player .player_rankedWins{
-    float: right;
-}
-
-.player .player_rankedWins{
-    clear: right;
-}
-.player .player_subborder{
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 52px;
-    height: 52px;
-    border: 2px solid #FF4400;
+	.player_rankedWins{
+		clear: right;
+	}
+	
+	.player_subborder{
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		width: 52px;
+		height: 52px;
+		border: 2px solid #FF4400;
+	}
 }
 
 .admin-paarung .table .cell-screen-gast,

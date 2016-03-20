@@ -25,14 +25,18 @@ use GGACTournament\Entity\Team;
 use GGACTournament\Entity\Tournament;
 use SkelletonApplication\Entity\User;
 use SkelletonApplication\Entity\Role;
-
+use GGACTournament\Entity\Player;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use DoctrineModule\Persistence\ProvidesObjectManager;
 
 /**
  * Description of Acl
  *
  * @author schurix
  */
-class Acl {
+class Acl implements ObjectManagerAwareInterface{
+	use ProvidesObjectManager;
+	
 	protected $guestRole = 'guest';
 	protected $moderatorRole = 'moderator';
 	protected $adminRole = 'administrator';
@@ -66,7 +70,7 @@ class Acl {
 		} else {
 			$tournament = $team->getTournament();
 		}
-		$player = $user->getPlayer($tournament);
+		$player = $this->getObjectManager()->getRepository(Player::class)->getPlayerForUser($user, $tournament);
 		return !empty($player);
 	}
 	
@@ -137,7 +141,7 @@ class Acl {
 				return false;
 			}
 			
-			$player = $user->getPlayer($team->getTournament());
+			$player = $this->getObjectManager()->getRepository(Player::class)->getPlayerForUser($user, $team->getTournament());
 			return $player->getTeam() == $team;
 		});
 		

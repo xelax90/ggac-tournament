@@ -53,6 +53,16 @@ return array(
 			),
 		)
 	),
+	'standings' => array(
+		'type' => 'literal',
+		'options' => array(
+			'route'    => '/standings',
+			'defaults' => array(
+				'controller' => Controller\StandingsController::class,
+				'action'     => 'table',
+			),
+		),
+	),
 	'zfcadmin' => array(
 		'child_routes' => array(
 			'tournament'        => array( 'type' => ListRoute::class, 'options' => array( 'controller_options_name' => 'tournament'        ) ),

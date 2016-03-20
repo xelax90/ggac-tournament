@@ -70,7 +70,7 @@ class Manager extends AbstractManager{
 		return $this;
 	}
 
-	public function calculateScores($refresh = false){
+	public function calculateScores($refresh = true){
 		// compute teamdata
 		$this->getTeamdataManager()->getTeamdata($refresh);
 		$computed = array();

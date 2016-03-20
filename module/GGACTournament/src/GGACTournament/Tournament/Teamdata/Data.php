@@ -344,6 +344,6 @@ class Data{
 	 * @return array
 	 */
 	public function __sleep(){
-		return array('teamid', 'points', 'playedHome', 'playedGuest', 'previousGameHome', 'penultimateGameHome');
+		return array('teamid', 'points', 'tiebreakOrder', 'playedHome', 'playedGuest', 'previousGameHome', 'penultimateGameHome');
 	}
 }
