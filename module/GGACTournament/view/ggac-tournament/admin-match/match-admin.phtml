@@ -6,11 +6,25 @@ $tournament = $this->tournament;
 
 <?php foreach($tournament->getPhases() as $phase) : /* @var $phase \GGACTournament\Entity\TournamentPhase */ ?>
 <h1>Phase <?= $phase->getNumber() ?> <?= $phase->getName() ?></h1>
-	<?php foreach($phase->getGroups() as $group) : /* @var $group GGACTournament\Entity\Group */ ?>
+	<?php $groupCount = count($phase->getGroups()); 
+	foreach($phase->getGroups() as $group) : /* @var $group GGACTournament\Entity\Group */ ?>
+		<?php if($groupCount > 1) : ?>
 		<h2>Gruppe <?= $group->getNumber() ?></h2>
+		<?php endif; ?>
 		<?php foreach($group->getRounds() as $round): /* @var $round \GGACTournament\Entity\Round */ ?>
-			<h3>Runde <?= $round->getNumber() ?> (<?= $round->getRoundType() ?>) <?= $round->getIsHidden() ? '<i>versteckt</i>' : '' ?></h3>
 
+			<div class="navbar filter-bar">
+				<div class="navbar-inner">
+					<div class="pull-left">
+						<h3>Runde <?= $round->getNumber() ?> (<?= $round->getRoundType() ?>) <?= $round->getIsHidden() ? '<i>versteckt</i>' : '' ?></h3>
+					</div>
+
+					<div class="pull-right">
+						<?php $codesRequested = !empty($round->getMatches()[0]->getGames()[0]->getTournamentCode()); ?>
+						<h3><a href="<?php echo $this->url('zfcadmin/matches/getcodes', array('round_id' => $round->getId())) ?>" class="btn btn-<?php echo $codesRequested ? 'success' : 'primary' ?>"><i class="fa fa-<?php echo $codesRequested ? 'check' : 'refresh' ?>"></i> Request tournament codes</a></h3>
+					</div>
+				</div>
+			</div>
 			<?php foreach ($round->getMatches() as $match): /* @var $match \GGACTournament\Entity\Match */ ?>
 				<?php
 					$pointsHome = "";

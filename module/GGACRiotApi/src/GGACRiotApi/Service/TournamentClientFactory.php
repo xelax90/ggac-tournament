@@ -23,7 +23,6 @@ namespace GGACRiotApi\Service;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\AbstractPluginManager;
 use SkelletonApplication\Service\Factory\InvokableFactory;
-use GGACRiotApi\Cache\ApiCache;
 use GGACRiotApi\Options\ApiOptions;
 
 /**
@@ -33,7 +32,7 @@ use GGACRiotApi\Options\ApiOptions;
  */
 class ClientFactory extends InvokableFactory{
 	public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
-		/* @var $client Client */
+		/* @var $client TournamentClient */
 		$client = parent::__invoke($container, $requestedName, $options);
 		
 		$services = $container;
@@ -41,10 +40,10 @@ class ClientFactory extends InvokableFactory{
 			$services = $services->getServiceLocator();
 		}
 		
-		$cache = $services->get(ApiCache::class);
 		$apiOptions = $services->get(ApiOptions::class);
+		$router = $services->get('Router');
 		
-		$client->setCache($cache);
+		$client->setRouter($router);
 		$client->setOptions($apiOptions);
 		
 		return $client;

@@ -2,6 +2,7 @@
 namespace GGACRiotApi;
 
 use GGACTournament\Tournament\ApiData\ApiInterface;
+use GGACTournament\Tournament\ApiData\TournamentApiInterface;
 use Zend\ServiceManager\ServiceManager;
 
 return array(
@@ -15,9 +16,11 @@ return array(
 			return new Options\ApiOptions(isset($config['ggac_riotapi']) ? $config['ggac_riotapi'] : array());
 		},
 		Service\Client::class => Service\ClientFactory::class,
+		Service\TournamentClient::class => Service\TournamentClient::class,
 		Cache\ApiCache::class => Service\CacheFactory::class,
 	),
 	'aliases' => array(
 		ApiInterface::class => Service\Client::class,		
+		TournamentApiInterface::class => Service\TournamentClient::class,		
 	)
 );

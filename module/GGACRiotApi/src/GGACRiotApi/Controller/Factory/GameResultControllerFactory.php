@@ -18,35 +18,31 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace GGACRiotApi\Service;
+namespace GGACRiotApi\Controller\Factory;
 
-use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\AbstractPluginManager;
 use SkelletonApplication\Service\Factory\InvokableFactory;
-use GGACRiotApi\Cache\ApiCache;
-use GGACRiotApi\Options\ApiOptions;
+use Interop\Container\ContainerInterface;
+use Doctrine\ORM\EntityManager;
+use Zend\ServiceManager\AbstractPluginManager;
 
 /**
- * Description of ClientFactory
+ * Description of GameResultControllerFactory
  *
  * @author schurix
  */
-class ClientFactory extends InvokableFactory{
+class GameResultControllerFactory extends InvokableFactory{
 	public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
-		/* @var $client Client */
-		$client = parent::__invoke($container, $requestedName, $options);
+		/* @var $controller \GGACTournament\Controller\AbstractTournamentController */
+		$controller = parent::__invoke($container, $requestedName, $options);
 		
 		$services = $container;
 		if($services instanceof AbstractPluginManager){
 			$services = $services->getServiceLocator();
 		}
 		
-		$cache = $services->get(ApiCache::class);
-		$apiOptions = $services->get(ApiOptions::class);
+		$em = $services->get(EntityManager::class);
+		$controller->setObjectManager($em);
 		
-		$client->setCache($cache);
-		$client->setOptions($apiOptions);
-		
-		return $client;
+		return $controller;
 	}
 }

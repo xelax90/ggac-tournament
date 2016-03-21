@@ -20,8 +20,9 @@
 
 namespace GGACTournament\Tournament\ApiData;
 
-use GGACTournament\Tournament\Manager as TournamentManager;
 use GGACTournament\Tournament\AbstractManager;
+use GGACTournament\Entity\Round;
+use GGACTournament\Entity\Match;
 
 /**
  * Manages Api data (division, level, etc.)
@@ -34,6 +35,9 @@ class Manager extends AbstractManager{
 	
 	/** @var ApiInterface */
 	protected $api;
+	
+	/** @var TournamentApiInterface */
+	protected $tournamentApi;
 	
 	/**
 	 * @return ApiInterface
@@ -66,7 +70,23 @@ class Manager extends AbstractManager{
 		$this->cache = $cache;
 		return $this;
 	}
-
+	
+	/**
+	 * @return TournamentApiInterface
+	 */
+	public function getTournamentApi() {
+		return $this->tournamentApi;
+	}
+	
+	/**
+	 * @param TournamentApiInterface $tournamentApi
+	 * @return Manager
+	 */
+	public function setTournamentApi(TournamentApiInterface $tournamentApi) {
+		$this->tournamentApi = $tournamentApi;
+		return $this;
+	}
+	
 	/**
 	 * Computes hash over all summoner names
 	 * @return string
@@ -108,6 +128,27 @@ class Manager extends AbstractManager{
 			$apiData[$registration->getId()]->setRegistration($registration);
 			$registration->setData($apiData[$registration->getId()]);
 		}
+	}
+	
+	public function requestCodesForRound(Round $round){
+		$res = true;
+		foreach($round->getMatches() as $match){
+			if(!$this->requestCodesForMatch($match)){
+				$res = false;
+			}
+		}
+		return $res;
+	}
+	
+	public function requestCodesForMatch(Match $match){
+		$tournamentApi = $this->getTournamentApi();
+		$res = true;
+		foreach($match->getGames() as $game){ /* @var $game Game */
+			if(!$tournamentApi->updateCode($game)){
+				$res = false;
+			}
+		}
+		return $res;
 	}
 	
 	/**

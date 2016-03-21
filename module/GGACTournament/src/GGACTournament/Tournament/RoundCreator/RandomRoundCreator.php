@@ -76,7 +76,7 @@ class RandomRoundCreator extends AbstractRoundCreator{
 		$matches = array();
 		$number = 1;
 		for($i = 0; $i+1 < count($teams); $i += 2){
-			$matches[] = $this->createMatch($round, $number, $teams[$i], $teams[$i+1]);
+			$matches[] = $this->createMatch($round, $roundConfig, $number, $teams[$i], $teams[$i+1]);
 			$number++;
 		}
 		$round->setMatches($matches);

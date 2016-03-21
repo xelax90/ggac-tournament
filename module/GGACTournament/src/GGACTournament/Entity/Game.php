@@ -13,6 +13,20 @@ use JsonSerializable;
  */
 class Game implements JsonSerializable
 {
+	const PICK_TYPE_TOURNAMENT_DRAFT = 'TOURNAMENT_DRAFT';
+	const PICK_TYPE_BLIND_PICK = 'BLIND_PICK';
+	const PICK_TYPE_DRAFT_MODE = 'DRAFT_MODE';
+	const PICK_TYPE_ALL_RANDOM = 'ALL_RANDOM';
+	
+	const SPECTATOR_TYPE_NONE = 'NONE';
+	const SPECTATOR_TYPE_LOBBYONLY = 'LOBBYONLY';
+	const SPECTATOR_TYPE_ALL = 'ALL';
+	
+	const MAP_TYPE_SUMMONERS_RIFT = 'SUMMONERS_RIFT';
+	const MAP_TYPE_TWISTED_TREELINE = 'TWISTED_TREELINE';
+	const MAP_TYPE_CRYSTAL_SCAR = 'CRYSTAL_SCAR';
+	const MAP_TYPE_HOWLING_ABYSS = 'HOWLING_ABYSS';
+	
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer");
@@ -107,6 +121,21 @@ class Game implements JsonSerializable
 	 * @ORM\Column(type="text", nullable=true);
 	 */
 	protected $tournamentCode;
+	
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	protected $pickType;
+	
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	protected $mapType;
+	
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	protected $spectatorType;
 	
 	/**
 	 * @return int
@@ -234,6 +263,27 @@ class Game implements JsonSerializable
 		return $this->tournamentCode;
 	}
 	
+	/**
+	 * @return string
+	 */
+	public function getPickType() {
+		return $this->pickType;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMapType() {
+		return $this->mapType;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSpectatorType() {
+		return $this->spectatorType;
+	}
+
 	/**
 	 * @param int $id
 	 * @return Game
@@ -395,7 +445,34 @@ class Game implements JsonSerializable
 		$this->tournamentCode = $tournamentCode;
 		return $this;
 	}
-	
+
+	/**
+	 * @param string $pickType
+	 * @return Game
+	 */
+	public function setPickType($pickType) {
+		$this->pickType = $pickType;
+		return $this;
+	}
+
+	/**
+	 * @param string $mapType
+	 * @return Game
+	 */
+	public function setMapType($mapType) {
+		$this->mapType = $mapType;
+		return $this;
+	}
+
+	/**
+	 * @param string $spectatorType
+	 * @return Game
+	 */
+	public function setSpectatorType($spectatorType) {
+		$this->spectatorType = $spectatorType;
+		return $this;
+	}
+
 	/**
 	 * Generates tournament codes
 	 * @deprecated since version 1.0

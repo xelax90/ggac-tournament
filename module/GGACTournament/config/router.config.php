@@ -102,6 +102,18 @@ return array(
 				),
 				'may_terminate' => true,
 				'child_routes' => array(
+					'getcodes' => array(
+						'type' => 'literal',
+						'options' => array(
+							'route'    => '/getcodes/:round_id',
+							'defaults' => array(
+								'action'     => 'roundGetCodes',
+							),
+							'constraints' => array(
+								'round_id' => '[0-9]+',
+							),
+						),
+					),
 					'unblock' => array(
 						'type' => 'literal',
 						'options' => array(

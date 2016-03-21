@@ -3,6 +3,7 @@ namespace GGACTournament\Tournament\RoundCreator;
 
 use DateTime;
 use Zend\Stdlib\AbstractOptions;
+use GGACTournament\Entity\Game;
 
 /**
  * Options passed to round creator
@@ -51,6 +52,15 @@ class RoundConfig extends AbstractOptions{
 	 */
 	protected $timeForDates = 7;
 	
+	/** @var string */
+	protected $mapType = Game::MAP_TYPE_SUMMONERS_RIFT;
+	
+	/** @var string */
+	protected $pickType = Game::PICK_TYPE_TOURNAMENT_DRAFT;
+	
+	/** @var string */
+	protected $spectatorType = Game::SPECTATOR_TYPE_ALL;
+	
 	public function getGamesPerMatch() {
 		return $this->gamesPerMatch;
 	}
@@ -96,6 +106,18 @@ class RoundConfig extends AbstractOptions{
 
 	public function getTimeForDates() {
 		return $this->timeForDates;
+	}
+	
+	public function getMapType() {
+		return $this->mapType;
+	}
+
+	public function getPickType() {
+		return $this->pickType;
+	}
+
+	public function getSpectatorType() {
+		return $this->spectatorType;
 	}
 
 	public function setGamesPerMatch($gamesPerMatch) {
@@ -150,6 +172,21 @@ class RoundConfig extends AbstractOptions{
 
 	public function setTimeForDates($timeForDates) {
 		$this->timeForDates = $timeForDates;
+		return $this;
+	}
+	
+	public function setMapType($mapType) {
+		$this->mapType = $mapType;
+		return $this;
+	}
+
+	public function setPickType($pickType) {
+		$this->pickType = $pickType;
+		return $this;
+	}
+
+	public function setSpectatorType($spectatorType) {
+		$this->spectatorType = $spectatorType;
 		return $this;
 	}
 

@@ -86,8 +86,12 @@ class AdminRoundController extends ListController implements ProviderAwareInterf
 			}
 			
 			$formData = $form->getData(FormInterface::VALUES_AS_ARRAY);
-			$formData['round']['startDate'] = $item->getStartDate();
-			$roundConfig = new RoundConfig($formData['round']);
+			$roundConfigData = $formData['round'];
+			$roundConfigData['startDate'] = $item->getStartDate();
+			$roundConfigData['mapType'] = $formData['mapType'];
+			$roundConfigData['pickType'] = $formData['pickType'];
+			$roundConfigData['spectatorType'] = $formData['spectatorType'];
+			$roundConfig = new RoundConfig($roundConfigData);
 			
 			$gameCheck = null;
 			switch($formData['gameCheck']){

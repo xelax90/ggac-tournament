@@ -25,6 +25,7 @@ use GGACTournament\Tournament\ApiData\Manager as ApiDataManager;
 use GGACTournament\Tournament\Manager as TournamentManager;
 
 use GGACTournament\Entity\Match;
+use GGACTournament\Entity\Round;
 use GGACTournament\Form\MatchCommentForm;
 use GGACTournament\Form\MatchResultForm;
 use Zend\View\Model\ViewModel;
@@ -193,6 +194,20 @@ class AdminMatchController extends AbstractTournamentController{
 			'id' => $match->getId(), 
 			'form' => $form
 		));
+	}
+	
+	public function roundGeCodesAction(){
+        $roundId = $this->getEvent()->getRouteMatch()->getParam('round_id');
+		$em = $this->getObjectManager();
+		/* @var $round Round */
+		$round = $em->getRepository(Round::class)->find((int)$roundId);
+		if(!$round){
+			return $this->_redirectToMatches();
+		}
+		$api = $this->getApiDataManager();
+		$api->requestCodesForRound($round);
+		$this->flashMessenger()->addSuccessMessage(sprintf($this->getTranslator()->translate('Tournament codes for round %d were successfully requested'), $round->getNumber()));
+		return $this->_redirectToMatches();
 	}
 	
 }

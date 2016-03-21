@@ -6,6 +6,7 @@ use Zend\Form\Element\Csrf;
 use Zend\InputFilter\InputFilter;
 use XelaxHTMLPurifier\Filter\HTMLPurifier;
 use Zend\InputFilter\InputFilterProviderInterface;
+use GGACTournament\Entity\Game;
 
 /**
  * Round Form
@@ -129,6 +130,68 @@ class RoundForm extends Form implements InputFilterProviderInterface{
 				)
 			));
 		}
+		
+		$this->add(array(
+			'name' => 'mapType',
+			'type' => 'Select',
+			'options' => array(
+				'label' => gettext_noop('Map Type'),
+				'options' => array(
+					Game::MAP_TYPE_SUMMONERS_RIFT => Game::MAP_TYPE_SUMMONERS_RIFT,
+					Game::MAP_TYPE_HOWLING_ABYSS => Game::MAP_TYPE_HOWLING_ABYSS,
+					Game::MAP_TYPE_TWISTED_TREELINE => Game::MAP_TYPE_TWISTED_TREELINE,
+					Game::MAP_TYPE_CRYSTAL_SCAR => Game::MAP_TYPE_CRYSTAL_SCAR,
+				),
+				'column-size' => 'sm-10',
+				'label_attributes' => array(
+					'class' => 'col-sm-2',
+				),
+			),
+			'attributes' => array(
+				'id' => "",
+			)
+		));
+		
+		$this->add(array(
+			'name' => 'pickType',
+			'type' => 'Select',
+			'options' => array(
+				'label' => gettext_noop('Pick Type'),
+				'options' => array(
+					Game::PICK_TYPE_TOURNAMENT_DRAFT => Game::PICK_TYPE_TOURNAMENT_DRAFT,
+					Game::PICK_TYPE_ALL_RANDOM => Game::PICK_TYPE_ALL_RANDOM,
+					Game::PICK_TYPE_BLIND_PICK => Game::PICK_TYPE_BLIND_PICK,
+					Game::PICK_TYPE_DRAFT_MODE => Game::PICK_TYPE_DRAFT_MODE,
+				),
+				'column-size' => 'sm-10',
+				'label_attributes' => array(
+					'class' => 'col-sm-2',
+				),
+			),
+			'attributes' => array(
+				'id' => "",
+			)
+		));
+		
+		$this->add(array(
+			'name' => 'spectatorType',
+			'type' => 'Select',
+			'options' => array(
+				'label' => gettext_noop('Spectator Type'),
+				'options' => array(
+					Game::SPECTATOR_TYPE_ALL => Game::SPECTATOR_TYPE_ALL,
+					Game::SPECTATOR_TYPE_LOBBYONLY => Game::SPECTATOR_TYPE_LOBBYONLY,
+					Game::SPECTATOR_TYPE_NONE => Game::SPECTATOR_TYPE_NONE,
+				),
+				'column-size' => 'sm-10',
+				'label_attributes' => array(
+					'class' => 'col-sm-2',
+				),
+			),
+			'attributes' => array(
+				'id' => "",
+			)
+		));
 		
 		$this->add(array(
 			'name' => 'round_csrf',

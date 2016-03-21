@@ -91,7 +91,7 @@ abstract class AbstractRoundCreator implements RoundCreatorInterface{
 	 * Creates games for the passed match according to it's round's configuration
 	 * @param Match $match
 	 */
-	protected function createGamesForMatch(Match $match){
+	protected function createGamesForMatch(Match $match, RoundConfig $roundConfig){
 		$gamesPerMatch = $match->getRound()->getGamesPerMatch();
 		
 		$games = array();
@@ -104,10 +104,13 @@ abstract class AbstractRoundCreator implements RoundCreatorInterface{
 				$teamBlue = $match->getTeamGuest();
 				$teamPurple = $match->getTeamHome();
 			}
-			$game->setTeamBlue($teamBlue);
-			$game->setTeamPurple($teamPurple);
-			$game->setNumber($j+1);
-			$game->setMatch($match);
+			$game->setTeamBlue($teamBlue)
+					->setTeamPurple($teamPurple)
+					->setNumber($j+1)
+					->setMapType($roundConfig->getMapType())
+					->setPickType($roundConfig->getPickType())
+					->setSpectatorType($roundConfig->getSpectatorType())
+					->setMatch($match);
 			$games[] = $game;
 		}
 		$match->setGames($games);
@@ -146,13 +149,13 @@ abstract class AbstractRoundCreator implements RoundCreatorInterface{
 	 * @param Team $teamGuest
 	 * @return Match
 	 */
-	protected function createMatch(Round $round, $number, Team $teamHome = null, Team $teamGuest = null){
+	protected function createMatch(Round $round, RoundConfig $roundConfig, $number, Team $teamHome = null, Team $teamGuest = null){
 		$match = new Match();
 		$match->setNumber($number);
 		$match->setRound($round);
 		$match->setTeamHome($teamHome);
 		$match->setTeamGuest($teamGuest);
-		$this->createGamesForMatch($match);
+		$this->createGamesForMatch($match, $roundConfig);
 		if ($teamHome === null || $teamGuest === null) {
 			$match->setIsBlocked(true);
 		}

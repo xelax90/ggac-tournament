@@ -30,6 +30,11 @@ class Tournament implements JsonSerializable, AlreadyPlayedInterface
 	protected $name;
 	
 	/**
+	 * @ORM\Column(type="string")
+	 */
+	protected $apiId;
+	
+	/**
 	 * @ORM\OneToMany(targetEntity="Registration", mappedBy="tournament");
 	 */
 	protected $registrations;
@@ -94,6 +99,13 @@ class Tournament implements JsonSerializable, AlreadyPlayedInterface
 	 */
 	public function getId(){
 		return $this->id;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getApiId() {
+		return $this->apiId;
 	}
 
 	/**
@@ -189,6 +201,15 @@ class Tournament implements JsonSerializable, AlreadyPlayedInterface
 		return $this;
 	}
 	
+	/** 
+	 * @param string $apiId
+	 * @return Tournament
+	 */
+	public function setApiId($apiId) {
+		$this->apiId = $apiId;
+		return $this;
+	}
+
 	/** 
 	 * @param string $name
 	 * @return Tournament
@@ -418,6 +439,7 @@ class Tournament implements JsonSerializable, AlreadyPlayedInterface
 	public function jsonSerialize(){
 		$data = array(
 			"id" => $this->getId(),
+			"apiId" => $this->getApiId(),
 			"name" => $this->getName(),
 			"announcementFile" => $this->getAnnouncementFile(),
 			"minimumSubs" => $this->getMinimumSubs(),
