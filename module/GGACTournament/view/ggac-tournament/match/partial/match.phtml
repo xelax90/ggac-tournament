@@ -1,0 +1,35 @@
+<?php
+
+/* 
+ * Copyright (C) 2016 schurix
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+$match = $this->match;
+$position = $this->position;
+?>
+<div class="match <?= $position == 0 ? "first" : "" ?>">
+	<div class="position"><?= $match->getNumber() ?></div>
+	<?php $gamedate = $match->getTime(); ?>
+	<?php if($this->showGamedate) : ?>
+	<div class="gamedate"><?= $gamedate && $gamedate->format('Y') > 0 ? $gamedate->format('d.m<\b\r>H:i') : '' ?></div>
+	<?php endif; ?>
+	<div class="result"><?= $this->result ?></div>
+	<?php 
+		echo $this->partial('ggac-tournament/partial/team.phtml', array('team' => $match->getTeamHome(), 'match' => $match) + $this->teamOptions);
+		echo $this->partial('ggac-tournament/partial/team.phtml', array('team' => $match->getTeamGuest(), 'match' => $match) + $this->teamOptions);
+	?>
+</div>

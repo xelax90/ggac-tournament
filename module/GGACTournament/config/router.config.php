@@ -73,6 +73,16 @@ return array(
 			),
 		),
 	),
+	'matches' => array(
+		'type' => 'literal',
+		'options' => array(
+			'route'    => '/matches',
+			'defaults' => array(
+				'controller' => Controller\MatchController::class,
+				'action'     => 'matches',
+			),
+		),
+	),
 	'zfcadmin' => array(
 		'child_routes' => array(
 			'tournament'        => array( 'type' => ListRoute::class, 'options' => array( 'controller_options_name' => 'tournament'        ) ),

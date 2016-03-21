@@ -1,0 +1,105 @@
+<?php
+
+/* 
+ * Copyright (C) 2016 schurix
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+/* @var $tournament GGACTournament\Entity\Tournament */
+$tournament = $this->tournament;
+/* @var $teamdataManager \GGACTournament\Tournament\Teamdata\Manager */
+$teamdataManager = $this->teamdataManager;
+
+?>
+<div class="anmeldung ergebnisse">
+	<div class="content">
+		<ul class="paarungen">
+			<?php echo $this->partial('partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url('matches'))) ?>
+			<?php
+			foreach($tournament->getPhases() as $phase) : /* @var $phase \GGACTournament\Entity\TournamentPhase */
+				if($phase->getTournamentState() != \GGACTournament\Entity\TournamentPhase::TOURNAMENT_STATUS_STARTED){
+					continue;
+				}
+				$groupCount = count($phase->getGroups());
+				foreach($phase->getGroups() as $group) : /* @var $group \GGACTournament\Entity\Group */
+					foreach($group->getRounds() as $round) : /* @var $round GGACTournament\Entity\Round */
+						if($round->getIsHidden() && !$this->isAllowed('tournament', 'round/viewHidden')){
+							continue;
+						}
+						$teamdataManager->injectTeamdata($group, $round);
+					?>
+					<li>
+						<div class="header" <?= $round->getIsHidden() ? 'style="border-color: red;"' : '' ?>>
+							<b><?php echo $phase->getName() ?> - <?php echo $groupCount > 1 ? 'Gruppe '. $group->getNumber().' - ' : '' ?> Runde <?= $round->getNumber() ?> <?= $round->getIsHidden() ? "(Nicht freigegeben)" : "" ?></b>
+						</div>
+
+						<div class="article">
+							<div class="matches">
+								<?php
+									$position = 0;
+									foreach($round->getMatches() as $match) : /* @var $match GGACTournament\Entity\Match */
+										$pointsHome = "";
+										$pointsGuest = "";
+										foreach($match->getGames() as $game){ /* @var $game GGACTournament\Entity\Game */
+											if($game->getPointsBlue() !== null || $game->getPointsPurple() !== null){
+												$pointsHome  += $match->getTeamHome()  == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+												$pointsGuest += $match->getTeamGuest() == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+											}
+										}
+
+										$result = "";
+										$result .= $match->getPointsHome() === null ? $pointsHome : $match->getPointsHome();
+										$result .= " - ";
+										$result .= $match->getPointsGuest() === null ? $pointsGuest : $match->getPointsGuest();
+										//if($result != " - ")
+										//	$result = '<a href="gameinfo.html?gameid='.$game->gameID.'">'.$result.'</a>';
+
+										$captainAllowed = $this->tournamentAcl('viewCaptain', $match->getTeamHome()) || $this->tournamentAcl('viewCaptain', $match->getTeamGuest());
+										$showCaptainContact = false;
+										if($captainAllowed){
+											$showCaptainContact = $this->tournamentAcl('viewContacts', $match->getTeamHome()) || $this->tournamentAcl('viewContacts', $match->getTeamGuest());
+										}
+
+										echo $this->partial('ggac-tournament/match/partial/match.phtml', array(
+											'match' => $match,
+											'position' => $position,
+											'result' => $result,
+											'showGamedate' => true,
+											'teamOptions' => array(
+												'showFarberwartung' => false,
+												'playerOptions' => array(
+													'addStyles' => '',
+													'showCaptain' => true,
+													'showCaptainContact' => $showCaptainContact,
+													'showAllContacts' => false,
+													'showWins' => false
+												)
+											)
+										));
+										$position++;
+									endforeach;
+								?>
+							</div>
+						</div>
+					</li>
+					<?php
+					endforeach;
+				endforeach;
+			endforeach;
+			?>
+		</ul>
+	</div>
+</div>
