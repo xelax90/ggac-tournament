@@ -11357,6 +11357,9 @@ body {
   margin: 0 0 10px 0;
   font-size: 17px;
 }
+#body .games .aside ul li .team .players {
+  display: block;
+}
 #body .games .aside ul li .team .players .player .player_subborder {
   border-color: #FFD700;
 }
