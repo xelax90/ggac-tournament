@@ -11,6 +11,8 @@ $bjyConfig = array(
 			'role_entity_class' => 'SkelletonApplication\Entity\Role',
 		),
 	),
+	
+	'unauthorized_strategy' => BjyAuthorize\View\RedirectionStrategy::class,
 );
 
 return array(

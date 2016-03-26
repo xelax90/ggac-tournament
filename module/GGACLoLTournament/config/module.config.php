@@ -104,8 +104,8 @@ return array(
 			'kontakt'         => array('label' => gettext_noop('Kontakt'),         'route' => 'kontakt'),
 		),
 		'tournament_login' => array(
-			'my-matches'      => array('label' => gettext_noop('Ergebnis/Spieltermin melden'),            'route' => 'my-matches'),
-			'my-team'         => array('label' => gettext_noop('Dein Team/Ersatzspieler ansehen'),        'route' => 'my-team'),
+			'my-matches'      => array('label' => gettext_noop('Ergebnis/Spieltermin melden'),            'route' => 'my-matches',     'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
+			'my-team'         => array('label' => gettext_noop('Dein Team/Ersatzspieler ansehen'),        'route' => 'my-team',        'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
 		),
 		// default navigation
 		'default' => array(
