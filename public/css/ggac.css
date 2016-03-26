@@ -10963,6 +10963,68 @@ body {
   padding: 0 9px 22px 9px;
   width: 958px;
 }
+#body > div > div .section.loginWidget {
+  background: none;
+  padding-bottom: 0;
+}
+#body > div > div .section.loginWidget form input {
+  border: 1px solid #22272a;
+  background-color: #7e7e7e;
+  color: black;
+  width: 100%;
+}
+#body > div > div .section.loginWidget form input::-webkit-input-placeholder,
+#body > div > div .section.loginWidget form input:-moz-placeholder,
+#body > div > div .section.loginWidget form input::-moz-placeholder,
+#body > div > div .section.loginWidget form input:-ms-input-placeholder,
+#body > div > div .section.loginWidget form input:placeholder-shown {
+  /* WebKit, Blink, Edge */
+  color: #eee;
+  opacity: 1;
+}
+#body > div > div .section.loginWidget > div:first-child > div {
+  padding-bottom: 14px;
+}
+#body > div > div .section.loginWidget ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#body > div > div .section.loginWidget ul:before,
+#body > div > div .section.loginWidget ul:after {
+  content: " ";
+  display: table;
+}
+#body > div > div .section.loginWidget ul:after {
+  clear: both;
+}
+#body > div > div .section.loginWidget ul:before,
+#body > div > div .section.loginWidget ul:after {
+  content: " ";
+  display: table;
+}
+#body > div > div .section.loginWidget ul:after {
+  clear: both;
+}
+#body > div > div .section.loginWidget ul li {
+  display: block;
+  float: left;
+  border-right: 1px solid #727272;
+  padding: 0 10px;
+}
+#body > div > div .section.loginWidget ul li:last-child {
+  border-right: none;
+  padding-right: 0px;
+}
+#body > div > div .section.loginWidget ul li:first-child {
+  padding-left: 0px;
+}
+#body > div > div .section.loginWidget ul li a {
+  color: #727272;
+}
+#body > div > div .section.loginWidget ul li a.active {
+  text-decoration: underline;
+}
 #body > div > div .section > div {
   background: url(../img/border.gif) repeat-x top left;
   float: left;
@@ -11384,122 +11446,6 @@ body {
 #body .games > .article p a:hover {
   color: #a3a3a3;
 }
-#body .games .loginForm {
-  background: url(../img/border.gif) repeat-x top left;
-  float: left;
-  margin: 0 0 0 20px;
-  padding: 3px 0 0;
-  width: 920px;
-}
-#body .games .loginForm ul {
-  border: none;
-  background-color: transparent;
-}
-#body .games .loginForm ul li {
-  border: none;
-  padding: 0 0 20px;
-}
-#body .games .loginForm ul li .header {
-  background: #070707 url(../img/gradient5.png) repeat-x top center;
-  border: 1px solid #22272a;
-  color: #fff;
-  font-size: 14px;
-  line-height: 24px;
-  margin: 0 0 1px;
-  overflow: hidden;
-  padding: 10px 18px 15px;
-}
-#body .games .loginForm ul li .header b {
-  display: inline;
-  float: left;
-  line-height: 24px;
-  margin: 0;
-  padding: 0;
-}
-#body .games .loginForm ul li .header b a {
-  color: #fff;
-}
-#body .games .loginForm ul li .header b a:hover {
-  color: #727272;
-}
-#body .games .loginForm ul li .header span {
-  background: #181818;
-  border: 1px solid #22272a;
-  border-radius: 4px;
-  display: inline;
-  float: left;
-  margin: 0 0 0 34px;
-  overflow: hidden;
-  padding: 0;
-}
-#body .games .loginForm ul li .header span a {
-  color: #bababa;
-  display: block;
-  float: left;
-  font-size: 10px;
-  height: 23px;
-  line-height: 23px;
-  margin: 0;
-  padding: 0 15px;
-  text-align: center;
-  text-decoration: none;
-  text-transform: capitalize;
-}
-#body .games .loginForm ul li .header span a:first-child {
-  border-right: 1px solid #22272a;
-}
-#body .games .loginForm ul li .header span a:hover {
-  color: #fff;
-}
-#body .games .loginForm ul li .article {
-  background: #181818;
-  border: 1px solid #22272a;
-  margin: 0;
-  overflow: hidden;
-  padding: 14px 19px 19px;
-}
-#body .games .loginForm ul li .article a.figure {
-  border: 1px solid #22272a;
-  display: block;
-  margin: 0;
-  padding: 0;
-  float: left;
-  margin: 6px 20px 0 0;
-}
-#body .games .loginForm ul li .article a.figure:hover {
-  opacity: 0.8;
-}
-#body .games .loginForm ul li .article a.figure img {
-  border: 1px solid #000;
-  display: block;
-}
-#body .games .loginForm ul li .article p {
-  line-height: 18px;
-  margin-bottom: 8px;
-}
-#body .games .loginForm ul li .article p a.more {
-  background: url("../img/bg-more.png") no-repeat center center;
-  color: #bababa;
-  display: inline-block;
-  font-size: 10px;
-  font-weight: normal;
-  height: 23px;
-  line-height: 22px;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  text-decoration: none;
-  text-transform: lowercase;
-  width: 70px;
-}
-#body .games .loginForm ul li .article p a.more:hover {
-  color: #fff;
-}
-#body .games .loginForm ul li .article form input {
-  border: 1px solid #22272a;
-  background-color: #7e7e7e;
-  color: black;
-}
 #body .about {
   overflow: hidden;
 }
@@ -11827,6 +11773,80 @@ body {
   border: 1px solid #22272a;
   background-color: #7e7e7e;
   color: black;
+}
+#body .blog .content input[type=text]::-webkit-input-placeholder,
+#body .anmeldung .content input[type=text]::-webkit-input-placeholder,
+#body .blog .content input[type=password]::-webkit-input-placeholder,
+#body .anmeldung .content input[type=password]::-webkit-input-placeholder,
+#body .blog .content input[type=email]::-webkit-input-placeholder,
+#body .anmeldung .content input[type=email]::-webkit-input-placeholder,
+#body .blog .content input[type=file]::-webkit-input-placeholder,
+#body .anmeldung .content input[type=file]::-webkit-input-placeholder,
+#body .blog .content input[type=datetime-local]::-webkit-input-placeholder,
+#body .anmeldung .content input[type=datetime-local]::-webkit-input-placeholder,
+#body .blog .content select::-webkit-input-placeholder,
+#body .anmeldung .content select::-webkit-input-placeholder,
+#body .blog .content textarea::-webkit-input-placeholder,
+#body .anmeldung .content textarea::-webkit-input-placeholder,
+#body .blog .content input[type=text]:-moz-placeholder,
+#body .anmeldung .content input[type=text]:-moz-placeholder,
+#body .blog .content input[type=password]:-moz-placeholder,
+#body .anmeldung .content input[type=password]:-moz-placeholder,
+#body .blog .content input[type=email]:-moz-placeholder,
+#body .anmeldung .content input[type=email]:-moz-placeholder,
+#body .blog .content input[type=file]:-moz-placeholder,
+#body .anmeldung .content input[type=file]:-moz-placeholder,
+#body .blog .content input[type=datetime-local]:-moz-placeholder,
+#body .anmeldung .content input[type=datetime-local]:-moz-placeholder,
+#body .blog .content select:-moz-placeholder,
+#body .anmeldung .content select:-moz-placeholder,
+#body .blog .content textarea:-moz-placeholder,
+#body .anmeldung .content textarea:-moz-placeholder,
+#body .blog .content input[type=text]::-moz-placeholder,
+#body .anmeldung .content input[type=text]::-moz-placeholder,
+#body .blog .content input[type=password]::-moz-placeholder,
+#body .anmeldung .content input[type=password]::-moz-placeholder,
+#body .blog .content input[type=email]::-moz-placeholder,
+#body .anmeldung .content input[type=email]::-moz-placeholder,
+#body .blog .content input[type=file]::-moz-placeholder,
+#body .anmeldung .content input[type=file]::-moz-placeholder,
+#body .blog .content input[type=datetime-local]::-moz-placeholder,
+#body .anmeldung .content input[type=datetime-local]::-moz-placeholder,
+#body .blog .content select::-moz-placeholder,
+#body .anmeldung .content select::-moz-placeholder,
+#body .blog .content textarea::-moz-placeholder,
+#body .anmeldung .content textarea::-moz-placeholder,
+#body .blog .content input[type=text]:-ms-input-placeholder,
+#body .anmeldung .content input[type=text]:-ms-input-placeholder,
+#body .blog .content input[type=password]:-ms-input-placeholder,
+#body .anmeldung .content input[type=password]:-ms-input-placeholder,
+#body .blog .content input[type=email]:-ms-input-placeholder,
+#body .anmeldung .content input[type=email]:-ms-input-placeholder,
+#body .blog .content input[type=file]:-ms-input-placeholder,
+#body .anmeldung .content input[type=file]:-ms-input-placeholder,
+#body .blog .content input[type=datetime-local]:-ms-input-placeholder,
+#body .anmeldung .content input[type=datetime-local]:-ms-input-placeholder,
+#body .blog .content select:-ms-input-placeholder,
+#body .anmeldung .content select:-ms-input-placeholder,
+#body .blog .content textarea:-ms-input-placeholder,
+#body .anmeldung .content textarea:-ms-input-placeholder,
+#body .blog .content input[type=text]:placeholder-shown,
+#body .anmeldung .content input[type=text]:placeholder-shown,
+#body .blog .content input[type=password]:placeholder-shown,
+#body .anmeldung .content input[type=password]:placeholder-shown,
+#body .blog .content input[type=email]:placeholder-shown,
+#body .anmeldung .content input[type=email]:placeholder-shown,
+#body .blog .content input[type=file]:placeholder-shown,
+#body .anmeldung .content input[type=file]:placeholder-shown,
+#body .blog .content input[type=datetime-local]:placeholder-shown,
+#body .anmeldung .content input[type=datetime-local]:placeholder-shown,
+#body .blog .content select:placeholder-shown,
+#body .anmeldung .content select:placeholder-shown,
+#body .blog .content textarea:placeholder-shown,
+#body .anmeldung .content textarea:placeholder-shown {
+  /* WebKit, Blink, Edge */
+  color: #eee;
+  opacity: 1;
 }
 #body .blog .content input[type=file],
 #body .anmeldung .content input[type=file] {

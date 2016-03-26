@@ -1,7 +1,7 @@
+<?php $this->loginWidget(true)->setRedirect('registration'); ?>
 <div class="anmeldung">
 	<div class="content">
 		<ul>
-			<?php echo $this->partial('partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url())) ?>
 			<?php if($this->singleForm) : ?>
 			<li id="einzelanmeldung">
 				<div class="header">

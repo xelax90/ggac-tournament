@@ -13,8 +13,9 @@ $guardConfig = array(
 	['route' => 'registration/display',        'roles' => ['guest', 'user'] ],
 	['route' => 'standings',                   'roles' => ['guest', 'user'] ],
 	['route' => 'teams',                       'roles' => ['guest', 'user'] ],
+	['route' => 'my-team',                     'roles' => ['user'] ],
 	['route' => 'matches',                     'roles' => ['guest', 'user'] ],
-	['route' => 'my-matches',                   'roles' => ['user'] ],
+	['route' => 'my-matches',                  'roles' => ['user'] ],
 	
 	// backend
 	['route' => 'zfcadmin/tournament',               'roles' => ['administrator'] ],
@@ -130,9 +131,11 @@ return array(
 	'view_helpers' => array(
 		'aliases' => array(
 			'tournamentAcl' => View\Helper\TournamentAcl::class,
+			'loginWidget' => View\Helper\LoginWidgetHelper::class,
 		),
 		'factories' => array(
 			View\Helper\TournamentAcl::class => Service\TournamentAclHelperFactory::class,
+			View\Helper\LoginWidgetHelper::class => Service\LoginWidgetHelperFactory::class,
 		)
 	),
 	

@@ -73,6 +73,16 @@ return array(
 			),
 		),
 	),
+	'my-team' => array(
+		'type' => 'literal',
+		'options' => array(
+			'route'    => '/my-team',
+			'defaults' => array(
+				'controller' => Controller\TeamController::class,
+				'action'     => 'my-team',
+			),
+		),
+	),
 	'my-matches' => array(
 		'type' => 'Segment',
 		'options' => array(

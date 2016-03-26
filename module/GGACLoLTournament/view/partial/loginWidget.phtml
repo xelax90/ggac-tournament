@@ -1,0 +1,33 @@
+<div class="section loginWidget">
+	<div>
+		<?php  $identity = $this->zfcUserIdentity(); ?>
+		<?php if(!$identity): ?>
+			<h3>Login</h3>
+			<div><?php echo $this->partial('partial/loginForm', array('loginForm' => $this->loginForm, 'redirectRoute' => $this->redirectRoute)); ?></div>
+		<?php else: ?>
+			<h3>Hallo <?= $identity->getDisplayName() ?>, was möchtest du tun?</h3>
+			<div>
+				<?php echo $this->navigation('login_navigation')
+								->menu()
+								->setMinDepth(0)
+								->setMaxDepth(0)
+								->setonlyActiveBranch(false)
+								->setUlClass('')
+								->setPartial('partial/login_navigation.phtml')
+								->render(); ?>
+				<?php /*
+					$links = array();
+					if($this->isAllowed('tournament', 'navigation/meldung')){
+						$links[] = array( 'url' => 'meldung', 'text' =>  'Ergebnis/Spieltermin melden');
+					}
+					if($this->isAllowed('tournament', 'navigation/myteam')){
+						$links[] = array( 'url' => 'myteam', 'text' =>  'Dein Team/Ersatzspieler ansehen');
+					}
+				?>
+				<?php foreach($links as $i => $link): ?>
+				<?= $i > 0 ? ' | ' : ''  ?><a href="<?= $this->url($link['url']) ?>"><?= $link['text']; ?></a>
+				<?php endforeach;  */ ?>
+			</div>
+		<?php endif; ?>
+	</div>
+</div>

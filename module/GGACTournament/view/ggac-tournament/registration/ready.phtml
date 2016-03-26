@@ -3,12 +3,11 @@ use GGACTournament\Form\RegistrationTeamForm;
 use Zend\Mvc\Controller\Plugin\FlashMessenger as PluginFlashMessenger;
 use GGACTournament\Entity\Registration;
 
-?>
+$this->loginWidget(true)->setRedirect('registration'); ?>
 
 <div class="anmeldung">
 	<div class="content">
 		<ul>
-			<?php echo $this->partial('partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url())) ?>
 			<li>
 				<div class="header">
 					<?php if($this->team && is_array($this->team)) : ?>

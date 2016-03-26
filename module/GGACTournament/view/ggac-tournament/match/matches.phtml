@@ -27,7 +27,7 @@ $teamdataManager = $this->teamdataManager;
 <div class="anmeldung ergebnisse">
 	<div class="content">
 		<ul class="paarungen">
-			<?php echo $this->partial('partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url('matches'))) ?>
+			<?php  $this->loginWidget(true)->setRedirect('matches'); ?>
 			<?php
 			foreach($tournament->getPhases() as $phase) : /* @var $phase \GGACTournament\Entity\TournamentPhase */
 				if($phase->getTournamentState() != \GGACTournament\Entity\TournamentPhase::TOURNAMENT_STATUS_STARTED){

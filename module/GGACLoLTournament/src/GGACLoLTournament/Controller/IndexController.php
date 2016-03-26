@@ -49,4 +49,25 @@ class IndexController extends AbstractActionController implements ProviderAwareI
 		));
 	}
 	
+	public function authenticateAction(){
+		$this->authenticate();
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			if(!empty($data['redirect'])){
+				$this->redirect()->toRoute($data['redirect']);
+			}
+		}
+		return $this->redirect()->toRoute('home');
+	}
+	
+	protected function authenticate(){
+		if($this->zfcUserAuthentication()->hasIdentity()){
+			return true;
+		}
+		
+        $adapter = $this->zfcUserAuthentication()->getAuthAdapter();
+        $result = $adapter->prepareForAuthentication($this->getRequest());
+        $auth = $this->zfcUserAuthentication()->getAuthService()->authenticate($adapter);
+		return $auth;
+	}
 }

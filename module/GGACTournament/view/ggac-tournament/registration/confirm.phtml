@@ -2,13 +2,13 @@
 use XelaxTwbUnmask\Form\View\Helper\Form as FormHelper;
 use GGACTournament\Form\RegistrationTeamForm;
 
+$this->loginWidget(true)->setRedirect('registration');
 $form = $this->form;
 ?>
 
 <div class="anmeldung">
 	<div class="content">
 		<ul>
-			<?php echo $this->partial('partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url())) ?>
 			<li>
 				<div class="header">
 					<?php if($form instanceof RegistrationTeamForm) : ?>

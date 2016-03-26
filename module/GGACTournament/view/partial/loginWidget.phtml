@@ -1,0 +1,7 @@
+<?php  $identity = $this->zfcUserIdentity(); ?>
+<?php if(!$identity): ?>
+	<h3>Login</h3>
+	<div><?php echo $this->partial('partial/loginForm', array('loginForm' => $this->loginForm, 'redirectRoute' => $this->redirectRoute)); ?></div>
+<?php else: ?>
+	<h3>Hallo <?= $identity->getDisplayName() ?>, was möchtest du tun?</h3>
+<?php endif; ?>

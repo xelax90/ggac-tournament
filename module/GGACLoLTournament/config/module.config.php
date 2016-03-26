@@ -9,6 +9,7 @@ use GGACTournament\Entity\TournamentPhase;
 $guardConfig = array(
 	['route' => 'kontakt',      'roles' => ['user', 'guest'] ],
 	['route' => 'info',         'roles' => ['user', 'guest'] ],
+	['route' => 'authenticate', 'roles' => ['user', 'guest'] ],
 );
 
 $ressources = array(
@@ -56,6 +57,16 @@ return array(
 					),
 				),
 			),
+			'authenticate' => array(
+				'type' => 'literal',
+				'options' => array(
+					'route' => '/authenticate',
+					'defaults' => array(
+						'controller' => Controller\IndexController::class,
+						'action' => 'authenticate',
+					),
+				),
+			),
 		),
 	),
 	
@@ -91,6 +102,10 @@ return array(
 			'standings'       => array('label' => gettext_noop('Tabelle'),         'route' => 'standings',             'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
 			'teams'           => array('label' => gettext_noop('Teilnehmer'),      'route' => 'teams',                 'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
 			'kontakt'         => array('label' => gettext_noop('Kontakt'),         'route' => 'kontakt'),
+		),
+		'tournament_login' => array(
+			'my-matches'      => array('label' => gettext_noop('Ergebnis/Spieltermin melden'),            'route' => 'my-matches'),
+			'my-team'         => array('label' => gettext_noop('Dein Team/Ersatzspieler ansehen'),        'route' => 'my-team'),
 		),
 		// default navigation
 		'default' => array(

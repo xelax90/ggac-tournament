@@ -1,9 +1,5 @@
+<?php $this->loginWidget(true)->setRedirect('registration/display'); ?>
 <div class="games">
-	<div class="loginForm">
-		<ul>
-			<?php echo $this->partial('partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url())) ?>
-		</ul>
-	</div>
 	<div class="content">
 		<?php $singles = $this->singles; ?>
 		<h3>Einzelanmeldungen<span style="padding-left: 5px; font-size: 10px;"><?= count($singles) ?> Spieler</span></h3>

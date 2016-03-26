@@ -22,6 +22,7 @@ use GGACTournament\Entity\Team;
 /* @var $tournament \GGACTournament\Entity\Tournament */
 $tournament = $this->tournament;
 $phase = $tournament->getCurrentPhase();
+$this->loginWidget(true)->setRedirect('standings'); 
 ?>
 
 <div class="anmeldung ergebnisse">

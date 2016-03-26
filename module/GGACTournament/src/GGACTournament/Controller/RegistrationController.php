@@ -158,7 +158,6 @@ class RegistrationController extends AbstractTournamentController{
 		$icons = $this->getRegistrationManager()->getAvailableIcons();
 		$loginForm = $this->getLoginForm();
 		
-		$this->layout('layout/ggaclol');
 		return new ViewModel(array(
 			'singleForm' => $singleForm,
 			'teamForm' => $teamForm,
@@ -180,7 +179,6 @@ class RegistrationController extends AbstractTournamentController{
 		
 		$loginForm = $this->getLoginForm();
 		
-		$this->layout('layout/ggaclol');
 		return new ViewModel(array(
 			'form' => $form, 
 			'icons' => $icons, 
@@ -215,7 +213,6 @@ class RegistrationController extends AbstractTournamentController{
 			return $this->_redirectToForm();
 		}
 		
-		$this->layout('layout/ggaclol');
 		return new ViewModel($params);
 	}
 	
@@ -226,7 +223,6 @@ class RegistrationController extends AbstractTournamentController{
 		$teams = $this->getRegistrationManager()->getTeams();
 		$loginForm = $this->getLoginForm();
 		
-		$this->layout('layout/ggaclol');
 		return new ViewModel(array(
 			'singles' => $singles,
 			'teams' => $teams,
