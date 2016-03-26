@@ -198,7 +198,7 @@ class UserReportController extends AbstractTournamentController{
 		if($this->updateMatch()){
 			return $this->_redirectToMyMatches();
 		}
-		
+		$this->getApiDataManager()->setData();
 		return new ViewModel(array(
 			'team' => $team,
 			'teamdataManager' => $this->getTeamdataManager(),
