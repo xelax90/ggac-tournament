@@ -142,7 +142,7 @@ class Acl implements ObjectManagerAwareInterface{
 			}
 			
 			$player = $this->getObjectManager()->getRepository(Player::class)->getPlayerForUser($user, $team->getTournament());
-			return $player->getTeam() == $team;
+			return $player[0]->getTeam() == $team;
 		});
 		
 		$this->addRessource('viewSubContacts', function($user, $team) use($that){

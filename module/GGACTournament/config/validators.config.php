@@ -18,6 +18,7 @@ return array(
 		Validator\EmailIsRwth::class => InvokableFactory::class,
 		Validator\MinMaxEmailsRwth::class => Validator\Factory\MinMaxEmailsRwthFactory::class,
 		Validator\MinMaxEmailsNotRwth::class => Validator\Factory\MinMaxEmailsRwthFactory::class,
+		Validator\MatchReport::class => InvokableFactory::class,
 	),
 	'aliases' => array(
 	)

@@ -73,6 +73,20 @@ return array(
 			),
 		),
 	),
+	'my-matches' => array(
+		'type' => 'Segment',
+		'options' => array(
+			'route'    => '/my-matches[/:match_id]',
+			'defaults' => array(
+				'controller' => Controller\UserReportController::class,
+				'action'     => 'index',
+				'match_id'   => 0,
+			),
+			'constraints' => array(
+				'match_id' => '[0-9]+',
+			),
+		),
+	),
 	'matches' => array(
 		'type' => 'literal',
 		'options' => array(

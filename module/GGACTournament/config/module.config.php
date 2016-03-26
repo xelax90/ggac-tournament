@@ -14,6 +14,7 @@ $guardConfig = array(
 	['route' => 'standings',                   'roles' => ['guest', 'user'] ],
 	['route' => 'teams',                       'roles' => ['guest', 'user'] ],
 	['route' => 'matches',                     'roles' => ['guest', 'user'] ],
+	['route' => 'my-matches',                   'roles' => ['user'] ],
 	
 	// backend
 	['route' => 'zfcadmin/tournament',               'roles' => ['administrator'] ],
@@ -59,6 +60,7 @@ return array(
 			Controller\StandingsController::class => Controller\Factory\StandingsControllerFactory::class,
 			Controller\TeamController::class => Controller\Factory\TeamControllerFactory::class,
 			Controller\MatchController::class => Controller\Factory\MatchControllerFactory::class,
+			Controller\UserReportController::class => Controller\Factory\UserReportControllerFactory::class,
 			Controller\AdminTournamentPhaseController::class => Controller\Factory\AdminTournamentPhaseControllerFactory::class,
 			Controller\AdminMatchController::class => Controller\Factory\AdminMatchControllerFactory::class,
 			Controller\AdminRoundController::class => Controller\Factory\AdminRoundControllerFactory::class,

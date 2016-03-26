@@ -3,6 +3,8 @@ namespace GGACLoLTournament;
 
 use BjyAuthorize\Provider;
 use BjyAuthorize\Guard;
+use GGACTournament\Entity\TournamentPhase;
+
 
 $guardConfig = array(
 	['route' => 'kontakt',      'roles' => ['user', 'guest'] ],
@@ -76,8 +78,20 @@ return array(
 		),
 	),
 	
+    'service_manager' => include 'service.config.php',
+	
 	// Site navigation
 	'navigation' => array(
+		'tournament' => array(
+			'home'            => array('label' => gettext_noop('Home'),            'route' => 'home',                  'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_CLOSED),
+			'info'            => array('label' => gettext_noop('Info'),            'route' => 'info'),
+			'anmeldung'       => array('label' => gettext_noop('Anmeldung'),       'route' => 'registration',          'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_CLOSED),
+			'teilnehmer'      => array('label' => gettext_noop('Teilnehmer'),      'route' => 'registration/display',  'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_CLOSED),
+			'matches'         => array('label' => gettext_noop('Paarungen'),       'route' => 'matches',               'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
+			'standings'       => array('label' => gettext_noop('Tabelle'),         'route' => 'standings',             'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
+			'teams'           => array('label' => gettext_noop('Teilnehmer'),      'route' => 'teams',                 'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
+			'kontakt'         => array('label' => gettext_noop('Kontakt'),         'route' => 'kontakt'),
+		),
 		// default navigation
 		'default' => array(
 			'admin'           => null,
@@ -86,9 +100,12 @@ return array(
 			'profile'         => null,
 			'change-password' => null,
 			'logout'          => null,
-			'info'            => array('label' => gettext_noop('Info'),            'route' => 'info'),
-			'anmeldung'       => array('label' => gettext_noop('Anmeldung'),       'route' => 'registration'),
-			'teilnehmer'      => array('label' => gettext_noop('Teilnehmer'),      'route' => 'registration/display'),
+			'info'            => array('label' => gettext_noop('Info'),            'route' => 'info',                  'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_CLOSED),
+			'anmeldung'       => array('label' => gettext_noop('Anmeldung'),       'route' => 'registration',          'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_CLOSED),
+			'teilnehmer'      => array('label' => gettext_noop('Teilnehmer'),      'route' => 'registration/display',  'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_CLOSED),
+			'matches'         => array('label' => gettext_noop('Paarungen'),       'route' => 'matches',               'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
+			'standings'       => array('label' => gettext_noop('Tabelle'),         'route' => 'standings',             'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
+			'teams'           => array('label' => gettext_noop('Teilnehmer'),      'route' => 'teams',                 'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
 			'kontakt'         => array('label' => gettext_noop('Kontakt'),         'route' => 'kontakt'),
 		),
 		// admin navigation

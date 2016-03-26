@@ -1,0 +1,159 @@
+<?php
+
+/* 
+ * Copyright (C) 2016 schurix
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+/* @var $tournament GGACTournament\Entity\Tournament */
+$tournament = $this->tournament;
+/* @var $myTeam \GGACTournament\Entity\Team */
+$myTeam = $this->team;
+/* @var $teamdataManager \GGACTournament\Tournament\Teamdata\Manager */
+$teamdataManager = $this->teamdataManager;
+$resultFormGenerator = $this->resultFormGenerator;
+$timeFormGenerator = $this->timeFormGenerator;
+$matchId = $this->match_id;
+?>
+<div class="anmeldung ergebnisse">
+	<div class="content">
+		<ul class="paarungen">
+			<?php echo $this->partial('partial/admin_flashmessenger.phtml'); ?>
+			<?php
+			foreach($tournament->getPhases() as $phase) : /* @var $phase \GGACTournament\Entity\TournamentPhase */
+				if($phase->getTournamentState() != \GGACTournament\Entity\TournamentPhase::TOURNAMENT_STATUS_STARTED){
+					continue;
+				}
+				$groupCount = count($phase->getGroups());
+				foreach($phase->getGroups() as $group) : /* @var $group \GGACTournament\Entity\Group */
+					foreach($group->getRounds() as $round) : /* @var $round GGACTournament\Entity\Round */
+						if($round->getIsHidden() && !$this->isAllowed('tournament', 'round/viewHidden')){
+							continue;
+						}
+						$teamdataManager->injectTeamdata($group, $round);
+					?>
+					<li>
+						<div class="header" <?= $round->getIsHidden() ? 'style="border-color: red;"' : '' ?>>
+							<b><?php echo $phase->getName() ?> - <?php echo $groupCount > 1 ? 'Gruppe '. $group->getNumber().' - ' : '' ?> Runde <?= $round->getNumber() ?> <?= $round->getIsHidden() ? "(Nicht freigegeben)" : "" ?></b>
+						</div>
+
+						<div class="article">
+							<div class="matches">
+								<?php
+									$position = 0;
+									foreach($round->getMatches() as $match) : /* @var $match GGACTournament\Entity\Match */
+										if($match->getTeamHome() != $myTeam && $match->getTeamGuest() != $myTeam){ // skip other
+											continue;
+										}
+										$pointsHome = "";
+										$pointsGuest = "";
+										foreach($match->getGames() as $game){ /* @var $game GGACTournament\Entity\Game */
+											if($game->getPointsBlue() !== null || $game->getPointsPurple() !== null){
+												$pointsHome  += $match->getTeamHome()  == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+												$pointsGuest += $match->getTeamGuest() == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+											}
+										}
+
+										$result = "";
+										$result .= $match->getPointsHome() === null ? $pointsHome : $match->getPointsHome();
+										$result .= " - ";
+										$result .= $match->getPointsGuest() === null ? $pointsGuest : $match->getPointsGuest();
+										//if($result != " - ")
+										//	$result = '<a href="gameinfo.html?gameid='.$game->gameID.'">'.$result.'</a>';
+
+										$captainAllowed = $this->tournamentAcl('viewCaptain', $match->getTeamHome()) || $this->tournamentAcl('viewCaptain', $match->getTeamGuest());
+										$showCaptainContact = false;
+										if($captainAllowed){
+											$showCaptainContact = $this->tournamentAcl('viewContacts', $match->getTeamHome()) || $this->tournamentAcl('viewContacts', $match->getTeamGuest());
+										}
+
+										echo $this->partial('ggac-tournament/match/partial/match.phtml', array(
+											'match' => $match,
+											'position' => $position,
+											'result' => $result,
+											'showGamedate' => true,
+											'teamOptions' => array(
+												'showFarberwartung' => false,
+												'playerOptions' => array(
+													'addStyles' => '',
+													'showCaptain' => true,
+													'showCaptainContact' => $showCaptainContact,
+													'showAllContacts' => false,
+													'showWins' => false
+												)
+											)
+										));
+											?>
+											<div class="match-forms">
+												<?php
+													$form = call_user_func($timeFormGenerator, $match);
+													if($form):
+												?>
+												<div class="match-form">
+													<a class="btn btn-primary col-xs-12" onclick="jQuery(this).parent().find('> .match-form-form').toggle()">Zeit eintragen</a>
+													<div class="match-form-form" <?php if($matchId == $match->getId()){ echo 'style="display: block;"'; } ?>>
+														<?php
+															$form->prepare();
+															echo $this->partial('partial/admin_form.phtml', array('formular' => $form));
+														
+														?>
+													</div>
+												</div>
+												<?php endif; ?>
+												<?php
+													$form = call_user_func($resultFormGenerator, $match);
+													if($form):
+												?>
+												<div class="match-form">
+													<a class="btn btn-primary col-xs-12" onclick="jQuery(this).parent().find('> .match-form-form').toggle()">Ergebnis melden</a>
+													<div class="match-form-form" <?php if($matchId == $match->getId()){ echo 'style="display: block;"'; } ?>>
+														<?php
+															$form->prepare();
+															$i = 0;
+															foreach($match->getGames() as $game){
+																$form->get('match')->get('games')->get($i)->setLabel('Spiel '.($i+1));
+																$i++;
+															}
+															echo $this->partial('partial/admin_form.phtml', array('formular' => $form));
+														?>
+													</div>
+												</div>
+												<?php endif; ?>
+											</div>
+											<?php
+										$position++;
+									endforeach;
+								?>
+							</div>
+						</div>
+					</li>
+					<?php
+					endforeach;
+				endforeach;
+			endforeach;
+			?>
+		</ul>
+	</div>
+</div>
+
+<script type="text/javascript">
+	jQuery(function(){
+		jQuery('.match-form > form > fieldset > legend').click(function(e){
+			jQuery(this).parent().find('> fieldset').toggle();
+			jQuery(this).parent().parent().find('> .form-group').toggle();
+		});
+	})
+</script>

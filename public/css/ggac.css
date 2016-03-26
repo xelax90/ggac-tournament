@@ -11806,28 +11806,40 @@ body {
 #body .anmeldung .sidebar ul li span a:hover {
   color: #fff;
 }
+#body .blog .content,
 #body .anmeldung .content {
   width: 920px;
 }
+#body .blog .content input[type=text],
 #body .anmeldung .content input[type=text],
+#body .blog .content input[type=password],
 #body .anmeldung .content input[type=password],
+#body .blog .content input[type=email],
 #body .anmeldung .content input[type=email],
+#body .blog .content input[type=file],
 #body .anmeldung .content input[type=file],
+#body .blog .content input[type=datetime-local],
 #body .anmeldung .content input[type=datetime-local],
+#body .blog .content select,
 #body .anmeldung .content select,
+#body .blog .content textarea,
 #body .anmeldung .content textarea {
   border: 1px solid #22272a;
   background-color: #7e7e7e;
   color: black;
 }
+#body .blog .content input[type=file],
 #body .anmeldung .content input[type=file] {
   background-color: transparent;
   height: auto;
 }
+#body .blog .content label sup,
 #body .anmeldung .content label sup {
   color: #900;
 }
+#body .blog .content input[type=submit],
 #body .anmeldung .content input[type=submit],
+#body .blog .content button,
 #body .anmeldung .content button {
   float: right;
   background-color: #7e7e7e;
@@ -11837,26 +11849,94 @@ body {
   padding-right: 30px;
   color: #333;
 }
+#body .blog .content fieldset,
 #body .anmeldung .content fieldset {
   border: 1px solid #22272a;
   margin: 5px 0;
   clear: both;
   padding: 10px;
 }
+#body .blog .content fieldset#teamanmeldung_spieler,
 #body .anmeldung .content fieldset#teamanmeldung_spieler,
+#body .blog .content fieldset.anmeldung_single_fieldset,
 #body .anmeldung .content fieldset.anmeldung_single_fieldset {
   border: none;
   padding: 0;
   margin: 0;
 }
+#body .blog .content fieldset#teamanmeldung_spieler > legend,
 #body .anmeldung .content fieldset#teamanmeldung_spieler > legend,
+#body .blog .content fieldset.anmeldung_single_fieldset > legend,
 #body .anmeldung .content fieldset.anmeldung_single_fieldset > legend {
   display: none;
 }
+#body .blog .content fieldset legend,
 #body .anmeldung .content fieldset legend {
   float: left;
   border: none;
 }
+#body .blog .content .match-forms,
+#body .anmeldung .content .match-forms {
+  margin-top: 20px;
+}
+#body .blog .content .match-forms:before,
+#body .anmeldung .content .match-forms:before,
+#body .blog .content .match-forms:after,
+#body .anmeldung .content .match-forms:after {
+  content: " ";
+  display: table;
+}
+#body .blog .content .match-forms:after,
+#body .anmeldung .content .match-forms:after {
+  clear: both;
+}
+#body .blog .content .match-forms:before,
+#body .anmeldung .content .match-forms:before,
+#body .blog .content .match-forms:after,
+#body .anmeldung .content .match-forms:after {
+  content: " ";
+  display: table;
+}
+#body .blog .content .match-forms:after,
+#body .anmeldung .content .match-forms:after {
+  clear: both;
+}
+#body .blog .content .match-forms .match-form,
+#body .anmeldung .content .match-forms .match-form {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+#body .blog .content .match-forms .match-form:before,
+#body .anmeldung .content .match-forms .match-form:before,
+#body .blog .content .match-forms .match-form:after,
+#body .anmeldung .content .match-forms .match-form:after {
+  content: " ";
+  display: table;
+}
+#body .blog .content .match-forms .match-form:after,
+#body .anmeldung .content .match-forms .match-form:after {
+  clear: both;
+}
+#body .blog .content .match-forms .match-form:before,
+#body .anmeldung .content .match-forms .match-form:before,
+#body .blog .content .match-forms .match-form:after,
+#body .anmeldung .content .match-forms .match-form:after {
+  content: " ";
+  display: table;
+}
+#body .blog .content .match-forms .match-form:after,
+#body .anmeldung .content .match-forms .match-form:after {
+  clear: both;
+}
+#body .blog .content .match-forms .match-form fieldset,
+#body .anmeldung .content .match-forms .match-form fieldset {
+  border: none;
+}
+#body .blog .content .match-forms .match-form .match-form-form,
+#body .anmeldung .content .match-forms .match-form .match-form-form {
+  display: none;
+}
+#body .blog.teams ul li,
 #body .anmeldung.teams ul li {
   float: left;
   width: 450px;

@@ -26,6 +26,9 @@ return array(
 		Form\TournamentPhaseFieldset::class => DoctrineHydratedFieldsetFactory::class,
 		Form\WarningFieldset::class => DoctrineHydratedFieldsetFactory::class,
 		Form\RoundFieldset::class => DoctrineHydratedFieldsetFactory::class,
+		Form\GameResultFieldset::class => DoctrineHydratedFieldsetFactory::class,
+		Form\MatchUserResultFieldset::class => DoctrineHydratedFieldsetFactory::class,
+		Form\MatchTimeFieldset::class => DoctrineHydratedFieldsetFactory::class,
 
 		// forms
 		Form\RegistrationTeamForm::class => DoctrineHydratedFieldsetFactory::class,
@@ -33,6 +36,7 @@ return array(
 		Form\MatchCommentForm::class => DoctrineHydratedFieldsetFactory::class,
 		Form\MatchResultForm::class => DoctrineHydratedFieldsetFactory::class,
 		Form\TeamCommentForm::class => DoctrineHydratedFieldsetFactory::class,
+		Form\MatchUserResultForm::class => DoctrineHydratedFieldsetFactory::class,
 	),
 	'aliases' => array(
 	)
