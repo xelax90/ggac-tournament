@@ -46,11 +46,13 @@ class RegistrationManagerFactory extends TournamentServiceFactory {
 		$userService = $services->get('zfcuser_user_service');
 		$passwordService = $services->get('goalioforgotpassword_password_service');
 		$generator = $services->get('XelaxPasswordGenerator\Default');
+		$authService = $services->get('zfcuser_auth_service');
 		$manager->setFormManager($formManager);
 		$manager->setUserMapper($userMapper);
 		$manager->setUserService($userService);
 		$manager->setPasswordService($passwordService);
 		$manager->setPasswordGenerator($generator);
+		$manager->setAuthService($authService);
 		
 		return $manager;
 	}

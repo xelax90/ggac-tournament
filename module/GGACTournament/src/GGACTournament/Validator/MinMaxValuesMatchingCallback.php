@@ -85,18 +85,18 @@ class MinMaxValuesMatchingCallback extends AbstractValidator{
 			}
 		}
 		
-		if(is_int($min) && $positives < $min){
+		if((is_int($min) || ((int)$min == $min)) && $positives < $min){
 			$this->error(static::MESSAGE_NOT_ENOUGH);
 			return false;
-		} elseif(is_float($min) && $positives/$notEmpty < $min){
+		} elseif(is_float($min) && ((int)$min != $min) && $positives/$notEmpty < $min){
 			$this->error(static::MESSAGE_NOT_ENOUGH);
 			return false;
 		}
 		
-		if(is_int($max) && $positives > $max){
+		if((is_int($max) || ((int) $max == $max) )&& $positives > $max){
 			$this->error(static::MESSAGE_TOO_MANY);
 			return false;
-		} elseif(is_float($max) && $positives/$notEmpty > $max){
+		} elseif(is_float($max) && ((int)$max != $max) && $positives/$notEmpty > $max){
 			$this->error(static::MESSAGE_TOO_MANY);
 			return false;
 		}

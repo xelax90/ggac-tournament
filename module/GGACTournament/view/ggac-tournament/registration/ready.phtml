@@ -25,7 +25,7 @@ $this->loginWidget(true)->setRedirect('registration'); ?>
 					Hinweis: Die Benutzer werden sich erst einloggen können, wenn ihre E-Mail Adresse bestätigt ist. Auch, wenn das Passwort bereits gesetzt ist.
 					<?php elseif($this->registration && $this->registration instanceof Registration) : ?>
 					Vielen Dank <?php echo $this->registration->getName() ?> "<?php echo $this->registration->getSummonerName() ?>", du hast dich erfolgreich zum Turnier angemeldet. <br><br>
-					Bevor das Turnier los geht, musst Du noch deine E-Mail Adresse bestätigen und ein Passwort für deinen Benutzer setzen. Du solltest dafür jeweils eine E-Mail von uns bekommen haben. <br>
+					Bevor das Turnier los geht, musst Du noch deine E-Mail Adresse bestätigen und ein neues Passwort für deinen Benutzer setzen. Du solltest dafür jeweils eine E-Mail von uns bekommen haben. <br>
 					Hinweis: Du wirst dich erst einloggen können, wenn Du deine E-Mail Adresse bestätigt hast. Auch, wenn dein Passwort bereits gesetzt ist.
 					<?php else: ?>
 					<b>Bei der Anmeldung ist ein Fehler aufgetreten. Bitte versuche es erneut, oder kontaktiere die Turnierleitung.</b>

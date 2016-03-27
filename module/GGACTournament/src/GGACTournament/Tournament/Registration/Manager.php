@@ -35,6 +35,7 @@ use GoalioForgotPassword\Service\Password as PasswordService;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use GGACTournament\Entity\TournamentPhase;
 use GGACTournament\Entity\Team;
+use Zend\Authentication\AuthenticationService;
 
 /**
  * Description of Manager
@@ -61,6 +62,9 @@ class Manager extends AbstractManager{
 	/** @var PasswordGeneratorInterface */
 	protected $passwordGenerator;
 	
+	/** @var AuthenticationService */
+	protected $authService;
+	
 	protected function getFormManager() {
 		return $this->formManager;
 	}
@@ -86,6 +90,10 @@ class Manager extends AbstractManager{
 
 	protected function getPasswordGenerator() {
 		return $this->passwordGenerator;
+	}
+	
+	public function getAuthService() {
+		return $this->authService;
 	}
 
 	public function setFormManager(FormElementManager $formManager) {
@@ -115,6 +123,11 @@ class Manager extends AbstractManager{
 	
 	public function setPasswordGenerator(PasswordGeneratorInterface $passwordGenerator) {
 		$this->passwordGenerator = $passwordGenerator;
+		return $this;
+	}
+	
+	public function setAuthService(AuthenticationService $authService) {
+		$this->authService = $authService;
 		return $this;
 	}
 	
@@ -350,10 +363,10 @@ class Manager extends AbstractManager{
 					->setIcon($teamIcon)
 					->setId(0);
 			$em->persist($newRegistration);
-			$user = $this->createUser($registration);
+			$user = $this->createUser($newRegistration);
 			
 			if($tournamentRunning){
-				$player = $this->createPlayer($registration);
+				$player = $this->createPlayer($newRegistration);
 				$player->setUser($user);
 				$players[] = $player;
 			}
@@ -459,6 +472,9 @@ class Manager extends AbstractManager{
 	 */
 	protected function resetUser($user){
 		$user->setState(0);
+		$createdTime = $user->getCreatedAt();
+		$user->prePersist();
+		$user->setCreatedAt($createdTime);
         $this->getEventManager()->trigger('register.post', $this->getUserService(), array('user' => $user, 'form' => null));
 		$this->getPasswordService()->sendProcessForgotRequest($user->getId(), $user->getEmail());
 	}

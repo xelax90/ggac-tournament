@@ -23,7 +23,7 @@ $settings = array(
      *
      * Default: 'You requested to reset your password'
      */
-    'reset_email_subject_line' => gettext_noop('[SkelletonApplication] Your new password'),
+    'reset_email_subject_line' => gettext_noop('[RWTH LoL] Dein neues Passwort'),
 
     /**
      * Template for the email message sent to users
