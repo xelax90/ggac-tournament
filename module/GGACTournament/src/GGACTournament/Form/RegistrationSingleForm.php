@@ -13,7 +13,12 @@ class RegistrationSingleForm extends Form implements InputFilterProviderInterfac
 
 	protected $requireRwth = true;
 	
+	protected $subOnly = false;
+	
 	public function __construct($name = "", $options = array()){
+		if(is_array($name) && empty($options)){
+			$options = $name;
+		}
 		// we want to ignore the name passed
 		parent::__construct('RegistrationSingleForm', $options);
 		$this->setAttribute('method', 'post');
@@ -27,12 +32,28 @@ class RegistrationSingleForm extends Form implements InputFilterProviderInterfac
 		$this->requireRwth = $requireRwth;
 		return $this;
 	}
+	
+	public function getSubOnly() {
+		return $this->subOnly;
+	}
+
+	public function setSubOnly($subOnly) {
+		$this->subOnly = $subOnly;
+		return $this;
+	}
 
 	public function setOptions($options) {
 		parent::setOptions($options);
 		
 		if(isset($options['require_rwth'])){
 			$this->setRequireRwth($options['require_rwth']);
+		}
+		
+		if(isset($options['sub_only'])){
+			$this->setSubOnly($options['sub_only']);
+			if($this->has('registration')){
+				$this->get('registration')->setSubOnly($this->getSubOnly());
+			}
 		}
 	}
 	
@@ -47,6 +68,7 @@ class RegistrationSingleForm extends Form implements InputFilterProviderInterfac
 				'use_as_base_fieldset' => true,
 				'require_rwth' => $this->getRequireRwth(),
 				'show_teamName' => false,
+				'sub_only' => $this->getSubOnly(),
 			),
 		));
 		

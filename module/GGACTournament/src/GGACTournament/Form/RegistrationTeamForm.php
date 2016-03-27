@@ -62,6 +62,9 @@ class RegistrationTeamForm extends Form implements InputFilterProviderInterface{
 	}
 
 	public function __construct($name = "", $options = array()){
+		if(is_array($name) && empty($options)){
+			$options = $name;
+		}
 		// we want to ignore the name passed
 		parent::__construct('RegistrationSingleForm', $options);
 		$this->setAttribute('method', 'post');

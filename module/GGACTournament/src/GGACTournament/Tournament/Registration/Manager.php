@@ -237,8 +237,19 @@ class Manager extends AbstractManager{
 			return null;
 		}
 		
+		$subOnly = false;
+		if(in_array($currentPhase->getRegistrationState(), array(
+			TournamentPhase::REGISTRATION_STATUS_SUB_ONLY,
+			TournamentPhase::REGISTRATION_STATUS_SUB_ONLY_OR_TEAM,
+		))){
+			// return null if single registration is disabled
+			$subOnly = true;
+		}
+		
+		
 		$form = $this->getFormManager()->get(RegistrationSingleForm::class, array(
 			'require_rwth' => $tournament->getRegistrationSingleRequireRWTH(),
+			'sub_only' => $subOnly,
 		));
 		return $form;
 	}

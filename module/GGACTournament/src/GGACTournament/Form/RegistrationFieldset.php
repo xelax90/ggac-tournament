@@ -9,7 +9,7 @@ use GGACTournament\Entity\Registration;
 use GGACTournament\Validator\UniqueObjectInTournament;
 use GGACTournament\Validator\EmailIsRwth;
 use GGACTournament\Validator\EmailIsNotTim;
-
+use Zend\Form\Element\Select;
 /**
  * Registration Fieldset
  */
@@ -30,7 +30,21 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 	/** @var boolean */
 	protected $showTeamName = true;
 	
+	/** @var boolean */
+	protected $subOnly = false;
+	
+	protected $isSubOptions = array(
+		'-1' => 'Bitte Wählen', 
+		'2' => 'Ja, ich möchte NUR Ersatzspieler sein', 
+		'1' => 'Ja, ich könnte auch Ersatzspieler sein', 
+		'0' => "Nein, ich möchte kein Ersatzspieler sein."
+	);
+	
 	public function __construct($name = "", $options = array()){
+		if(is_array($name) && empty($options)){
+			$options = $name;
+			$name = "";
+		}
 		if($name == ""){
 			$name = 'RegistrationFieldset';
 		}
@@ -57,6 +71,10 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 		
         if (isset($options['show_teamName'])) {
             $this->setShowTeamName($options['show_teamName']);
+        }
+		
+        if (isset($options['sub_only'])) {
+            $this->setSubOnly($options['sub_only']);
         }
 	}
 	
@@ -93,6 +111,13 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 	 */
 	public function getShowTeamName() {
 		return $this->showTeamName;
+	}
+	
+	/**
+	 * @return boolean
+	 */
+	public function getSubOnly() {
+		return $this->subOnly;
 	}
 
 	/**
@@ -145,6 +170,24 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 		$this->showTeamName = $showTeamName;
 		if(!$showTeamName && $this->has('teamName')){
 			$this->remove('teamName');
+		}
+		return $this;
+	}
+	
+	/**
+	 * @param boolean $subOnly
+	 * @return RegistrationFieldset
+	 */
+	public function setSubOnly($subOnly) {
+		$this->subOnly = $subOnly;
+		if($this->has('isSub')){
+			$options = $this->get('isSub')->getOptions();
+			if($subOnly){
+				$options['options'] = array('2' => $this->isSubOptions['2']);
+			} else {
+				$options['options'] = $this->isSubOptions;
+			}
+			$this->get('isSub')->setOptions($options);
 		}
 		return $this;
 	}
@@ -272,12 +315,7 @@ class RegistrationFieldset extends Fieldset implements InputFilterProviderInterf
 					'label_options' => array(
 						'disable_html_escape' => true,
 					),
-					'options' => array(
-						'-1' => 'Bitte Wählen', 
-						'2' => 'Ja, ich möchte NUR Ersatzspieler sein', 
-						'1' => 'Ja, ich könnte auch Ersatzspieler sein', 
-						'0' => "Nein, ich möchte kein Ersatzspieler sein."
-					),
+					'options' => $this->getSubOnly() ? array('2' => $this->isSubOptions['2']) : $this->isSubOptions,
 					'column-size' => 'sm-10',
 					'label_attributes' => array(
 						'class' => 'col-sm-2',
