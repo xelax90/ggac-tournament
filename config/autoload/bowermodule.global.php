@@ -41,6 +41,7 @@ return array(
 					'iscroll',
 					'bootstrap',
 					'select2',
+					'webshim',
 				)
 			),
 			'ieLT9' => array(
