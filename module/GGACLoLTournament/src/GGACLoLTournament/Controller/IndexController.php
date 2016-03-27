@@ -54,7 +54,7 @@ class IndexController extends AbstractActionController implements ProviderAwareI
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			if(!empty($data['redirect'])){
-				$this->redirect()->toRoute($data['redirect']);
+				return $this->redirect()->toRoute($data['redirect']);
 			}
 		}
 		return $this->redirect()->toRoute('home');

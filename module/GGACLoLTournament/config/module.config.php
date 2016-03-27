@@ -106,6 +106,7 @@ return array(
 		'tournament_login' => array(
 			'my-matches'      => array('label' => gettext_noop('Ergebnis/Spieltermin melden'),            'route' => 'my-matches',     'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
 			'my-team'         => array('label' => gettext_noop('Dein Team/Ersatzspieler ansehen'),        'route' => 'my-team',        'tournamentState' => TournamentPhase::TOURNAMENT_STATUS_STARTED),
+			'logout'          => array('label' => gettext_noop('Logout'),                                 'route' => 'zfcuser/logout')
 		),
 		// default navigation
 		'default' => array(
