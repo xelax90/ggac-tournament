@@ -54,6 +54,8 @@ class TeamMatcher extends AbstractManager{
 	
 	protected $initialized = false;
 	
+	protected $possible_picks = array();
+	
 	/**
 	 * @return ApiDataManager
 	 */
@@ -290,6 +292,23 @@ class TeamMatcher extends AbstractManager{
 			}
 			$c++;
 		}
+		
+		$em = $this->getObjectManager();
+		$c = 1;
+		foreach($this->matched as $teams){
+			foreach($teams as $team){ /* @var $team Team */
+				foreach($team->getPlayers() as $player){
+					$em->persist($player);
+				}
+				$team->setNumber($c)
+						->setIsBlocked(false)
+						->setAnmerkung('')
+						->setTournament($this->getTournamentProvider()->getTournament());
+				$em->persist($team);
+				$c++;
+			}
+		}
+		$em->flush();
 	}
 	
 	/**
@@ -297,6 +316,7 @@ class TeamMatcher extends AbstractManager{
 	 * @return boolean
 	 */
 	protected function pickRound(){
+		$this->printCounts();
 		$teamSize = $this->getTournamentProvider()->getTournament()->getRegistrationTeamSize();
 		$minMatch = $this->getLowestPossibleMatch(); // pick largest teams first
 		if($minMatch === false){
@@ -305,7 +325,7 @@ class TeamMatcher extends AbstractManager{
 		
 		// get all teams that are allowed to pick
 		$pickingTeams = array();
-		for($i = 2; $i < $teamSize; $i++){
+		for($i = 1; $i < $teamSize; $i++){
 			$pickingTeams = array_merge($pickingTeams, $this->matched[$i]);
 		}
 		
@@ -314,7 +334,7 @@ class TeamMatcher extends AbstractManager{
 		$weakestTeam = null;
 		foreach($pickingTeams as $team){
 			/* @var $team Team */
-			if($weakestTeam === null || $weakestTeam->getAverageScore() > $team->getAverageScore()){
+			if(($weakestTeam === null || $weakestTeam->getAverageScore() > $team->getAverageScore()) && $this->canPick($team)){
 				$weakestTeam = $team;
 			}
 		}
@@ -351,7 +371,7 @@ class TeamMatcher extends AbstractManager{
 		$randomPrefix = 'team 1';
 		$teamSize = $this->getTournamentProvider()->getTournament()->getRegistrationTeamSize();
 		usort($picks, array(Team::class, "compareAverage"));
-		for($i = count($picks - 1); $i >= 0; $i++){
+		for($i = count($picks) - 1; $i >= 0; $i++){
 			// do not combine with itself and only combine if team size is not exceeded
 			if($team != $picks[$i] && count($team->getPlayers()) + count($picks[$i]->getPlayers()) <= $teamSize ){
 				// ignore generated team names
@@ -369,7 +389,7 @@ class TeamMatcher extends AbstractManager{
 	protected function combineTeams(Team $a, Team $b, $teamname){
 		$team = new Team();
 		$team->setName($teamname);
-		$team->setIcon($a->icon);
+		$team->setIcon($a->getIcon());
 		$players = array();
 		foreach($a->getPlayers() as $player){
 			$players[] = $player;
@@ -389,12 +409,13 @@ class TeamMatcher extends AbstractManager{
 	}
 	
 	protected function removeTeam(Team $team){
-		unset($this->matched[count($team->getPlayers())][array_search($team, $this->matched)]);
-		$this->matched[$team->getPlayers()] = array_values($this->matched[$team->getPlayers()]);
+		$plCount = count($team->getPlayers());
+		unset($this->matched[$plCount][array_search($team, $this->matched[$plCount])]);
+		$this->matched[$plCount] = array_values($this->matched[$plCount]);
 	}
 	
 	protected function addTeam(Team $team){
-		$this->matched[$team->getPlayers()][] = $team;
+		$this->matched[count($team->getPlayers())][] = $team;
 	}
 	
 	protected function getLowestPossibleMatch(){
@@ -446,9 +467,10 @@ class TeamMatcher extends AbstractManager{
 		foreach($this->matched as $size => $teams){
 			$teamCounts[$size] = count($teams);
 		}
-		
+		$canPick = array();
+		// $path = array();
 		for($i = $minMatch; $i >= 1; $i--){ // size of team 1 
-			for($j = $teamSize - $i; $j >= 1; $j++){ // size of team 2
+			for($j = $teamSize - $i; $j >= 1; $j--){ // size of team 2
 				$missing = $teamSize - $j;
 				$times = floor($missing / $i); // how often can size 1 be matched with size 2?
 				// compute number of teams that are matched out of size 1 and size 2
@@ -456,10 +478,20 @@ class TeamMatcher extends AbstractManager{
 					if($teamCounts[$i] < $times){
 						$times = $teamCounts[$i]; // if not at least $times size 1 teams are there, take all available
 					}
-					$matchedTeams = min([floor($teamCounts[$i] / $times), $teamCounts[$j]]);
+					if($times == 0){
+						$matchedTeams = 0;
+					} else {
+						$matchedTeams = min([floor($teamCounts[$i] / $times), $teamCounts[$j]]);
+					}
 				} else {
 					$matchedTeams = floor($teamCounts[$i] / ($times + 1));
 				}
+				if($matchedTeams != 0){
+					$canPick[$j] = true;
+				}
+				
+				//$path[] = $i.'x'.$times.' + '.$j.' -- '.$matchedTeams; // Matching path for debugging
+				
 				// adjust team counts according to $times and $matchedTeams
 				$teamCounts[$i * $times + $j] += $matchedTeams;
 				$teamCounts[$i] -= $matchedTeams * $times;
@@ -467,12 +499,30 @@ class TeamMatcher extends AbstractManager{
 			}
 		}
 		
+		//var_dump($path);
+		//var_dump($canPick);
 		// check if there are no incomplete teams left
 		for($i = 1; $i < $teamSize; $i++){
 			if($teamCounts[$i] > 0){
 				return false;
 			}
 		}
+		$this->possible_picks = $canPick;
 		return true;
+	}
+	
+	/**
+	 * Just a debug print
+	 */
+	public function printCounts(){
+		$teamCounts = array();
+		foreach($this->matched as $size => $teams){
+			$teamCounts[$size] = count($teams);
+		}
+		var_dump($teamCounts);
+	}
+	
+	protected function canPick(Team $team){
+		return !empty($this->possible_picks[count($team->getPlayers())]);
 	}
 }

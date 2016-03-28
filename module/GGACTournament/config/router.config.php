@@ -193,6 +193,19 @@ return array(
 				),
 				'may_terminate' => true,
 				'child_routes' => array(
+					'match' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route'    => '/match[/:confirm]',
+							'defaults' => array(
+								'action'     => 'teamMatcher',
+								'confirm'    => ''
+							),
+							'constraints' => array(
+								'confirm' => 'confirm',
+							),
+						),
+					),
 					'unblock' => array(
 						'type' => 'literal',
 						'options' => array(

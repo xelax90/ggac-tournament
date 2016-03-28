@@ -34,6 +34,11 @@ $teams = $tournament->getTeams();
 <div class="navbar filter-bar">
 	<div class="navbar-inner">
 		<div class="pull-right">
+			<?php if($this->isAllowed('debug', 'administrator')) : ?>
+			<a href="<?php echo $this->url('zfcadmin/teams/match') ?>" class="btn btn-primary">
+				<?php echo $this->translate('Match teams') ?>
+			</a>
+			<?php endif; ?>
 			<a href="<?php echo $this->url('zfcadmin/teams/create') ?>" class="btn btn-primary">
 				<?php echo $this->translate('New team') ?>
 			</a>
@@ -135,7 +140,9 @@ $teams = $tournament->getTeams();
 				</a>
 				<?php endif; ?>
 			</div>
+			<?php if($team->getAnsprechpartner()) : ?>
 			<div class="team-ansprechpartner"><?= $team->getAnsprechpartner()->getDisplayName() ?> <?= $team->getAnsprechpartner()->getEmail() ?></div>
+			<?php endif; ?>
 			<?php echo $this->partial('ggac-tournament/partial/team.phtml', $teamOptions); ?>
 			<?php if(!empty($team->getAnmerkung())) : ?>
 			<button class="btn btn-info btn-xs" style="position: absolute;top: -9px; right: -9px;" title="<?= $team->getAnmerkung() ?>"><i class="fa fa-comments"></i> </button>

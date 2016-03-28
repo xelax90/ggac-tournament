@@ -24,6 +24,8 @@ use Zend\View\Model\ViewModel;
 use GGACTournament\Tournament\Manager as TournamentManager;
 use GGACTournament\Tournament\ApiData\Manager as ApiDataManager;
 use GGACTournament\Tournament\Teamdata\Manager as TeamdataManager;
+use GGACTournament\Tournament\TeamMatcher\TeamMatcher;
+
 use GGACTournament\Entity\Team;
 use GGACTournament\Entity\Warning;
 use GGACTournament\Entity\Player;
@@ -48,6 +50,9 @@ class AdminTeamController extends AbstractTournamentController{
 	
 	/** @var TeamdataManager */
 	protected $teamdataManager;
+	
+	/** @var TeamMatcher */
+	protected $teamMatcher;
 	
 	protected function _redirectToTeams(){
         $start = $this->getEvent()->getRouteMatch()->getParam('routeStart');
@@ -295,6 +300,33 @@ class AdminTeamController extends AbstractTournamentController{
 		));
 	}
 	
+	public function teamMatcherAction(){
+		$confirm = $this->getEvent()->getRouteMatch()->getParam('confirm');
+		$possible = true;
+		$tournament = $this->getTournamentProvider()->getTournament();
+		if($tournament->getCurrentPhase()->getTournamentState() == \GGACTournament\Entity\TournamentPhase::TOURNAMENT_STATUS_STARTED){
+			$possible = false;
+		}
+		$teams = $tournament->getTeams();
+		if(!$confirm || !$possible){
+			return new ViewModel(array('possible' => $possible));
+		}
+		
+		$em = $this->getObjectManager();
+		foreach($teams as $team){ /* @var $team Team */
+			foreach($team->getPlayers() as $player){
+				$em->remove($player);
+			}
+			$em->remove($team);
+		}
+		$em->flush();
+		foreach($tournament->getRegistrations() as $reg){
+			$em->refresh($reg);
+		}
+		$this->getTeamMatcher()->match();
+		return new ViewModel(array('ready' => true));
+	}
+	
 	/**
 	 * @param int $team_id
 	 * @return Team
@@ -362,6 +394,10 @@ class AdminTeamController extends AbstractTournamentController{
 	public function getTeamdataManager() {
 		return $this->teamdataManager;
 	}
+	
+	public function getTeamMatcher() {
+		return $this->teamMatcher;
+	}
 
 	public function setTournamentManager(TournamentManager $tournamentManager) {
 		$this->tournamentManager = $tournamentManager;
@@ -375,6 +411,11 @@ class AdminTeamController extends AbstractTournamentController{
 	
 	public function setTeamdataManager(TeamdataManager $teamdataManager) {
 		$this->teamdataManager = $teamdataManager;
+		return $this;
+	}
+	
+	public function setTeamMatcher(TeamMatcher $teamMatcher) {
+		$this->teamMatcher = $teamMatcher;
 		return $this;
 	}
 	

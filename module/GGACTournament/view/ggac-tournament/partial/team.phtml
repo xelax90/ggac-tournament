@@ -63,9 +63,11 @@ if($team != null) :
 	<div class="team <?= $teamSide ?>" style="background-image: url('<?= $this->basePath('img/teamIcons/'.$team->getIcon()) ?>')">
 		<div class="teamname" <?= $js ?>>
 			<?= $team->getName() ?> 
+			<?php if($team->getData()) : ?>
 			(<?= $team->getData()->getPoints() ?>) 
+			<?php endif; ?>
 			<?= $showScore ? '('.$team->getScore().')' : '' ?> 
-			<?= $showFarberwartung ? $team->getData()->getFarberwartung() : '' ?>
+			<?= $showFarberwartung && $team->getData() ? $team->getData()->getFarberwartung() : '' ?>
 			<?php foreach($warnings as $warning): 
 				$warnJs = "if(confirm('Verwarnung löschen?')){ window.location='".$this->url($deleteWarningRoute, array('team_id' => $team->getId(), 'warning_id' => $warning->getId()) + $deleteWarningParams )."'; }";
 			?>

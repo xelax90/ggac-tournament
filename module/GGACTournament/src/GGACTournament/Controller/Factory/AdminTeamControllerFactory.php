@@ -25,6 +25,7 @@ use GGACTournament\Tournament\Manager as TournamentManager;
 use GGACTournament\Tournament\ApiData\Manager as ApiDataManager;
 use GGACTournament\Tournament\Teamdata\Manager as TeamdataManager;
 use Zend\ServiceManager\AbstractPluginManager;
+use GGACTournament\Tournament\TeamMatcher\TeamMatcher;
 
 /**
  * Description of AdminTeamControllerFactory
@@ -45,10 +46,11 @@ class AdminTeamControllerFactory extends AbstractTournamentControllerFactory{
 		$tournamentManager = $services->get(TournamentManager::class);
 		$teamdataManager = $services->get(TeamdataManager::class);
 		$apiManager = $services->get(ApiDataManager::class);
+		$teamMatcher = $services->get(TeamMatcher::class);
 		$controller->setTournamentManager($tournamentManager);
 		$controller->setTeamdataManager($teamdataManager);
 		$controller->setApiDataManager($apiManager);
-		
+		$controller->setTeamMatcher($teamMatcher);
 		return $controller;
 	}
 }
