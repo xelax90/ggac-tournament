@@ -129,6 +129,7 @@ $tournament = $this->tournament;
 									<th><abbr title="Meldung Gast">MeldG</abbr></th>
 									<th><abbr title="Screen Gast">ScrG</abbr></th>
 									<th><abbr title="Ergebnis">Erg</abbr></th>
+									<th><abbr title="Tournament code">Code</abbr></th>
 								</tr>
 							</thead>
 
@@ -163,6 +164,7 @@ $tournament = $this->tournament;
 										<td class="cell cell-meldung-gast"><?= $game->getMeldungGuest() ?></td>
 										<td class="cell cell-screen-gast"><?php if($game->getScreenGuest()): ?><a data-lightbox="game_<?= $game->getId() ?>_H" data-title="<?= $match->getTeamHome() ? $match->getTeamHome()->getName() : 'Spielfrei' ?> - <?= $match->getTeamGuest() ? $match->getTeamGuest()->getName() : 'Spielfrei' ?>: Spiel <?= $game->getNumber() ?>" href="<?= $this->basePath($game->getScreenGuest()) ?>">Screen</a><?php endif; ?></td>
 										<td class="cell cell-ergebnis"><?= $ergebnis ?></td>
+										<td class="cell cell-code"><?= $game->getTournamentCode() ?></td>
 									</tr>
 								<?php endforeach; ?>
 								<tr>
@@ -170,6 +172,7 @@ $tournament = $this->tournament;
 									<td colspan="2" class="cell cell-anmerkung"><?= $anmerkungHome ?></td>
 									<td colspan="2" class="cell cell-anmerkung"><?= $anmerkungGuest ?></td>
 									<td class="cell cell-ergebnis"></td>
+									<td class="cell cell-code"></td>
 								</tr>
 							</tbody>
 						</table>

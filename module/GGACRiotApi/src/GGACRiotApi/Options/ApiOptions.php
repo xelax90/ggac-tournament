@@ -29,13 +29,19 @@ use Zend\Stdlib\AbstractOptions;
  */
 class ApiOptions extends AbstractOptions{
 	protected $key = '';
+	protected $tournamentKey = '';
 	protected $region = 'euw';
 	protected $maxRequests = 20;
 	protected $protocol = 'https';
 	protected $url = "api.pvp.net";
+	protected $tournamentUrl = "global.api.pvp.net";
 	
 	public function getKey() {
 		return $this->key;
+	}
+	
+	public function getTournamentKey() {
+		return $this->tournamentKey;
 	}
 
 	public function getRegion() {
@@ -53,12 +59,21 @@ class ApiOptions extends AbstractOptions{
 	public function getUrl() {
 		return $this->url;
 	}
+	
+	public function getTournamentUrl() {
+		return $this->tournamentUrl;
+	}
 
 	public function setKey($key) {
 		$this->key = $key;
 		return $this;
 	}
 
+	public function setTournamentKey($tournamentKey) {
+		$this->tournamentKey = $tournamentKey;
+		return $this;
+	}
+	
 	public function setRegion($region) {
 		$this->region = $region;
 		return $this;
@@ -76,6 +91,11 @@ class ApiOptions extends AbstractOptions{
 
 	public function setUrl($url) {
 		$this->url = $url;
+		return $this;
+	}
+	
+	public function setTournamentUrl($tournamentUrl) {
+		$this->tournamentUrl = $tournamentUrl;
 		return $this;
 	}
 }

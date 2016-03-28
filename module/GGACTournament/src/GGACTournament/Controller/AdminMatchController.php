@@ -196,7 +196,7 @@ class AdminMatchController extends AbstractTournamentController{
 		));
 	}
 	
-	public function roundGeCodesAction(){
+	public function roundGetCodesAction(){
         $roundId = $this->getEvent()->getRouteMatch()->getParam('round_id');
 		$em = $this->getObjectManager();
 		/* @var $round Round */

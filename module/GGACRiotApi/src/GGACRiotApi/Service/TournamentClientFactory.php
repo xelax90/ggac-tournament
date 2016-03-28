@@ -24,13 +24,14 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\AbstractPluginManager;
 use SkelletonApplication\Service\Factory\InvokableFactory;
 use GGACRiotApi\Options\ApiOptions;
+use Doctrine\ORM\EntityManager;
 
 /**
- * Description of ClientFactory
+ * Description of TournamentClientFactory
  *
  * @author schurix
  */
-class ClientFactory extends InvokableFactory{
+class TournamentClientFactory extends InvokableFactory{
 	public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
 		/* @var $client TournamentClient */
 		$client = parent::__invoke($container, $requestedName, $options);
@@ -42,10 +43,11 @@ class ClientFactory extends InvokableFactory{
 		
 		$apiOptions = $services->get(ApiOptions::class);
 		$router = $services->get('Router');
+		$objectManager = $services->get(EntityManager::class);
 		
 		$client->setRouter($router);
 		$client->setOptions($apiOptions);
-		
+		$client->setObjectManager($objectManager);
 		return $client;
 	}
 }

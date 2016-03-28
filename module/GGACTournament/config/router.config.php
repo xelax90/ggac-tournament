@@ -127,7 +127,7 @@ return array(
 				'may_terminate' => true,
 				'child_routes' => array(
 					'getcodes' => array(
-						'type' => 'literal',
+						'type' => 'segment',
 						'options' => array(
 							'route'    => '/getcodes/:round_id',
 							'defaults' => array(

@@ -63,10 +63,10 @@ class TournamentClient implements ObjectManagerAwareInterface, TournamentApiInte
 
 	protected function requestProvider(){
 		$options = $this->getOptions();
-		$region = $options->getRegion();
+		$region = strtoupper($options->getRegion());
 		$params = array();
-		$routeOptions = array( 'name' => 'riot/getresult' );
-		$url = $this->getRouter()->assemble($params, $routeOptions);
+		$routeOptions = array( 'name' => 'riot/gameresult' ); //, 'force_canonical' => true);
+		$url = 'http://lol.gaming.rwth-aachen.de'. $this->getRouter()->assemble($params, $routeOptions); // TODO
 		$result = $this->request('/tournament/public/v1/provider', 'post', array('region' => $region, 'url' => $url));
 		if($result['statuscode'] === 200){
 			$provider = new RiotTournamentProvider();
@@ -74,8 +74,10 @@ class TournamentClient implements ObjectManagerAwareInterface, TournamentApiInte
 			$em = $this->getObjectManager();
 			$em->persist($provider);
 			$em->flush();
+			aser();
 			return $provider;
 		}
+		bser();
 		return $result['statuscode'];
 	}
 	
@@ -147,6 +149,7 @@ class TournamentClient implements ObjectManagerAwareInterface, TournamentApiInte
 			$i = 0;
 			foreach($games as $g){ /* @var $g Game */
 				$g->setTournamentCode($codes[$i]);
+				$this->getObjectManager()->flush($g);
 				$i++;
 			}
 			return true;
@@ -219,7 +222,7 @@ class TournamentClient implements ObjectManagerAwareInterface, TournamentApiInte
 	 */
 	protected function getBaseUrl($endpoint){
 		$options = $this->getOptions();
-		$url = $options->getProtocol() . '://'.$options->getRegion().'.'.$options->getUrl();
+		$url = $options->getProtocol() . '://'.$options->getTournamentUrl();
 		$url .= $this->normalizeInterface($endpoint);
 		return $url;
 	}
@@ -234,12 +237,13 @@ class TournamentClient implements ObjectManagerAwareInterface, TournamentApiInte
 	public function request($endpoint, $method, $params = array(), $GETParams = array()){
 		$options = $this->getOptions();
 		$url = $this->getBaseUrl($endpoint);
-		if(!$options->getKey()){
+		if(!$options->getTournamentKey()){
 			return null;
 		}
-		$GETParams['api_key'] = $options->getKey();
 		
 		$ch = null;
+		$headers = array();
+		$headers[] = 'X-Riot-Token: '.$options->getTournamentKey();
 		switch(strtolower($method)){
 			case 'get':
 				$params = $params + $GETParams;
@@ -251,20 +255,16 @@ class TournamentClient implements ObjectManagerAwareInterface, TournamentApiInte
 				$dataString = json_encode($params);
 				curl_setopt($ch, CURLOPT_POST, true);
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-					'Content-Type: application/json',
-					'Content-Length: ' . strlen($dataString))
-				);
+				$headers[] = 'Content-Type: application/json';
+				$headers[] = 'Content-Length: ' . strlen($dataString);
 				break;
 			case 'put':
 				$ch = curl_init($url .'?'.http_build_query($GETParams));
 				$dataString = json_encode($params);
 				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-					'Content-Type: application/json',
-					'Content-Length: ' . strlen($dataString))
-				);
+				$headers[] = 'Content-Type: application/json';
+				$headers[] = 'Content-Length: ' . strlen($dataString);
 				break;
 			case 'delete':
 				$ch = curl_init($url .'?'.http_build_query($GETParams));
@@ -276,7 +276,7 @@ class TournamentClient implements ObjectManagerAwareInterface, TournamentApiInte
 		if(!is_resource($ch) || get_resource_type($ch) !== 'curl'){
 			return array("statuscode" => 405, "content" => 'Method not allowed');
 		}
-		
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
 		curl_setopt($ch,CURLOPT_TIMEOUT,10);
 		$output = curl_exec($ch);
@@ -284,7 +284,10 @@ class TournamentClient implements ObjectManagerAwareInterface, TournamentApiInte
 		curl_close($ch);
 
 		$res = array("statuscode" => $httpcode, "content" => $output);
-
+		if($res['statuscode'] == 429){
+			var_dump($res);
+			die();
+		}
 		return $res;
 	}
 }

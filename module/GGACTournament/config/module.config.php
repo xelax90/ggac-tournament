@@ -21,6 +21,7 @@ $guardConfig = array(
 	['route' => 'zfcadmin/tournament',               'roles' => ['administrator'] ],
 	['route' => 'zfcadmin/registration',             'roles' => ['moderator'] ],
 	['route' => 'zfcadmin/matches',                  'roles' => ['moderator'] ],
+	['route' => 'zfcadmin/matches/getcodes',         'roles' => ['moderator'] ],
 	['route' => 'zfcadmin/matches/block',            'roles' => ['moderator'] ],
 	['route' => 'zfcadmin/matches/unblock',          'roles' => ['moderator'] ],
 	['route' => 'zfcadmin/matches/setResult',        'roles' => ['moderator'] ],

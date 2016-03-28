@@ -27,6 +27,7 @@ return array(
 	),
 	'ggac_riotapi' => array(
 		'key' => '', 
+		'tournament_key' => '', 
 		'region' => 'euw',
 		'max_requests' => 20,
 	),

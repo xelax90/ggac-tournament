@@ -16,7 +16,7 @@ return array(
 			return new Options\ApiOptions(isset($config['ggac_riotapi']) ? $config['ggac_riotapi'] : array());
 		},
 		Service\Client::class => Service\ClientFactory::class,
-		Service\TournamentClient::class => Service\TournamentClient::class,
+		Service\TournamentClient::class => Service\TournamentClientFactory::class,
 		Cache\ApiCache::class => Service\CacheFactory::class,
 	),
 	'aliases' => array(

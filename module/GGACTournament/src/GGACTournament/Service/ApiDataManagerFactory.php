@@ -24,7 +24,9 @@ use Interop\Container\ContainerInterface;
 
 use GGACTournament\Tournament\ApiData\Manager;
 use GGACTournament\Tournament\ApiData\ApiInterface;
+use GGACTournament\Tournament\ApiData\TournamentApiInterface;
 use GGACTournament\Tournament\ApiData\Cache;
+use Zend\ServiceManager\AbstractPluginManager;
 
 /**
  * Factory for ApiData manager
@@ -37,13 +39,24 @@ class ApiDataManagerFactory extends TournamentServiceFactory {
 		/* @var $apiManager Manager */
 		$apiManager = parent::__invoke($container, $requestedName, $options);
 		
-		$apiCache = $container->get(Cache::class);
+		$services = $container;
+		if($services instanceof AbstractPluginManager){
+			$services = $services->getServiceLocator();
+		}
+		
+		$apiCache = $services->get(Cache::class);
 		$apiManager->setCache($apiCache);
 		
-		if($container->has(ApiInterface::class)){
+		if($services->has(ApiInterface::class)){
 			// fetch and inject API
-			$api = $container->get(ApiInterface::class);
+			$api = $services->get(ApiInterface::class);
 			$apiManager->setApi($api);
+		}
+		
+		if($services->has(TournamentApiInterface::class)){
+			// fetch and inject Tournament API
+			$tournamentApi = $services->get(TournamentApiInterface::class);
+			$apiManager->setTournamentApi($tournamentApi);
 		}
 		
 		return $apiManager;
