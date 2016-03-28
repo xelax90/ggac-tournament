@@ -29,10 +29,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class TeamRepository extends EntityRepository{
 	
-	public function getTeamsForTournament($tournament){
-		$query = $this->createQueryBuilder('t')
-			->join('t.group', 'g')
-			->where('g.tournament = ?1')
+	public function getNotGroupedTeamsForTournament($tournament){
+		$query = $this->createQueryBuilder('t');
+		$query->leftJoin('t.groupMappings', 'g')
+			->andWhere($query->expr()->isNull('g.seed'))
+			->andWhere($query->expr()->eq('t.tournament', '?1'))
 			->setParameter(1, $tournament)
 			->orderBy('t.name', 'ASC');
 		return $query->getQuery()->getResult();

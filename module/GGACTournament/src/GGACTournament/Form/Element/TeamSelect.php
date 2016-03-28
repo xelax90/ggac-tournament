@@ -41,7 +41,7 @@ class TeamSelect extends ObjectSelect implements ProviderAwareInterface{
 			},
 			'label' => gettext_noop('Team'),
 			'find_method' => array(
-				'name'   => 'getTeamsForTournament',
+				'name'   => 'getNotGroupedTeamsForTournament',
 				'params' => array(
 					'tournament' => $this->getTournamentProvider()->getTournament()
 				),

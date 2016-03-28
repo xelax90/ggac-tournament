@@ -29,6 +29,7 @@ return array(
 		Form\GameResultFieldset::class => DoctrineHydratedFieldsetFactory::class,
 		Form\MatchUserResultFieldset::class => DoctrineHydratedFieldsetFactory::class,
 		Form\MatchTimeFieldset::class => DoctrineHydratedFieldsetFactory::class,
+		Form\GroupTeamMappingFieldset::class => DoctrineHydratedFieldsetFactory::class,
 
 		// forms
 		Form\RegistrationTeamForm::class => DoctrineHydratedFieldsetFactory::class,

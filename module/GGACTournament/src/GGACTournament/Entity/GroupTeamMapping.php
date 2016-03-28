@@ -96,7 +96,27 @@ class GroupTeamMapping implements JsonSerializable{
 		$this->seed = $seed;
 		return $this;
 	}
-
+	
+	public function getTeamId(){
+		return $this->getTeam()->getId();
+	}
+	
+	public function getTeamIcon(){
+		return $this->getTeam()->getIcon();
+	}
+	
+	public function getTeamName(){
+		return $this->getTeam()->getName();
+	}
+	
+	public function getTeamNumber(){
+		return $this->getTeam()->getNumber();
+	}
+	
+	public function getTeamIsBlocked(){
+		return $this->getTeam()->getIsBlocked();
+	}
+	
 	/**
 	 * Returns json String
 	 * @return string

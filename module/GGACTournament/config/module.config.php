@@ -68,6 +68,7 @@ return array(
 			Controller\AdminRoundController::class => Controller\Factory\AdminRoundControllerFactory::class,
 			Controller\AdminRegistrationController::class => Controller\Factory\AdminRegistrationControllerFactory::class,
 			Controller\AdminTeamController::class => Controller\Factory\AdminTeamControllerFactory::class,
+			Controller\AdminGroupTeamMappingController::class => Controller\Factory\AdminGroupTeamMappingControllerFactory::class,
 		),
 	),
 	
