@@ -90,6 +90,7 @@ return array(
 									'list_columns' => array(gettext_noop('Seed') => 'seed', gettext_noop('Id') => 'teamId', gettext_noop('Icon') => 'teamIcon', gettext_noop('Number') => 'teamNumber', gettext_noop('Name') => 'teamName', gettext_noop('Blocked') => 'teamIsBlocked' ),
 									'list_title' => gettext_noop('Teams'),
 									'rest_enabled' => false,
+									'page_length' => 0,
 									'idName' => 'teamId',
 								),
 							),
