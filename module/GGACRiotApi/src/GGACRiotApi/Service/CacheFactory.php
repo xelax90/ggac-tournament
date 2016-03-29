@@ -37,7 +37,7 @@ class CacheFactory implements FactoryInterface {
 			'adapter' => array(
 				'name' => ApiCache::class,
 				'options' => array(
-					'ttl' => 11200,
+					'ttl' => 10800, // 3 hours
 					'namespace' => 'riotapicache',
 					'cache_dir' => './data/cache/',
 				),

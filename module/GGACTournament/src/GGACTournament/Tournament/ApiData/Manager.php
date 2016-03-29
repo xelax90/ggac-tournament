@@ -133,7 +133,8 @@ class Manager extends AbstractManager{
 	public function requestCodesForRound(Round $round){
 		$res = true;
 		foreach($round->getMatches() as $match){
-			if(!$this->requestCodesForMatch($match)){
+			$currentRes = $this->requestCodesForMatch($match);
+			if($currentRes !== true){
 				$res = false;
 			}
 		}
@@ -143,12 +144,28 @@ class Manager extends AbstractManager{
 	public function requestCodesForMatch(Match $match){
 		$tournamentApi = $this->getTournamentApi();
 		$res = true;
-		foreach($match->getGames() as $game){ /* @var $game Game */
-			if(!$tournamentApi->updateCode($game)){
+		foreach($match->getGames() as $game){
+			$currentRes = $tournamentApi->updateCode($game);
+			if($currentRes !== true){
 				$res = false;
 			}
 		}
 		return $res;
+	}
+	
+	/**
+	 * Runs workQueue on apis if they implement HasWorkingQueueInterface
+	 */
+	public function workQueue(){
+		$api = $this->getApi();
+		if($api instanceof HasWorkingQueueInterface){
+			$api->workQueue();
+		}
+		
+		$tournamentApi = $this->getTournamentApi();
+		if($tournamentApi instanceof HasWorkingQueueInterface){
+			$tournamentApi->workQueue();
+		}
 	}
 	
 	/**

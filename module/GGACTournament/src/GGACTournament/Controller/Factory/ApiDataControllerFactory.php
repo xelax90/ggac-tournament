@@ -18,44 +18,29 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace GGACRiotApi\Service;
-
-use SkelletonApplication\Service\Factory\InvokableFactory;
-use Interop\Container\ContainerInterface;
+namespace GGACTournament\Controller\Factory;
 use Zend\ServiceManager\AbstractPluginManager;
+use GGACTournament\Tournament\ApiData\Manager as ApiDataManager;
+use SkelletonApplication\Service\Factory\InvokableFactory;
 
 /**
- * Description of DDragonHelperFactory
+ * Description of ApiDataControllerFactory
  *
  * @author schurix
  */
-class DDragonHelperFactory extends InvokableFactory{
-	public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
-		/* @var $helper \FSMPILoL\View\Helper\DDragonHelper */
-		$helper = parent::__invoke($container, $requestedName, $options);
+class ApiDataControllerFactory extends InvokableFactory{
+	public function __invoke(\Interop\Container\ContainerInterface $container, $requestedName, array $options = null) {
+		/* @var $controller \GGACTournament\Controller\ApiDataController */
+		$controller = parent::__invoke($container, $requestedName, $options);
 		
 		$services = $container;
 		if($services instanceof AbstractPluginManager){
 			$services = $services->getServiceLocator();
 		}
 		
-		/* @var $api Client */
-		$api = $services->get(Client::class);
-		$realm = $api->getRealm();
-		$version = null;
-		$cdn = null;
-		if(!is_numeric($realm)){
-			$version = $realm->dd;
-			$cdn = rtrim($realm->cdn, '/').'/';
-		}
+		$apiManager = $services->get(ApiDataManager::class);
+		$controller->setApiDataManager($apiManager);
 		
-		if($version){
-			$helper->setVersion($version);
-		}
-		if($cdn){
-			$helper->setBaseUrl($cdn);
-		}
-		
-		return $helper;
+		return $controller;
 	}
 }

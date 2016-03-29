@@ -75,8 +75,7 @@ class Client implements ApiInterface, ValidateSummonerName{
 	public function getApiData($registrations) {
 		$summoners = $this->getSummoners($registrations);
 		$result = array();
-		
-		foreach($registrations as $registration){
+		foreach($registrations as $c => $registration){
 			/* @var $registration \GGACTournament\Entity\Registration */
 			$data = new Data();
 			$summoner = null;
@@ -85,15 +84,21 @@ class Client implements ApiInterface, ValidateSummonerName{
 			} elseif(!empty($registration->getSummonerName()) && !empty($summoners['byName'][$registration->getSummonerName()])){
 				$summoner = $summoners['byName'][$registration->getSummonerName()];
 			}
+			$start = microtime(true);
 			if($summoner){
 				$data->setLevel($summoner->summonerLevel);
 				$registration->setSummonerId($summoner->id);
 				$registration->setSummonerName($summoner->name);
 				$data->setProfileIconId($summoner->profileIconId);
+				var_dump('start - '.(microtime(true) - $start));
 				$data->setNormalWins($this->getNormalWins($summoner->id));
+				var_dump('normal - '.(microtime(true) - $start));
 				$data->setRankedWins($this->getRankedWins($summoner->id));
+				var_dump('ranked - '.(microtime(true) - $start));
 				$data->setTier($this->getRecentLeague($summoner->id));
+				var_dump('league - '.(microtime(true) - $start));
 			}
+			var_dump('all - '.(microtime(true) - $start));
 			$result[$registration->getId()] = $data;
 		}
 		
@@ -105,8 +110,6 @@ class Client implements ApiInterface, ValidateSummonerName{
 	 * @param $registrations Array of Registration
 	 */
 	public function getSummoners($registrations){
-		// TODO Benchmark!!
-		
 		$names = array();
 		$ids = array();
 		foreach($registrations as $registration){
@@ -225,7 +228,6 @@ class Client implements ApiInterface, ValidateSummonerName{
 		if(!is_numeric($leagueEntries)){
 			$leagueEntries = $leagueEntries->$summonerID;
 			foreach($leagueEntries as $entry){
-				//var_dump($entry);
 				if($entry->queue == "RANKED_SOLO_5x5" && !empty($entry->entries)){
 					$leagueEntry = $entry;
 				}
@@ -240,7 +242,7 @@ class Client implements ApiInterface, ValidateSummonerName{
 	
 	public function getRealm(){
 		$endpoint = "/api/lol/static-data/".$this->getOptions()->getRegion()."/v1.2/realm";
-		$result = $this->request($endpoint);
+		$result = $this->request($endpoint, array(), 'global');
 		return $result;
 	}
 	
@@ -302,9 +304,12 @@ class Client implements ApiInterface, ValidateSummonerName{
 		return $result;
 	}
 	
-	protected function getBaseUrl($endpoint){
+	protected function getBaseUrl($endpoint, $region = null){
 		$options = $this->getOptions();
-		$url = $options->getProtocol() . '://'.$options->getRegion().'.'.$options->getUrl();
+		if(null === $region){
+			$region = $options->getRegion();
+		}
+		$url = $options->getProtocol() . '://'.$region.'.'.$options->getUrl();
 		$url .= '/'.$endpoint;
 		return $url;
 	}
@@ -313,9 +318,9 @@ class Client implements ApiInterface, ValidateSummonerName{
 		return hash('sha256', $url);
 	}
 
-	protected function request($endpoint, $parameters = array()){
+	protected function request($endpoint, $parameters = array(), $region = null){
 		$options = $this->getOptions();
-		$baseUrl = $this->getBaseUrl($endpoint);
+		$baseUrl = $this->getBaseUrl($endpoint, $region);
 		$parameters['api_key'] = $options->getKey();
 		
 		$request = $baseUrl.'?'.http_build_query($parameters);
@@ -331,7 +336,7 @@ class Client implements ApiInterface, ValidateSummonerName{
 		
 		// new request if no cache or if expired cache and stil requests left
 		if(($contents != null && $cache->itemHasExpired($cacheKey) && static::$requestCount <= $options->getMaxRequests()) || $contents == null) {
-			@$requestContent = file_get_contents($request);
+			$requestContent = file_get_contents($request);
 		    // Retrieve HTTP status code
 		    list($version,$status_code,$msg) = explode(' ',$http_response_header[0], 3);
 
@@ -367,13 +372,13 @@ class Client implements ApiInterface, ValidateSummonerName{
 		    }
 			if($status_code == 200){
 				//echo 'not cached';
-				$cache->addItem($cacheKey, $requestContent);
+				$cache->setItem($cacheKey, $requestContent);
 				$contents = $requestContent;
 				self::$requestCount++;
 			} elseif($status_code == 429 && !empty($cache)){ // rate limit exceeded
 				// use cache
 			} elseif($status_code == 404){ // 404 is sometimes a valid response
-				$cache->addItem($cacheKey, '404');
+				$cache->setItem($cacheKey, '404');
 				return 404;
 			} else {
 				if($contents != null){

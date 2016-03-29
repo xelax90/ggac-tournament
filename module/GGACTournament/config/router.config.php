@@ -4,6 +4,28 @@ namespace GGACTournament;
 use XelaxAdmin\Router\ListRoute;
 
 return array(
+	'apidata' => array(
+		'type' => 'literal',
+		'options' => array(
+			'route'    => '/apidata',
+			'defaults' => array(
+				'controller' => Controller\ApiDataController::class,
+				'action'     => 'index',
+			),
+		),
+		'may_terminate' => false,
+		'child_routes' => array(
+			'queue' => array(
+				'type' => 'literal',
+				'options' => array(
+					'route'    => '/queue',
+					'defaults' => array(
+						'action'     => 'queue',
+					),
+				),
+			),
+		),
+	),
 	'registration' => array(
 		'type' => 'literal',
 		'options' => array(

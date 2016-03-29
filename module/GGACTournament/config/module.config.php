@@ -6,6 +6,7 @@ use BjyAuthorize\Guard;
 
 $guardConfig = array(
 	//frontend
+	['route' => 'apidata/queue',               'roles' => ['guest', 'user'] ],
 	['route' => 'registration',                'roles' => ['guest', 'user'] ],
 	['route' => 'registration/form',           'roles' => ['guest', 'user'] ],
 	['route' => 'registration/confirm',        'roles' => ['guest', 'user'] ],
@@ -70,6 +71,7 @@ return array(
 			Controller\AdminRegistrationController::class => Controller\Factory\AdminRegistrationControllerFactory::class,
 			Controller\AdminTeamController::class => Controller\Factory\AdminTeamControllerFactory::class,
 			Controller\AdminGroupTeamMappingController::class => Controller\Factory\AdminGroupTeamMappingControllerFactory::class,
+			Controller\ApiDataController::class => Controller\Factory\ApiDataControllerFactory::class,
 		),
 	),
 	
