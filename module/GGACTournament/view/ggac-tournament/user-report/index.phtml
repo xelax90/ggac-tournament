@@ -103,7 +103,7 @@ $this->loginWidget(true)->setRedirect('registration');
 												<div class="match-form">
 													<h3>Tournament Codes</h3>
 													<?php foreach($match->getGames() as $game): /* @var $game \GGACTournament\Entity\Game */ ?>
-													<p><b>Spiel <?php echo $game->getNumber() ?></b> <?php echo $game->getTournamentCode() ?></p>
+													<p><b>Spiel <?php echo $game->getNumber() ?>:</b> <?php echo $game->getTournamentCode() ?></p>
 													<?php endforeach; ?>
 												</div>
 												<?php
