@@ -84,21 +84,15 @@ class Client implements ApiInterface, ValidateSummonerName{
 			} elseif(!empty($registration->getSummonerName()) && !empty($summoners['byName'][$registration->getSummonerName()])){
 				$summoner = $summoners['byName'][$registration->getSummonerName()];
 			}
-			$start = microtime(true);
 			if($summoner){
 				$data->setLevel($summoner->summonerLevel);
 				$registration->setSummonerId($summoner->id);
 				$registration->setSummonerName($summoner->name);
 				$data->setProfileIconId($summoner->profileIconId);
-				var_dump('start - '.(microtime(true) - $start));
 				$data->setNormalWins($this->getNormalWins($summoner->id));
-				var_dump('normal - '.(microtime(true) - $start));
 				$data->setRankedWins($this->getRankedWins($summoner->id));
-				var_dump('ranked - '.(microtime(true) - $start));
 				$data->setTier($this->getRecentLeague($summoner->id));
-				var_dump('league - '.(microtime(true) - $start));
 			}
-			var_dump('all - '.(microtime(true) - $start));
 			$result[$registration->getId()] = $data;
 		}
 		
