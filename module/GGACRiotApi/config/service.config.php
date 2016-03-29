@@ -18,6 +18,7 @@ return array(
 		Service\Client::class => Service\ClientFactory::class,
 		Service\TournamentClient::class => Service\TournamentClientFactory::class,
 		Cache\ApiCache::class => Service\CacheFactory::class,
+		Cache\TournamentReport::class => Service\TournamentCacheFactory::class,
 	),
 	'aliases' => array(
 		ApiInterface::class => Service\Client::class,		

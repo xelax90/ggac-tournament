@@ -18,34 +18,38 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace GGACRiotApi\Controller\Factory;
+namespace GGACRiotApi\Service;
 
-use SkelletonApplication\Service\Factory\InvokableFactory;
 use Interop\Container\ContainerInterface;
-use Doctrine\ORM\EntityManager;
-use Zend\ServiceManager\AbstractPluginManager;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use GGACRiotApi\Cache\TournamentReport;
+use Zend\Cache\StorageFactory;
 
 /**
- * Description of GameResultControllerFactory
+ * Description of CacheFactory
  *
  * @author schurix
  */
-class GameResultControllerFactory extends InvokableFactory{
+class TournamentCacheFactory implements FactoryInterface {
 	public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
-		/* @var $controller \GGACRiotApi\Controller\GameResultController */
-		$controller = parent::__invoke($container, $requestedName, $options);
-		
-		$services = $container;
-		if($services instanceof AbstractPluginManager){
-			$services = $services->getServiceLocator();
-		}
-		
-		$em = $services->get(EntityManager::class);
-		$cache = $services->get(TournamentReport::class);
-		$controller->setObjectManager($em);
-		$controller->setTournamentCache($cache);
-		
-		return $controller;
+		$cache = StorageFactory::factory(array(
+			'adapter' => array(
+				'name' => TournamentReport::class,
+				'options' => array(
+					'ttl' => 604800, // 7 days
+					'namespace' => 'riotgamereport',
+					'cache_dir' => './data/cache/',
+				),
+			),
+			'plugins' => array(
+				'exception_handler' => array('throw_exceptions' => false),
+			),
+		));
+		return $cache;
+	}
+
+	public function createService(ServiceLocatorInterface $services) {
+		return $this($services, TeamdataCache::class);
 	}
 }

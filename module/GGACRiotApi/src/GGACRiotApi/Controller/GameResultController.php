@@ -26,6 +26,8 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use DoctrineModule\Persistence\ProvidesObjectManager;
 use GGACTournament\Entity\Game;
+use GGACRiotApi\Cache\TournamentReport;
+
 
 /**
  * Description of GameResultController
@@ -35,6 +37,18 @@ use GGACTournament\Entity\Game;
 class GameResultController extends AbstractRestfulController implements ObjectManagerAwareInterface{
 	use ProvidesObjectManager;
 	
+	/** @var TournamentReport */
+	protected $tournamentCache;
+	
+	public function getTournamentCache() {
+		return $this->tournamentCache;
+	}
+
+	public function setTournamentCache(TournamentReport $tournamentCache) {
+		$this->tournamentCache = $tournamentCache;
+		return $this;
+	}
+
 	public function onDispatch(\Zend\Mvc\MvcEvent $e) {
 		$return = parent::onDispatch($e);
 		if(is_array($return)){
@@ -46,6 +60,9 @@ class GameResultController extends AbstractRestfulController implements ObjectMa
 	}
 	
 	public function create($data) {
+		// save all reports
+		$this->getTournamentCache()->setItem(time(), json_encode($data));
+		
 		$meta = json_decode($data['metaData']);
 		if(!$meta || !isset($meta->game_id)){
 			return array('success' => false, 'error' => 'No meta');
