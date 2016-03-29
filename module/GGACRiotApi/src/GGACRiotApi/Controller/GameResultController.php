@@ -57,6 +57,20 @@ class GameResultController extends AbstractRestfulController implements ObjectMa
 		if(!$game){
 			return array('success' => false, 'error' => 'Game not found');
 		}
+		if(!empty($game->getReport())){
+			foreach($game->getMatch()->getGames() as $g){ /* @var $g Game */
+				if(empty($g->getReport())){
+					$game = $g;
+					break;
+				}
+			}
+		}
+		if(!empty($game->getReport())){
+			return array('success' => false, 'error' => 'All games have results already');
+		}
+		if($game->getMatch()->getIsBlocked()){
+			return array('success' => false, 'error' => 'Match is blocked');
+		}
 		
 		// always save report
 		$game->setReport(json_encode($data));
