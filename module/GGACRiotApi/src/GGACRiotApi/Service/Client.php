@@ -330,7 +330,7 @@ class Client implements ApiInterface, ValidateSummonerName{
 		
 		// new request if no cache or if expired cache and stil requests left
 		if(($contents != null && $cache->itemHasExpired($cacheKey) && static::$requestCount <= $options->getMaxRequests()) || $contents == null) {
-			$requestContent = file_get_contents($request);
+			$requestContent = @file_get_contents($request);
 		    // Retrieve HTTP status code
 		    list($version,$status_code,$msg) = explode(' ',$http_response_header[0], 3);
 

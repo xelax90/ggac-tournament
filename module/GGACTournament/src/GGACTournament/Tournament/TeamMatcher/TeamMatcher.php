@@ -308,6 +308,9 @@ class TeamMatcher extends AbstractManager{
 				$c++;
 			}
 		}
+		foreach($this->subs as $player){
+			$em->persist($player);
+		}
 		$em->flush();
 	}
 	
