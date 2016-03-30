@@ -12,9 +12,9 @@ $form = $this->form;
 			<li>
 				<div class="header">
 					<?php if($form instanceof RegistrationTeamForm) : ?>
-					<b>Teamanmeldung zur RWTH Liga</b>
+					<b>Teamanmeldung zum <?php echo $this->tournament->getName(); ?></b>
 					<?php else : ?>
-					<b>Einzelanmeldung zur RWTH Liga</b>
+					<b>Einzelanmeldung zum <?php echo $this->tournament->getName(); ?></b>
 					<?php endif; ?>
 				</div>
 				<div class="article">
