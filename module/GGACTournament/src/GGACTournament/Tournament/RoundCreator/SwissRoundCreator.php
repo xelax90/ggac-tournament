@@ -74,7 +74,7 @@ class SwissRoundCreator extends AbstractRoundCreator{
 			for($i = 0; $i < count($punktegruppe); $i++):
 				/* @var $t1 Team */
 				$t1 = $punktegruppe[$i];
-				
+			
 				// skip team if it is already matched
 				if(in_array($i, $matched)) continue;
 				
@@ -82,6 +82,8 @@ class SwissRoundCreator extends AbstractRoundCreator{
 				$besteVerteilung = $this->getBestColorMapping($t1->getData()->getFarberwartung());
 				// find team with same points and best possible Farberwartung
 				foreach($besteVerteilung as $erwartung){
+					if(in_array($i, $matched)) break;
+					
 					for($j = 0; $j < count($punktegruppe); $j++){
 						/* @var $t2 Team */
 						$t2 = $punktegruppe[$j];
@@ -130,7 +132,7 @@ class SwissRoundCreator extends AbstractRoundCreator{
 				$unmatchedTeams = array();
 				foreach($punktegruppe as $tnr => $team){
 					if(!in_array($tnr, $matched)){
-						$unmatchedTeams[] = array($tnr, $team);
+						$unmatchedTeams[] = array(array_search($team, $punktegruppen[$gruppeIndex]), $team);
 					}
 				}
 				
