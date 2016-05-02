@@ -51,6 +51,7 @@ class Manager extends AbstractPluginManager{
 	
 	protected $factories = [
 		RandomRoundCreator::class => RoundCreatorFactory::class,
+		SwissRoundCreator::class => RoundCreatorFactory::class,
 	];
 	
 	protected $roundTypes;
@@ -58,6 +59,7 @@ class Manager extends AbstractPluginManager{
 	public function __construct($configOrContainerInstance = null, array $v3config = array()) {
 		parent::__construct($configOrContainerInstance, $v3config);
 		$this->canonicalNames[RandomRoundCreator::class] = RandomRoundCreator::class;
+		$this->canonicalNames[SwissRoundCreator::class] = SwissRoundCreator::class;
 	}
 	
     public function validate($instance){

@@ -21,7 +21,7 @@
 namespace GGACTournament\Tournament\Teamdata\TieBreak;
 
 use GGACTournament\Tournament\Teamdata\Tiebreak\Exception\NoTeamdataManagerException;
-use GGACTournament\Tournament\Teamdata\Manager;
+use GGACTournament\Tournament\Teamdata\Manager as TeamdataManager;
 use GGACTournament\Tournament\ProviderAwareInterface;
 
 /**
@@ -33,9 +33,9 @@ interface ScoreInterface extends ProviderAwareInterface{
 	
 	/**
 	 * Sets the teamdata manager
-	 * @param Manager $manager
+	 * @param TeamdataManager $manager
 	 */
-	public function setTeamdataManager(Manager $manager);
+	public function setTeamdataManager(TeamdataManager $manager);
 	
 	/**
 	 * Uses the saved teamdata manager to compute the tiebreak scores and injects them into the teamdata. 

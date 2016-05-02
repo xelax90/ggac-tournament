@@ -247,7 +247,7 @@ class TeamMatcher extends AbstractManager{
 	 * Initializes matched array with semi-complete teams
 	 */
 	protected function initMatched(){
-		$this->matched = array();
+		$this->matched = array_fill(0, 5, array());
 		// set teams
 		foreach($this->teams as $team){
 			/* @var $team Team */
@@ -319,7 +319,7 @@ class TeamMatcher extends AbstractManager{
 	 * @return boolean
 	 */
 	protected function pickRound(){
-		$this->printCounts();
+		//$this->printCounts();
 		$teamSize = $this->getTournamentProvider()->getTournament()->getRegistrationTeamSize();
 		$minMatch = $this->getLowestPossibleMatch(); // pick largest teams first
 		if($minMatch === false){
@@ -466,12 +466,12 @@ class TeamMatcher extends AbstractManager{
 	protected function matchPossible($minMatch = 1){
 		$teamSize = $this->getTournamentProvider()->getTournament()->getRegistrationTeamSize();
 		
-		$teamCounts = array();
+		$teamCounts = array_fill(0, 5, 0);
 		foreach($this->matched as $size => $teams){
 			$teamCounts[$size] = count($teams);
 		}
 		$canPick = array();
-		// $path = array();
+		//$path = array();
 		for($i = $minMatch; $i >= 1; $i--){ // size of team 1 
 			for($j = $teamSize - $i; $j >= 1; $j--){ // size of team 2
 				$missing = $teamSize - $j;

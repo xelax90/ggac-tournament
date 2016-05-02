@@ -83,7 +83,7 @@ class Manager extends AbstractManager{
 	 * @return Group
 	 */
 	protected function copyGroup(TournamentPhase $phase, Group $group, $ignoreBlocked = true){
-		$em = $this->getEntityManager();
+		$em = $this->getObjectManager();
 		
 		/* @var $group Group */
 		$newGroup = new Group();

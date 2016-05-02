@@ -304,37 +304,49 @@ class Manager extends AbstractManager{
 		$th = $match->getTeamHome();
 		$tg = $match->getTeamGuest();
 		
-		// team points to be calculated
-		$pointsHome = 0;
-		$pointsGuest = 0;
+		if($th == null || $tg == null){
+			$team = $th ?: $tg;
+			return array($team->getId() => $match->getRound()->getPointsPerMatchFree());
+		}
 		
-		// number of won games
-		$gamesWonHome = 0;
-		$gamesWonGuest = 0;
-		// calculate points for games
-		foreach($match->getGames() as $game){
-			/* @var $game Game */
-			
-			// Team points for blue and purple site
-			$pointsBlue = $game->getPointsBlue()     * $round->getPointsPerGamePoint();
-			$pointsPurple = $game->getPointsPurple() * $round->getPointsPerGamePoint();
-			if($game->getTeamBlue() == $th){ // Home is blue, guest is purple
-				// add points to teams
-				$pointsHome  += $pointsBlue;
-				$pointsGuest += $pointsPurple;
-				// check which team won
-				if ($game->getPointsBlue() > $game->getPointsPurple()) { // blue = home win
-					$gamesWonHome++;
-				} elseif ($game->getPointsPurple() > $game->getPointsBlue()) { // purple = guest win
-					$gamesWonGuest++;
-				}
-			} else { // Home is purple, guest is blue
-				$pointsHome  += $pointsBlue;
-				$pointsGuest += $pointsPurple;
-				if ($game->getPointsBlue() > $game->getPointsPurple()) { // blue = guest win
-					$gamesWonGuest++;
-				} elseif ($game->getPointsPurple() > $game->getPointsBlue()) { // purple = home win
-					$gamesWonHome++;
+		if($match->getPointsHome() !== null && $match->getPointsGuest() !== null){
+			$gamesWonHome = $match->getPointsHome();
+			$gamesWonGuest = $match->getPointsGuest();
+			$pointsHome = $gamesWonHome * $round->getPointsPerGamePoint();
+			$pointsGuest = $gamesWonGuest * $round->getPointsPerGamePoint();
+		} else {
+			// team points to be calculated
+			$pointsHome = 0;
+			$pointsGuest = 0;
+
+			// number of won games
+			$gamesWonHome = 0;
+			$gamesWonGuest = 0;
+			// calculate points for games
+			foreach($match->getGames() as $game){
+				/* @var $game Game */
+
+				// Team points for blue and purple site
+				$pointsBlue = $game->getPointsBlue()     * $round->getPointsPerGamePoint();
+				$pointsPurple = $game->getPointsPurple() * $round->getPointsPerGamePoint();
+				if($game->getTeamBlue() == $th){ // Home is blue, guest is purple
+					// add points to teams
+					$pointsHome  += $pointsBlue;
+					$pointsGuest += $pointsPurple;
+					// check which team won
+					if ($game->getPointsBlue() > $game->getPointsPurple()) { // blue = home win
+						$gamesWonHome++;
+					} elseif ($game->getPointsPurple() > $game->getPointsBlue()) { // purple = guest win
+						$gamesWonGuest++;
+					}
+				} else { // Home is purple, guest is blue
+					$pointsHome  += $pointsBlue;
+					$pointsGuest += $pointsPurple;
+					if ($game->getPointsBlue() > $game->getPointsPurple()) { // blue = guest win
+						$gamesWonGuest++;
+					} elseif ($game->getPointsPurple() > $game->getPointsBlue()) { // purple = home win
+						$gamesWonHome++;
+					}
 				}
 			}
 		}

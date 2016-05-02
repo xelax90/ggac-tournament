@@ -20,7 +20,7 @@ $tournament = $this->tournament;
 					</div>
 
 					<div class="pull-right">
-						<?php $codesRequested = !empty($round->getMatches()[0]->getGames()[0]->getTournamentCode()); ?>
+						<?php  $codesRequested = empty($round->getMatches()) || empty($round->getMatches()[0]) || !empty($round->getMatches()[0]->getGames()[0]->getTournamentCode()); ?>
 						<h3><a href="<?php echo $this->url('zfcadmin/matches/getcodes', array('round_id' => $round->getId())) ?>" class="btn btn-<?php echo $codesRequested ? 'success' : 'primary' ?>"><i class="fa fa-<?php echo $codesRequested ? 'check' : 'refresh' ?>"></i> Request tournament codes</a></h3>
 					</div>
 				</div>

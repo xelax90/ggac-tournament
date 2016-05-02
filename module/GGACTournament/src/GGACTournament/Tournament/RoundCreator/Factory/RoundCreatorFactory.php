@@ -24,6 +24,7 @@ use Interop\Container\ContainerInterface;
 use SkelletonApplication\Service\Factory\InvokableFactory;
 use Doctrine\ORM\EntityManager;
 use GGACTournament\Tournament\Teamdata\Manager as TeamdataManager;
+use GGACTournament\Tournament\ApiData\Manager as ApiDataManager;
 use Zend\ServiceManager\AbstractPluginManager;
 
 /**
@@ -49,6 +50,10 @@ class RoundCreatorFactory extends InvokableFactory{
 		// retrieve and inject teamdata manager
 		$teamdataManager = $services->get(TeamdataManager::class);
 		$roundCreator->setTeamdataManager($teamdataManager);
+		
+		// retrieve and inject api data manager
+		$apiDataManager = $services->get(ApiDataManager::class);
+		$roundCreator->setApiDataManager($apiDataManager);
 		
 		return $roundCreator;
 	}

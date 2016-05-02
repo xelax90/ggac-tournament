@@ -108,7 +108,6 @@ class AdminRoundController extends ListController implements ProviderAwareInterf
 				default :
 					$gameCheck = $this->getTournamentProvider()->getTournament();
 			}
-			
 			$this->getRoundCreatorManager()->nextRound($formData['round']['roundType'], $item->getGroup(), $roundConfig, $gameCheck);
 			return true;
         }

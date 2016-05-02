@@ -319,6 +319,9 @@ class AdminTeamController extends AbstractTournamentController{
 			}
 			$em->remove($team);
 		}
+		foreach($tournament->getSubs() as $player){
+			$em->remove($player);
+		}
 		$em->flush();
 		foreach($tournament->getRegistrations() as $reg){
 			$em->refresh($reg);

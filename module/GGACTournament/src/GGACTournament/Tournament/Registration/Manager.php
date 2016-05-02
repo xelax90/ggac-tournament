@@ -358,6 +358,9 @@ class Manager extends AbstractManager{
 			/* @var $registration Registration */
 			$newRegistration = new Registration();
 			$hydrator->hydrate($registration, $newRegistration);
+			if(empty($newRegistration->getSummonerName())){
+				continue;
+			}
 			$newRegistration->setTournament($this->getTournamentProvider()->getTournament())
 					->setTeamName($teamName)
 					->setIcon($teamIcon)
@@ -440,8 +443,10 @@ class Manager extends AbstractManager{
 		}
 		
 		$player = new Player();
-		$player->setRegistration($registration);
+		$player->setRegistration($registration)
+				->setIsCaptain(false);
 		$registration->setPlayer($player);
+		$this->getObjectManager()->persist($player);
 		$this->getObjectManager()->flush();
 		return $player;
 	}
