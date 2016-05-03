@@ -21,6 +21,7 @@
 	"require": {
 		"php": ">=5.5",
 		"xelax90/skeleton-module" : "dev-master",
+		"ircmaxell/random-lib" : "*",
 		
 		"doctrine/data-fixtures": "@dev",
 		"hounddog/doctrine-data-fixture-module": "@dev",
