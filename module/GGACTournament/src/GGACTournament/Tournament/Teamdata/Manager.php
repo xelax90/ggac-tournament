@@ -325,7 +325,9 @@ class Manager extends AbstractManager{
 			// calculate points for games
 			foreach($match->getGames() as $game){
 				/* @var $game Game */
-
+				if(!$game->getPointsBlue() && !$game->getPointsPurple()){
+					continue;
+				}
 				// Team points for blue and purple site
 				$pointsBlue = $game->getPointsBlue()     * $round->getPointsPerGamePoint();
 				$pointsPurple = $game->getPointsPurple() * $round->getPointsPerGamePoint();
@@ -340,8 +342,8 @@ class Manager extends AbstractManager{
 						$gamesWonGuest++;
 					}
 				} else { // Home is purple, guest is blue
-					$pointsHome  += $pointsBlue;
-					$pointsGuest += $pointsPurple;
+					$pointsHome  += $pointsPurple;
+					$pointsGuest += $pointsBlue;
 					if ($game->getPointsBlue() > $game->getPointsPurple()) { // blue = guest win
 						$gamesWonGuest++;
 					} elseif ($game->getPointsPurple() > $game->getPointsBlue()) { // purple = home win
